@@ -1,0 +1,25 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap_tags %}
+{% load postorius_helpers %}
+
+
+{% block head_title %}
+{% trans 'Delete Account' %} - {{ auser|user_display }}
+{% endblock %}
+
+{% block content %}
+<h2>{% trans 'Delete Account' %} - {{ auser|user_display }}</h2>
+<form action="{% url 'delete_user' auser.user_id %}" method="post"  id="delete_account" class="form-horizontal">
+    {% csrf_token %}
+    <p>
+        {% blocktrans trimmed %}
+        Are you sure you want to delete this account? 
+        This will remove the account along with all its subscriptions.
+        {% endblocktrans %}
+    </p>
+    <button class="btn btn-danger" type="submit">{% trans 'Delete Account' %}</button>
+    <a class="btn btn-primary" href="{% url 'list_users' %}">{% trans 'Cancel' %}</a>
+</form>
+{% endblock %}

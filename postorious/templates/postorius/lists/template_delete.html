@@ -1,0 +1,31 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Templates' %}
+{% endblock head_title %}
+
+{% block content  %}
+    {% list_nav 'templates' 'msgid:title:list_templates' %}
+
+<h3>{% blocktrans with name=object.name %}Template '{{ name }}'{% endblocktrans %}<br />
+    <small>{{ object.description }}</small>
+</h3>
+
+<form action="" method="post">
+  {% csrf_token %}
+  <p>{% blocktrans with name=object.name identifier=object.identifier %}
+     Are you sure you want to delete the "{{ name }}" template
+     from list "{{ identifier }}"?
+     {% endblocktrans %}
+  </p>
+  <input class="btn btn-danger" type="submit" value="{% trans 'Confirm' %}" />
+  <a class="btn btn-info" href="{% url 'list_template_list' list.list_id %}">{% trans 'Cancel' %}</a>
+
+
+  {{ view }}
+</form>
+
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Settings' %} | {{ list.fqdn_listname}} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    {% list_nav 'list_settings' 'msgid:title:list_settings' %}
+
+<div class="row">
+  <div class="col-3">
+    <ul class="nav flex-column nav-pills margin-bottom navbar-light" role="tablist" aria-orientation="vertical">
+        {% for section in section_names %}
+        <li role="tab" class="nav-item">
+          <a href="{% url 'list_settings' list_id=list.list_id visible_section=section.0 %}" class="nav-link {% if section.0 == visible_section %}active{% endif %} ">
+            {{ section.1 }}
+          </a>
+        </li>
+        {% endfor %}
+    </ul>
+  </div>
+  <div class="col-9">
+    <form action="{% url 'list_settings' list_id=list.list_id visible_section=visible_section %}"
+          method="post" class="form-horizontal list_settings">
+        {% bootstrap_form_horizontal form 3 8 'Save changes' %}
+        <p hidden>{% trans 'Save changes' %}</p>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

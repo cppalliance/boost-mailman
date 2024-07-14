@@ -1,0 +1,184 @@
+/* Sticky footer: http://getbootstrap.com/examples/sticky-footer/ */
+html {
+    position: relative;
+    min-height: 100%;
+    /* This mostly makes sure that the font size doesn't change with
+     bump to Bootstrap 4, which has a default HTML level font-size
+     of 16px rem. */
+    font-size: 14px;
+    font-family: "Helvetica Neue", sans-serif;
+}
+
+body {
+    margin-bottom: 90px;
+    background-color: rgb(229 231 235);
+    color: rgb(49, 74, 87);
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: rgb(229 231 235);
+    border-top: 1px solid #e7e7e7;
+    border-radius: 4px;
+    padding-top: 20px;
+}
+/* ---- */
+
+.margin-bottom {
+    margin-bottom: 1em;
+}
+
+form.bans-add-form {
+    margin-bottom: 2.5rem;
+}
+table.bans-current {
+    width: auto;
+}
+
+
+/* Header matches */
+
+table.header-matches th .text-muted {
+    font-weight: normal;
+    font-size: small;
+}
+table.header-matches td .errorlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.header-matches-pending-changes {
+    display: none;
+    margin-left: 1rem;
+}
+
+.page-header{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 9px;
+    font-size: 175%;
+}
+
+.page-header h1 {
+	margin-top: 0px;
+	padding-top: 0px;
+}
+
+header, #header-nav {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* Improve contrast per accessibility guidelines */
+header.navbar {
+    background-color: rgb(229 231 235);
+    border-bottom: 2px solid rgb(209, 213, 219);
+    padding: 0;
+}
+
+.boost-nav {
+    margin-top: 6px;
+}
+.boost-nav .nav-item a:hover {
+    color: rgb(255 159 0);
+}
+
+.boost-nav .nav-item {
+    line-height: 14px;
+    margin-right: 25px !important;
+}
+
+.navbar-default .navbar-brand {
+    color: rgb(49, 74, 87);
+}
+.navbar-default a.nav-link {
+    color: rgb(49, 74, 87);
+}
+.navbar-default .fa-bars {
+    color: rgb(49, 74, 87);
+}
+.navbar-brand img {
+    height: 25px;
+    margin-right: 25px;
+}
+.navbar-default .navbar-nav > li > a {
+    color: rgb(49, 74, 87);
+    font-weight: 400;
+    line-height: 1.4;
+}
+.h1 .small, .h1 small, .h2 .small, .h2 small, .h3 .small, .h3 small, .h4 .small, .h4 small, .h5 .small, .h5 small, .h6 .small, .h6 small, h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small, h4 .small, h4 small, h5 .small, h5 small, h6 .small, h6 small {
+    color: #666;
+}
+a {
+    color: rgb(2, 132, 199);
+}
+a:hover {
+    color: rgb(255, 159, 0);
+}
+.btn-danger {
+    background-color: #c8423e;
+}
+.btn-success, .btn-success:hover {
+    background-color: rgb(156, 163, 175);
+    border-color: rgb(229, 231, 235);
+}
+.btn-warning {
+    background-color: #A4660E;
+}
+.btn-primary {
+    background-color: rgb(255, 159, 0);
+    border-color: rgb(255, 159, 0);
+}
+.btn-primary:hover {
+    background-color: rgba(255, 159, 0, 0.8);
+    border-color: rgb(255, 159, 0);
+}
+.alert-success {
+    color: #294C29;
+}
+.alert-danger {
+    color: #773231;
+}
+
+h1, h2, h3, h4, h5, h6, h7 {
+        margin-bottom: 10px;
+        margin-top: 20px;
+}
+
+.current-role {
+    font-size: 120%;
+    font-weight: 110%;
+    text-align: center;
+    /* padding-left: 15px; */
+}
+
+ul.horizontal-list {
+    list-style: none;
+    padding-inline-start: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    height: 100%;
+}
+
+ul.horizontal-list li {
+    display: inline;
+}
+
+.username {
+    font-weight: 400;
+}
+
+button.user-button {
+    background-color: inherit;
+    border: none;
+}
+
+/* Disable the black border on the navbar toggler
+   when it is in focus. */
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    color: white;
+}

@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load hk_generic %}
+
+
+<div class="dropdown-center">
+<a href="" id="navbarMonthsListDrop" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+  <span class="d-none d-md-inline">{% trans "Threads by" %}</span>{% trans " month" %} <b class="caret"></b>
+</a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="navbarMonthsListDrop">
+    {% for year, months in months_list|sort %}
+    <li role="presentation" class="dropdown-header disabled dropdown-item">
+        <a href="" class="nav-link">----- {{ year }} -----</a>
+    </li>
+    {% for ar_month in months %}
+    <li>
+        <a class="dropdown-item" href="{% url 'hk_archives_with_month' year=year mlist_fqdn=mlist.name month=ar_month %}"
+           >{{ ar_month|monthtodate:year|date:"F" }}</a>
+    </li>
+    {% endfor %}
+    {% endfor %}
+</ul>
+</div>

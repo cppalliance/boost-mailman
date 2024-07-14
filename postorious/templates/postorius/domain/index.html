@@ -1,0 +1,70 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load membership_helpers %}
+{% block head_title %}
+{% trans 'Domains' %} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    <header class="page-header">
+        {% trans 'Domains' %}
+    </header>
+
+    <div class="d-flex flex-row-reverse mb-2"><a class="btn btn-success" href="{% url 'domain_new' %}">{% trans 'Add Domain' %}</a></div>
+
+    {% if domains %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans 'Mail Host' %}</th>
+                    <th>{% trans 'Description' %}</th>
+                    <th>{% trans 'Alias Domain' %}</th>
+                    <th>{% trans 'Web Host' %}</th>
+                    <th>{% trans 'Owners' %}</th>
+                    <th>{% trans 'Action' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for domain in domains %}
+                    <tr>
+                        <td>{{ domain.mail_host }}</td>
+                        <td>{% if domain.description %}{{ domain.description }}{% endif %}</td>
+                        <td>{% if domain.alias_domain %}{{ domain.alias_domain }}{% endif %}</td>
+                        <td>
+                          {{ domain.site.name }} ({{ domain.site.domain }})
+                          <br/>
+                          (<a href='{% url 'admin:sites_site_change' domain.site.pk %}' title='edit web host'>{% trans 'Edit' %}</a>)
+                          <br/>
+                          <code>SITE_ID = {{ domain.site.id }}</code>
+
+                        </td>
+                        <td>
+                          <ul>
+                            {% for owner in domain.owners %}
+                            <li>
+                              {{ owner|owner_repr }}
+                              <form action="{% url 'remove_domain_owner' domain=domain.mail_host user_id=owner.user_id %}" method="post" class="form-inline">
+                                {% csrf_token %}
+                                <button href="#" type="submit" class="btn btn-xs">({% trans 'remove' %})</button>
+                              </form>
+                            </li>
+                            {% endfor %}
+                            <li><a href="{% url 'domain_owners' domain.mail_host %}">{% trans 'Add' %}</a></li>
+                        </ul></td>
+                        <td>
+                            <a href="{% url 'domain_template_list' domain.mail_host %}" class="btn btn-xs btn-primary">{% trans 'Templates' %}</a>
+                            <a href="{% url 'domain_edit' domain.mail_host %}" class="btn btn-xs btn-primary">{% trans 'Edit' %}</a>
+                            <a href="{% url 'domain_delete' domain.mail_host %}" class="btn btn-xs btn-danger">{% trans 'Delete' %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>{% trans 'No domains yet.' %}</p>
+    {% endif %}
+
+{% endblock content %}

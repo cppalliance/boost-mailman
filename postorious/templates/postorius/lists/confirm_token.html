@@ -1,0 +1,32 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load nav_helpers %}
+
+{% block head_title %}
+Confirm Token | {{ mlist.fqdn_listname }} - {{ block.super }}
+{% endblock %}
+
+{% block content%}
+<h4>
+{% if type == "subscription" %}
+    {% blocktrans with name=mlist.display_name listid=mlist.fqdn_listname %}
+    Confirm subscription of {{ addr }} to {{ name }}({{ listid }}):
+    {% endblocktrans %}
+{% elif type == "unsubscription" %}
+    {% blocktrans with name=mlist.display_name listid=mlist.fqdn_listname %}
+    Confirm unsubscription of {{ addr }} from {{ name }}({{ listid }}):
+    {% endblocktrans %}
+{% else %}
+    {% blocktrans %}
+    Confirm token {{ token}}:
+    {% endblocktrans %}
+{% endif %}
+</h4>
+
+<form action="{% url 'confirm_token' mlist.list_id %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Confirm" class="btn btn-success btn-lg">
+</form>
+
+{% endblock content %}

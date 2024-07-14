@@ -1,0 +1,121 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load pagination %}
+
+{% block head_title %}
+{% trans 'List Index' %} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    <header class="page-header">
+        {% trans 'Mailing Lists' %}
+    </header>
+
+    <div class="row mb-3">
+    {% if user.is_authenticated %}
+
+    <div class="col d-flex">
+      <div class="me-2">
+        <span class="current-role">{% trans 'Role: ' %}</span>
+      </div>
+            <ul class="horizontal-list align-middle">
+
+              {% comment %}
+
+              The conditional queries below for choosing "active" is a bit
+              complex because django's tmeplate syntax doesn't let us group the
+              boolean operators properly. The primary logic behind choosing the
+              role as active is basically:
+
+              1. Default view picks 'owner', 'moderator' and 'member' roles, so
+                 by default /postorius/lists will pick these and they are
+                 signified in code by (not all_lists and not role) i.e. neither
+                 all lists nor role is set.
+              2. Each role is obviously active when the role is chosen.
+              3. All lists is active when 'all_lists' is true.
+              {% endcomment %}
+              <li>
+                <a href="?role=owner" class="btn btn-outline-secondary btn-sm {% if role == 'owner' or not all_lists and not role %}active{% endif %} ">
+                  {% trans 'Owner' %}
+                </a>
+              </li>
+              <li>
+                <a href="?role=moderator" class="btn btn-outline-secondary btn-sm {% if role == 'moderator' or not all_lists and not role %}active{% endif %}">
+                  {% trans 'Moderator' %}
+                </a>
+              </li>
+              <li>
+                <a href="?role=member"  class="btn btn-outline-secondary btn-sm {% if role == 'member' or not all_lists and not role %}active{% endif %}">
+                  {% trans 'Member' %}
+                </a>
+              </li>
+              <li>
+                <a href="?role=nonmember" class="btn btn-outline-secondary btn-sm {% if role == 'nonmember' %}active{% endif %}">
+                  {% trans 'Non-member' %}
+                </a>
+              </li>
+              <li><a href="?all-lists" class="btn btn-outline-secondary btn-sm {% if all_lists %}active{% endif %}">{% trans 'All' %}</a></li>
+            </ul>
+          </div>
+    {% endif %}
+    {% if user.is_superuser %}
+      <div class="col d-flex flex-row-reverse">
+          {% comment %}
+           The span below exists only because d-flex will strech the child elements completely. So, we wrap
+           them in span so that the width the span increases but the button remains original height.
+          {% endcomment %}
+          <span>
+            {% if domain_count < 1 %}
+                <a class="btn btn-success" href="{% url 'domain_new' %}">{% trans 'Create New Domain' %}</a>
+            {% else %}
+                <a class="btn btn-success" href="{% url 'list_new' %}">{% trans 'Create New List' %}</a>
+            {% endif %}
+          </span>
+      </div>
+    {% endif %}
+    </div>
+
+    {% if lists|length > 0 %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>{% trans 'List name' %}</th>
+                        <th>{% trans 'Post address' %}</th>
+                        <th>{% trans 'Description' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for list in lists %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'list_summary' list_id=list.list_id %}">{{ list.display_name }}</a>
+                                {% if check_advertised %}
+                                  {% if user.is_superuser and not list.advertised %}
+                                    ({% trans 'unadvertised' %}*)
+                                  {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>{{ list.fqdn_listname }}</td>
+                            <td>{{ list.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if not all_lists and not role %}
+            <small>* {% trans 'Only lists that you are owner, moderator or subscriber for are shown here. Click to <a href="?all-lists"> see all lists</a>.' %}</small>
+            <br/>
+        {% endif %}
+        {% if user.is_superuser %}
+            <small>* {% trans 'Only admins see unadvertised lists in the list index.' %}</small>
+        {% endif %}
+        {% if not user.is_authenticated or "all-lists" in request.GET %}
+            {% paginator lists %}
+        {% endif %}
+    {% else %}
+        <p>{% trans 'There are currently no mailing lists.' %}</p>
+    {% endif %}
+
+{% endblock content %}

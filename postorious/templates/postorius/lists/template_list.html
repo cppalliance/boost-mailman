@@ -1,0 +1,45 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Templates' %}
+{% endblock head_title %}
+
+{% block content  %}
+
+    {% list_nav 'templates' 'msgid:title:list_templates' %}
+
+<div class="d-flex flex-row-reverse">
+  <a href="{% url 'list_template_new' list.list_id %}" class="btn btn-success">{% trans 'New Template' %}</a>
+</div>
+
+{% if object_list %}
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th> {% trans 'Template Name' %} </th>
+        <th> &nbsp; </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for template in object_list %}
+      <tr>
+        <td> <b>[{{ template.name }}]</b> - {{ template.description }}</td>
+        <td> <a class="btn btn-xs btn-primary" href="{% url 'list_template_update' list.list_id template.id %}">{% trans 'Edit' %}</a>
+          <a class="btn btn-xs btn-danger" href="{% url 'list_template_delete' list.list_id template.id %}">{% trans 'Delete' %}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <p>{% trans 'No Templates.' %}</p>
+{% endif %}
+
+
+{% endblock content %}

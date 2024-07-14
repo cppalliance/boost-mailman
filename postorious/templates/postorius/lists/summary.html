@@ -1,0 +1,164 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+{% load markdown %}
+{% load date_helpers %}
+{% load tz %}
+
+{% block head_title %}
+{% trans 'Info' %} | {{ list.fqdn_listname }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    {% list_nav 'list_summary' 'msgid:title:list_summary' %}
+
+    <p>{{ list.settings.description }}</p>
+    {% if list.settings.info %}
+        {% autoescape off %}
+          {% markdown_value list.settings.info %}
+        {% endautoescape %}
+    {% endif %}
+    <p>{% trans 'To contact the list owners, use the following email address:' %} <em>{{ list.settings.owner_address }}</em></p>
+
+    {# Archives #}
+    {% if hyperkitty_enabled %}
+      {% if not public_archive and not user.is_authenticated %}
+        <p>
+          {% trans 'You have to sign in to visit the archives of this list.' %}
+        </p>
+      {% else %}
+        {% url 'hk_list_overview' list.fqdn_listname as hyperkitty_list_url %}
+        <h2>{% trans 'Archives' %}</h2>
+        <p>
+          {% blocktrans %}
+            <a class="btn btn-primary" href="{{ hyperkitty_list_url }}">Archives</a>
+          {% endblocktrans %}
+        </p>
+      {% endif %}
+    {% endif %}
+
+    <hr />
+
+    {# Subscription #}
+    {% if user.is_authenticated %}
+        {% if user_subscribed %}
+            <h2>{% trans 'Subscription / Unsubscription' %}</h2>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">{% trans 'Subscription Address' %}</th>
+                    <th scope="col">{% trans 'Delivery status' %}</th>
+                    <th scope="col">{% trans 'Delivery mode' %}</th>
+                    <th scope="col">{% trans 'Manage' %}</th>
+                    <th scope="col">{% trans 'Unsubscribe' %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for subscription in user_subscriptions %}
+                  <tr>
+                    {% if subscription.subscribed_preferred %}
+                      <td>{% trans 'Primary Address' %} ({{ subscription.subscribed_address }})</td>
+                    {% else %}
+                      <td>{{ subscription.subscribed_address }}</td>
+                    {% endif %}
+                    <td>{{ subscription.delivery_status }}</td>
+                    <td>{{ subscription.delivery_mode }}</td>
+                    <td>
+                      {% url 'user_list_options' subscription.subscriber as user_list_options_url %}
+                      <a class="btn btn-primary" href="{{ user_list_options_url }}">{% trans 'Manage Subscription' %}</a>
+                    </td>
+                    <td>
+                      <form method="post" action="{% url 'list_unsubscribe' list.list_id %}" class="form-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="email" value="{{ subscription.subscribed_address }}" />
+                        <button type="submit" class="btn btn-danger">{% trans 'Unsubscribe' %}</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        {% elif not user_request_pending %}
+          <h2>{% trans 'Subscribe to this list' %}</h2>
+          <p>
+            {% blocktrans with address=list.settings.join_address %}
+                To subscribe you can send an email with 'subscribe' in the subject to
+                <a href="mailto:{{ address }}?subject=Subscribe">{{ address }}</a>
+                or use the form below:
+            {% endblocktrans %}
+          </p>
+          <form action="{% url 'list_subscribe' list.list_id %}" method="post" class="form-horizontal">
+            {% bootstrap_form_horizontal subscribe_form 2 8 'Subscribe' %}
+            <p hidden>{% trans 'Subscribe' %}</p>
+          </form>
+        {% endif %}
+        {% if user_request_pending %}
+            <h4>{% trans "You have a subscription request pending. If you don't hear back soon, please contact the list owners." %}</h4>
+        {% endif %}
+    {% else %}
+      <div>
+        <h2>{% trans 'Subscription / Unsubscription' %}</h2>
+        <p>{% blocktrans %}
+        To subscribe or unsubscribe from this list, please sign in first.
+        If you have not previously signed in, you may need to set up an account
+        with the appropriate email address.
+        {% endblocktrans %}</p>
+        <p><a href="{% url LOGIN_URL %}?next={{ next|default:request.path|urlencode }}" class="btn btn-primary">{% trans 'Sign In' %}</a></p>
+      </div>
+      {% if anon_subscribe %}
+        <hr />
+        <div>
+          <p>
+          {% blocktrans %}
+          You can also subscribe without creating an account.
+          If you wish to do so, please use the form below.
+          {% endblocktrans%}
+          </p>
+          <form action="{% url 'list_anonymous_subscribe' list.list_id %}"
+                method="post" class="form-horizontal">
+            {% bootstrap_form_horizontal anonymous_subscription_form 2 8 'Subscribe' %}
+            <p hidden>{% trans 'Subscribe' %}</p>
+          </form>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {# List metrics #}
+    {% if user.is_authenticated %}
+        {% if user.is_list_owner or user.is_superuser %}
+            <hr />
+            <h3>{% trans 'List metrics' %}</h3>
+            <dl class="row">
+              <dt class="col-6 col-md-2">{% trans 'Created at' %}</dt>
+              <dd class="col-6 col-md-4">
+                {% if list.settings.created_at %}{{ list.settings.created_at|datetime_parse|localtime|date:"DATETIME_FORMAT" }}{% endif %}
+              </dd>
+              <div class="w-100"></div>
+              <dt class="col-6 col-md-2">{% trans 'Last post at' %}</dt>
+              <dd class="col-6 col-md-4">
+                {% if list.settings.last_post_at%}
+                {{ list.settings.last_post_at|datetime_parse|localtime|date:"DATETIME_FORMAT" }}
+                {% else %}
+                {% trans 'None' %}
+                {% endif %}
+              </dd>
+              <div class="w-100"></div>
+              <dt class="col-6 col-md-2">{% trans 'Digest last sent at' %}</dt>
+              <dd class="col-6 col-md-4">
+                {% if list.settings.digest_last_sent_at %}
+                  {{ list.settings.digest_last_sent_at|datetime_parse|localtime|date:"DATETIME_FORMAT" }}
+                {% else %}
+                  {% trans 'None' %}
+                {% endif %}
+              </dd>
+              <div class="w-100"></div>
+              <dt class="col-6 col-md-2">{% trans 'Volume' %}</dt>
+              <dd class="col-6 col-md-4 ">{{ list.settings.volume }}</dd>
+            </dl>
+        {% endif %}
+    {% endif %}
+{% endblock %}

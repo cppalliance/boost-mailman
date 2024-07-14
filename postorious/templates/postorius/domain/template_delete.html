@@ -1,0 +1,32 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+
+{% block head_title %}
+{% trans 'Templates' %}
+{% endblock head_title %}
+
+{% block content  %}
+    <div class="page-header">
+      <h1>{% trans 'Delete Template' %}
+        <small>{{ domain.mail_host }}</small>
+      </h1>
+    </div>
+
+    <h3>{% blocktrans with name=object.name %}Template '{{ name }}'{% endblocktrans %}<br />
+        <small>{{ object.description }}</small>
+    </h3>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>{% blocktrans with name=object.name identifier=object.identifier %}
+           Are you sure you want to delete the "{{ name }}" template
+           for domain "{{ identifier }}"?
+           {% endblocktrans %}
+        </p>
+        <input class="btn btn-danger" type="submit" value="{% trans 'Confirm' %}" />
+        <a class="btn btn-info" href="{% url 'domain_template_list' domain.mail_host %}">{% trans 'Cancel' %}</a>
+
+    </form>
+
+{% endblock content %}

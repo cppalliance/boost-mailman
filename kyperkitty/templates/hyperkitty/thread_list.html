@@ -1,0 +1,120 @@
+{% extends "hyperkitty/base.html" %}
+{% load i18n %}
+{% load hk_generic %}
+{% load pagination %}
+{% load cache %}
+
+
+{% block head_title %}
+{{ list_title }} - {{ mlist.display_name|default:mlist.name }} - {{ block.super }}
+{% endblock %}
+
+{% block head_feed %}
+<link rel="alternate" type="application/rss+xml" title="{{ mlist.display_name }}" href="{% url 'hk_list_feed' mlist_fqdn=mlist.name %}"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div id="thread-list">
+        <div class="thread-list-header row">
+            <h1 class="col">
+                <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}" class="list-name">
+                    {% if mlist.display_name %}
+                        {{ mlist.display_name }}
+                    {% else %}
+                        {{ mlist.name|until:"@" }}
+                    {% endif %}
+                </a>
+            </h1>
+            <div class="col d-flex flex-align-center flex-row-reverse">
+                <div class="order-3 me-2">
+                    <a href="{% url "hk_message_new" mlist_fqdn=mlist.name %}"
+                        class="btn btn-success"
+                        aria-label="Start new thread">
+                        <i class="fa fa-plus"></i>
+                        <span class="d-inline d-md-none">{% trans 'Thread'%}</span>
+                        <span class="d-none d-md-inline">{% trans 'Start a new thread'%}</span>
+                    </a>
+                </div>
+                {% if export and export_allowed %}
+                <div class="d-none d-md-block">
+                    <a href="{{ export.url }}" title="{{ export.title }}"
+                    class="btn btn-outline-primary ms-2"><i class="fa fa-download" aria-label="Download Messages"></i>{{ export.message }}
+                    </a>
+                {% endif %}
+                </div>
+                {% cache 86400 month_list_select LANGUAGE_CODE months_list mlist.name %}
+                   {% include 'hyperkitty/fragments/month_list.html' with show_select='True' %}
+                {% endcache %}
+            </div>
+            <span class="list-address">
+                {{ mlist.name }}
+                <h2>{{ list_title }}</h2>
+            </span>
+            <ul class="list-unstyled list-stats thread-list-info">
+                {% if participants_count %}
+                <li>
+                    <i class="fa fa-user" aria-label="participants"></i>
+                    {{ participants_count }} {% trans "participants" %}
+                </li>
+                {% endif %}
+                <li>
+                    <i class="fa fa-comment" aria-label="replies"></i>
+                    {{ threads.paginator.count }} {% trans "discussions" %}
+                </li>
+            </ul>
+
+        </div>
+
+        {% for thread in threads %}
+            {% include "hyperkitty/threads/summary_thread_large.html" %}
+        {% empty %}
+            <p>{% trans "Sorry no email threads could be found" %} {{ no_results_text }}.</p>
+        {% endfor %}
+
+        {# Cache the pagination template rendering for the mailing list for 24hrs. #}
+        {% cache 86400 threads_paginator threads LANGUAGE_CODE %}
+            {% paginator threads bydate=True %}
+        {% endcache %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block additionaljs %}
+<script>
+$(document).ready(function() {
+    $('span.expander').expander({
+        slicePoint: 100,
+        userCollapseText : '<br /><br /><a class="btn-expander"><i class="fa fa-minus-square-o" aria-label="View less"></i> View less</a>',
+        expandText : '<br /><a class="btn-expander"><i class="fa fa-plus-square-o" aria-label="View more"></i> View more</a>',
+        beforeExpand: function() {
+            $(this).removeClass("collapsed");
+            $(this).addClass("expanded");
+        },
+        onCollapse: function() {
+            $(this).removeClass("expanded");
+            $(this).addClass("collapsed");
+        }
+    });
+    // setup_category();
+
+    // onchange event for month_list select (seen only in tiny/xs viewports)
+    // only add this event listener if the element exists
+    if ($('select#months-list').length > 0) {
+        $('select#months-list').change(function() {
+            var date = $('select#months-list>option:selected').text().split(' ');
+            var url = "{% url 'hk_archives_with_month' year=9999 mlist_fqdn=mlist.name month=0 %}";
+            url = url.replace('0', $(this).val());
+            url = url.replace('9999', date[1]);
+            window.parent.location.href = url;
+        });
+    }
+
+});
+</script>
+{% endblock %}

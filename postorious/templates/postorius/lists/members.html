@@ -1,0 +1,208 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+{% load pagination %}
+{% load membership_helpers %}
+{% block head_title %}
+{% trans 'List members' %} | {{ list.fqdn_listname}} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    {% list_nav 'list_members' page_title page_subtitle %}
+
+    {% if role != 'member' and user.is_poweruser %}
+        <form action="{% url 'list_members' list.list_id role %}" method="post" class="row gx-3 gy-2 align-items-end mb-2">
+            {% csrf_token %}
+            <div class="form-group col-4 {% if member_form.email.errors %}has-error{% endif %}">
+                {% if member_form.email.errors %}
+                    <div class="alert alert-danger">{{ member_form.email.errors }}</div>
+                {% endif %}
+                {{ member_form.email.label_tag }}
+                {{ member_form.email|add_form_control }}
+            </div>
+            <div class="form-group col-4 {% if member_form.display_name.errors %}has-error{% endif %}">
+                {% if member_form.display_name.errors %}
+                    <div class="alert alert-danger">{{ member_form.display_name.errors }}</div>
+                {% endif %}
+                {{ member_form.display_name.label_tag }}
+                {{ member_form.display_name|add_form_control }}
+            </div>
+            <button type="submit" class="btn btn-primary col-auto">{{ form_action }}</button>
+        </form>
+    {% endif %}
+
+
+    {% if form.choices.errors %}
+        <div class="alert alert-danger">{{ form.choices.errors }}</div>
+    {% endif %}
+    <!-- Member search form -->
+    <div class="pull-left margin-bottom">
+        <form action="{% url 'list_members' list.list_id role %}" method="get" class="form-inline">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="{% trans 'Search members...' %}" aria-label="Search box" />
+                <span class="input-group-btn">
+                    <button class="btn btn-outline-primary" type="submit" aria-label="Search"><span class="fa fa-search"></span></button>
+                </span>
+            </div>
+        </form>
+    </div>
+
+
+    {% if members|length > 0 %}
+        {% if role == 'member' and user.is_poweruser %}
+            <form action="{% url 'list_members' list.list_id role %}" method="post" id="unsubscribe-form">
+            {% csrf_token %}
+            <input type="submit" class="d-none" />
+            <div class="pull-right">
+                <a href="{% url 'csv_view' list.list_id %}" class="btn btn-primary">
+                   {% trans 'CSV Export' %}
+                </a>
+                <button class="btn btn-info" id="unsubscribe-selected-btn">{% trans 'Remove Selected' %}</button>
+                <a href="{% url 'unsubscribe_all' list.list_id %}" class="btn btn-danger">{% trans 'Remove ALL members' %}</a>
+            </div>
+        {% endif %}
+            <div class="table-responsive" style="clear:both">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            {% if role == 'member' %}
+                              {% if user.is_poweruser %}
+                            <th>
+                              <input type="checkbox" id="all-members-checkbox" aria-label="Select all members" />
+                            </td>
+                              {% endif %}
+                            {% endif %}
+                            <th>
+                              {% trans 'Address' %}
+                            </th>
+                            {% if role == 'member' or role == 'nonmember' %}
+                            <th>
+                              {% trans 'Delivery Mode' %}
+                            </th>
+                            <th>
+                              {% trans 'Moderation Action' %}
+                            </th>
+                            {%  endif %}
+                            {% if role == 'member' %}
+                            <th>
+                              {% trans 'Bounce Score' %}
+                            </th>
+                            {%  endif %}
+                            {# Extra column here for the "Delete" button of Non-members, owners and mods. #}
+                            {% if role != 'member' %}
+                              {% if user.is_poweruser %}
+                             <th></th>
+                              {% endif %}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                            <tr>
+                                {% if role == 'member' %}
+                                  {% if user.is_poweruser %}
+                                  <td>
+                                    <input type="checkbox" class="member-checkbox" name="choices" id="id_choices_{{ forloop.counter0 }}" value="{{ member.email }}"/>
+                                  </td>
+                                  {% endif %}
+                                <td>
+                                  <label for="id_choices_{{ forloop.counter0 }}">
+                                  {% if user.is_poweruser %}
+                                    <a href="{% url 'list_member_options' list.list_id member.email %}?role=member" title="Member options">
+                                  {% endif %}
+                                    {% if member.preferences.hide_address and not user.is_list_moderator and not user.is_poweruser %}
+                                        {% trans 'Masked per the user request' %}
+                                    {% else %}
+                                      {% if member.display_name %}
+                                        "{{ member.display_name }}" &lt;{{ member.email }}&gt;
+                                      {% else %}
+                                        {{ member.email }}
+                                      {% endif %}
+                                    {% endif %}
+                                  {% if user.is_poweruser %}
+                                    </a>
+                                  {% endif %}
+                                  </label>
+                                  </td>
+                                <td>
+                                  {{ member.delivery_mode | delivery_mode }}
+                                </td>
+                                <td>
+                                  {{ member.moderation_action | moderation_action }}
+                                </td>
+                                <td>
+                                  {{ member.bounce_score }}
+                                </td>
+                                {% elif role == 'nonmember' %}
+                                <td>
+                                  {% if user.is_poweruser %}
+                                  <a href="{% url 'list_member_options' list.list_id member.email %}?role=nonmember" title="NonMember options">
+                                  {% endif %}
+                                        {% if member.display_name %}
+                                            "{{ member.display_name }}" &lt;{{ member.email }}&gt;
+                                        {% else %}
+                                            {{ member.email }}
+                                        {% endif %}
+                                  {% if user.is_poweruser %}
+                                  </a>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                  {{ member.delivery_mode | delivery_mode }}
+                                </td>
+                                <td>
+                                  {{ member.moderation_action | moderation_action }}
+                                </td>
+                                  {% if user.is_poweruser %}
+                                <td><a href="{% url 'remove_role' list.list_id role member.email %}" class="btn btn-xs btn-danger">{% trans 'Delete' %}</a></td>
+                                  {% endif %}
+                                {% else %}
+                                    <td>
+                                        {% if member.display_name %}
+                                            "{{ member.display_name }}" &lt;{{ member.email }}&gt;
+                                        {% else %}
+                                            {{ member.email }}
+                                        {% endif %}
+                                    </td>
+                                  {% if user.is_poweruser %}
+                                    <td><a href="{% url 'remove_role' list.list_id role member.email %}" class="btn btn-xs btn-danger">{% trans 'Delete' %}</a></td>
+                                  {% endif %}
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% if role == 'member' and user.is_poweruser %}
+            </form>
+        {% endif %}
+        {% paginator members %}
+    {% else %}
+        <p>{{ empty_error }}</p>
+    {% endif %}
+
+{% endblock content %}
+{% block additionaljs %}
+<script>
+/* When the select all "Checkbox" in the header of the table is clicked, select all the subs on the page. */
+$('#all-members-checkbox').change(function() {
+  $('.member-checkbox').prop('checked', this.checked);
+});
+
+/* Move the focus to the search box when the page loads. This makes sure the user doesn't need to navigate
+   from the top back moving the entire menu item.
+*/
+function focus_searchbox() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const searchTerm = urlParams.get('q');
+  if (searchTerm != null) {
+    $('input[name^="q"]')[0].focus();
+  }
+}
+
+focus_searchbox()
+</script>
+{% endblock %}

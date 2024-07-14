@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load nav_helpers %}
+
+<h1>{% trans 'Mailman Settings' %} <small>{{ user }}</small></h1>
+
+<ul class="nav nav-pills margin-bottom" role="navigation" aria-label="mailman settings navigation">
+    <li  class="nav-item"><a class="nav-link {% nav_active_class current 'subscriptions' %}" href="{% url 'ps_user_profile' %}">{% trans 'Subscriptions' %}</a></li>
+    <li  class="nav-item"><a class="nav-link {% nav_active_class current 'settings_global' %}" href="{% url 'user_mailmansettings' %}">{% trans 'Global Mailman preferences' %}</a></li>
+    <li  class="nav-item"><a class="nav-link {% nav_active_class current 'settings_address' %}" href="{% url 'user_address_preferences' %}">{% trans 'Address-based preferences' %}</a></li>
+    <li  class="nav-item"><a class="nav-link {% nav_active_class current 'settings_list' %}" href="{% url 'user_subscription_preferences' %}">{% trans 'List-based preferences' %}</a></li>
+</ul>

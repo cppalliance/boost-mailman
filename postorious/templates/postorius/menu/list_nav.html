@@ -1,0 +1,94 @@
+{% load i18n %}
+{% load nav_helpers %}
+<header class="page-header">
+    {{ list.display_name }} <small>{{ list.fqdn_listname }}</small>
+</header>
+
+{% if user.is_authenticated  %}
+<ul class="nav nav-pills">
+  <li class="nav-item">
+      <a href="{% url 'list_summary' list.list_id %}" class="{% nav_active_class current 'list_summary' %} nav-link">{% trans 'Info' %}</a></li>
+    {% if user.is_superuser or user.is_list_owner or user.is_list_moderator %}
+    <li  class="dropdown nav-item">
+      <a href="#" class="{% nav_active_class current 'list_subscription_requests' %} nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        {% trans 'Subscription requests' %}<span class="ms-2 badge rounded-4 bg-warning">{{ list|pending_subscriptions }}</span>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="{% url 'list_subscription_requests' list.list_id %}" class="dropdown-item">
+            {% trans 'Pending Approval' %}
+        </a></li>
+        <li><a href="{% url 'list_pending_confirmation' list.list_id %}" class="dropdown-item">
+            {% trans 'Pending Confirmation' %}
+        </a></li>
+        <li><a href="{% url 'list_unsubscription_requests' list.list_id %}" class="dropdown-item">
+            {% trans 'Unsubscription Requests' %}
+        </a></li>
+      </ul>
+      <noscript>
+        <li><a href="{% url 'list_subscription_requests' list.list_id %}" class="dropdown-item">
+            {% trans 'Pending Approval' %}
+        </a></li>
+        <li><a href="{% url 'list_pending_confirmation' list.list_id %}" class="dropdown-item">
+            {% trans 'Pending Confirmation' %}
+        </a></li>
+        <li><a href="{% url 'list_unsubscription_requests' list.list_id %}" class="dropdown-item">
+            {% trans 'Unsubscription Requests' %}
+        </a></li>
+      </noscript>
+    </li>
+    <li  class="nav-item">
+      <a href="{% url 'list_held_messages' list.list_id %}" class="{% nav_active_class current 'list_held_messages' %} nav-link">
+        {% trans 'Held messages' %}<span class="badge rounded-4 bg-warning ms-2"> {{ list|held_count }}</span>
+      </a>
+    </li>
+    {% endif %}
+    {% if user.is_superuser or user.show_list_members %}
+      {% if user.is_superuser or user.is_list_owner %}
+        <li  class="dropdown nav-item">
+            <a href="#" class="nav-link dropdown-toggle {% nav_active_class current 'list_members' %} " data-bs-toggle="dropdown"
+               role="button" aria-haspopup="true" aria-expanded="false">
+                {% trans 'Users' %}<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'list_members' list.list_id 'member' %}" class="dropdown-item">{% trans 'Members' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'nonmember' %}" class="dropdown-item">{% trans 'Non-Members' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'moderator' %}" class="dropdown-item">{% trans 'Moderators' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'owner' %}" class="dropdown-item">{% trans 'Owners' %}</a></li>
+            </ul>
+            <noscript>
+              <li><a href="{% url 'list_members' list.list_id 'member' %}" class="dropdown-item">{% trans 'Members' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'nonmember' %}" class="dropdown-item">{% trans 'Non-Members' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'moderator' %}" class="dropdown-item">{% trans 'Moderators' %}</a></li>
+              <li><a href="{% url 'list_members' list.list_id 'owner' %}" class="dropdown-item">{% trans 'Owners' %}</a></li>
+            </noscript>
+        </li>
+      {% else %}
+        <li  class="nav-item"><a href="{% url 'list_members' list.list_id 'member' %}" class="nav-link {% nav_active_class current 'list_members' %}">{% trans 'Members' %}</a></li>
+      {% endif %}
+    {% endif %}
+    {% if user.is_superuser or user.is_list_owner %}
+        <li  class="nav-item"><a href="{% url 'list_template_list' list.list_id %}" class="nav-link {% nav_active_class current 'templates' %}">{% trans 'Templates' %}</a></li>
+        <li  class="nav-item"><a href="{% url 'list_settings' list.list_id %}" class="nav-link {% nav_active_class current 'list_settings' %} ">{% trans 'Settings' %}</a></li>
+        <li  class="dropdown nav-item">
+            <a href="#" class="{% nav_active_class current 'list_mass_ops' %} dropdown-toggle nav-link" data-bs-toggle="dropdown"
+               role="button" aria-haspopup="true" aria-expanded="false">
+                {% trans 'Mass operations' %}<span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'mass_subscribe' list.list_id %}" class="dropdown-item">{% trans 'Mass subscribe' %}</a></li>
+              <li><a href="{% url 'mass_removal' list.list_id %}" class="dropdown-item">{% trans 'Mass removal' %}</a></li>
+            </ul>
+            <noscript>
+              <li><a href="{% url 'mass_subscribe' list.list_id %}" class="dropdown-item">{% trans 'Mass subscribe' %}</a></li>
+              <li><a href="{% url 'mass_removal' list.list_id %}" class="dropdown-item">{% trans 'Mass removal' %}</a></li>
+            </noscript>
+        </li>
+        <li  class="nav-item"><a href="{% url 'list_bans' list.list_id %}" class="{% nav_active_class current 'list_bans' %} nav-link">{% trans 'Ban List' %}</a></li>
+        <li  class="nav-item"><a href="{% url 'list_header_matches' list.list_id %}" class="nav-link {% nav_active_class current 'list_header_matches' %}">{% trans 'Header filters' %}</a></li>
+        <li  class="nav-item"><a href="{% url 'list_delete' list.list_id %}" class="{% nav_active_class current 'list_delete' %} nav-link">{% trans 'Delete' %}</a></li>
+    {% endif %}
+</ul>
+{% endif %}
+<h2>{{ title }} {% if subtitle %}<small>{{ subtitle }}</small>{% endif %}</h2>
+<br>

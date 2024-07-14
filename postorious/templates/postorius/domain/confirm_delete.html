@@ -1,0 +1,37 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+
+{% block head_title %}
+{% trans 'Confirm domain removal' %} | {{ domain}} - {{ block.super }}
+{% endblock %}
+
+{% load nav_helpers %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h2>{% trans 'Confirm deletion' %}</h2>
+    </div>
+
+    <p>
+      {% trans 'Are you sure you want to permanently delete' %} {{ domain }}?
+    </p>
+    {% if domain.lists %}
+    <p>
+      {% blocktrans with size=lists.total_size%}
+        This would delete {{ size }} lists, some of which are:
+      {% endblocktrans  %}
+    </p>
+    <ul>
+        {% for list in lists %}
+        <li><a href="{% url 'list_summary' list.fqdn_listname %}">{{ list.fqdn_listname }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">{% trans 'Delete' %} {{ domain.mail_host }}</button>
+        <a class="btn btn-primary" href="{% url 'domain_index' %}">{% trans 'Cancel' %}</a>
+    </form>
+
+{% endblock content %}

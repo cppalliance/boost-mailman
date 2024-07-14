@@ -1,0 +1,17 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+{% load pagination %}
+
+{% block head_title %}
+{% trans 'Banned addresses' %} | {{ list.fqdn_listname }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  {% list_nav 'list_bans' 'msgid:title:list_bans' %}
+  {% url 'list_bans' list.list_id as formurl %}
+  {% include 'postorius/fragments/bans.html' with formurl=formurl %}
+
+{% endblock %}

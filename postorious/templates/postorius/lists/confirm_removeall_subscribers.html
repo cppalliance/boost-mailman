@@ -1,0 +1,25 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Unsubscribe all members' %} | {{ list.fqdn_listname }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    {% list_nav 'mass_removal' 'msgid:title:list_mass_removal_confirm' %}
+
+    <h3 class="alert alert-danger">
+    {% blocktrans with listname=list.fqdn_listname %}
+        Warning! This will remove every member from {{ listname }}!
+    {% endblocktrans %}
+    </h3>
+
+    <form method="post" action="{% url 'unsubscribe_all' list.list_id %}">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit" >{% trans 'Remove ALL members' %}</button>
+        <a class="btn btn-success" href="{% url 'mass_removal' list.list_id %}">{% trans 'Cancel' %}</a>
+    </form>
+
+{% endblock content %}

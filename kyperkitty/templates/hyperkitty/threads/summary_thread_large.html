@@ -1,0 +1,71 @@
+{% load i18n %}
+{% load hk_generic %}
+
+{% with starting_email=thread.starting_email %}
+    <div class="thread{% if thread.is_unread %} unread{% endif %}">
+        <div class="thread-info">
+            <div class="thread-email row d-flex w-100">
+                <div class="thread-summary d-flex">
+                    <div class="p-2 sender gravatar circle">
+                        {% if starting_email.sender.address %}
+                            {% gravatar starting_email.sender.address 120 %}
+                        {% else %}
+                            <div class="gravatar-placeholder">&nbsp;</div>
+                        {% endif %}
+                    </div>
+                    <div class="p-2 flex-fill">
+                        <a name="{{thread.thread_id}}"
+                           href="{% url 'hk_thread' threadid=thread.thread_id mlist_fqdn=mlist.name %}"
+                           class="thread-title">
+                            {% if thread.favorite %}
+                                <i class="fa fa-star saved" title="{% trans 'Favorite' %}" aria-label="Favorite thread"></i>
+                            {% else %}
+                                <i class="fa fa-star-o notsaved" title="{% trans 'Favorite' %}" aria-label="Favorite thread"></i>
+                            {% endif %}
+                            {{ starting_email.subject|strip_subject:mlist }}
+                        </a>
+                        <br />
+                        <span class="sender-name align-center">
+                            by {{ thread.starting_email.sender_name|default:thread.starting_email.sender.address|escapeemail }}
+                        </span>
+                        <span class="d-flex d-md-none pull-right text-muted" title="{{ thread.date_active|date:'l, j F Y H:i:s' }}">
+                          {{ thread.date_active|date:"d M 'y" }}
+                        </span>
+                    </div>
+                    <div class="ml-auto p-2 d-none d-md-flex">
+                      <br/ >
+                        <span class="thread-date pull-right" title="{{ thread.date_active|date:'l, j F Y H:i:s' }}">
+                          <i class="fa fa-clock-o" title="{% trans 'Most recent thread activity' %}"></i>
+                          {{ thread.date_active|date:"d M 'y" }}
+                        </span>
+                    </div>
+                </div>
+                <div class="d-none d-md-flex flex-row w-100">
+                  <div class="col-10 thread-email-content d-flex">
+                    <span class="expander collapsed" style="color: #999">
+                        {{ starting_email.content|urlizetrunc:76|escapeemaillinks }}
+                    </span>
+                  </div>
+                  <div class="col-2">
+                        <div class="list-stats pull-right">
+                          <span class="badge bg-secondary">
+                            <i class="fa fa-user" aria-label="participants"></i>
+                            {{ thread.participants_count }}
+                            <!-- {% trans "participants" %} -->
+                          </span>
+                          <span class="badge bg-secondary">
+                            <i class="fa fa-comment" aria-label="replies"></i>
+                            {{ thread|num_comments }}
+                            <!-- {% trans "comments" %} -->
+                          </span>
+                          <span class="d-block d-md-flex">
+                            {% include "hyperkitty/fragments/like_form.html" with message_id_hash=starting_email.message_id_hash object=thread mlist=mlist %}
+                          </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endwith %}

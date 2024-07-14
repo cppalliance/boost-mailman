@@ -1,0 +1,32 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load pagination %}
+
+{% block head_title %}
+{% trans 'System Configuration' %} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+       {% trans "Mailman System" %}
+    </header>
+
+    <table class="table table-bordered table-striped">
+        {% for key, value in configs %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>{% trans 'Queues' %}</h2>
+    <table class="table table-bordered table-striped">
+        {% for queue, count in queues.items %}
+        <tr>
+            <td>{{ queue }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
