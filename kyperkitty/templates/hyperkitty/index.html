@@ -1,0 +1,276 @@
+{% extends "hyperkitty/base.html" %}
+{% load i18n %}
+{% load hk_generic %}
+{% load pagination %}
+{% load static %}
+
+
+{% block head_title %}
+{% trans 'Available lists' %} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="all-lists">
+
+<div class="row header">
+    <div class="col">
+        <h1>{% trans 'Available lists' %}</h1>
+    </div>
+    {# This version of the sort-by options shows up on larger screens. #}
+    <nav class="col d-none d-md-flex flex-row-reverse sort-mode" aria-label="mailinglist sort mode">
+        <ul class="list-unstyled list-inline">
+            <li class="list-inline-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "popular" %}"
+                   data-bs-toggle="tooltip" data-placement="bottom"
+                   title="{% trans 'Sort by number of recent participants' %}"
+                   {% if sort_mode == "popular" %}
+                   aria-current="page"
+                   >
+                   <span class="active" >{% trans 'Most popular' %}</span>
+                   {% else %}
+                   >
+                   {% trans 'Most popular' %}
+                   {% endif %}
+                </a>
+            </li>
+            <li class="list-inline-item">
+               <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "active" %}"
+                  data-bs-toggle="tooltip" data-placement="bottom"
+                  title="{% trans 'Sort by number of recent discussions' %}"
+                 {% if sort_mode == "active" %}
+                   aria-current="page"
+                >
+                  <span class="active" aria-selected="true">{% trans 'Most active' %}</span>
+                {% else %}
+                >
+                  {% trans 'Most active' %}
+               {% endif %}
+                </a>
+            </li>
+            <li class="list-inline-item">
+               <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "name" %}"
+                  data-bs-toggle="tooltip" data-placement="bottom"
+                  title="{% trans 'Sort alphabetically' %}"
+                  {% if sort_mode == "name" %}
+                  aria-current="page"
+                  >
+                    <span class="active" aria-selected="true">{% trans 'By name' %}</span>
+                  {% else %}
+                  >
+                    {% trans 'By name' %}
+               {% endif %}
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "creation" %}"
+                   data-bs-toggle="tooltip" data-placement="bottom"
+                   title="{% trans 'Sort by list creation date' %}"
+                   {% if sort_mode == "creation" %}
+                   aria-current="page"
+                   >
+                      <span class="active" aria-selected="true">{% trans 'Newest' %}</span>
+                   {% else %}
+                   >
+                   {% trans 'Newest' %}
+                   {% endif %}
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {# This version of the sort-by options shows up on tablets/mobile phones. #}
+    <div class="col btn-group float-right d-md-none">
+        <button type="button" role="button" class="dropdown-toggle btn btn-sm btn-secondary pull-right" data-bs-toggle="dropdown" aria-haspopup="true">
+            {% trans 'Sort by' %} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "popular" %}">{% trans 'Most popular' %}</a>
+            </li>
+            <li class="dropdown-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "active" %}">{% trans 'Most active' %}</a>
+            </li>
+            <li class="dropdown-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "name" %}">{% trans 'By name' %}</a>
+            </li>
+            <li class="dropdown-item">
+                <a href="{% url 'hk_root' %}?{% add_to_query_string "sort" "creation" %}">{% trans 'Newest' %}</a>
+            </li>
+        </ul>
+    </div>
+</div> <!--/row, for title & header -->
+
+<div class="row filter-lists">
+    <div class="col-12 col-sm-7 col-md-8">
+            {% if all_lists %}
+            <p class="hide-switches">
+                <label><input type="checkbox" value="inactive" {% if show_inactive %}checked="checked"{% endif %}/> {% trans "Hide inactive" %}</label>
+                <label><input type="checkbox" value="private" /> {% trans "Hide private" %}</label>
+            </p>
+            {% endif %}
+    </div>
+    <div class="float-right col-12 col-sm-5 col-md-4">
+        <form method="get" action="">
+            <input name="name" type="text" class="form-control" id="focusedInput"
+                   placeholder="{% trans 'Find list' %}"
+                   aria-label="Find list"
+                   aria-autocomplete="list"
+                   />
+        </form>
+    </div>
+</div> <!--/row, for switches & filter -->
+
+<!-- condensed table for tiny & xsmall screens -->
+<section class="row lists d-md-none" aria-label="List of mailinglists">
+    <div class="col-12">
+        {% if all_lists %}
+        <table class="lists table">
+            <tbody>
+            {% for mlist in all_lists %}
+                <tr class="list
+                   {% if mlist.is_private %}
+                   private
+                   {% elif mlist.recent_threads_count == 0 %}
+                   inactive
+                   {% endif %}
+                   "
+                   data-list-name="{{ mlist.name }}">
+                    <td>
+                        {% ifchanged mlist.name|first %}<a name="{{ mlist.name|first }}" />{% endifchanged %}
+                        {% if mlist.is_new %}
+                        <span class="new badge bg-secondary">{% trans 'new' %}</span>
+                        {% endif %}
+                         <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}"
+                            class="list-name">
+                             {% if mlist.display_name %}
+                                 {{ mlist.display_name }}
+                             {% else %}
+                                 {{ mlist.name|until:"@" }}
+                             {% endif %}
+                         </a>
+                        <span class="list-address">{{ mlist.name }}</span>
+                        {% if mlist.is_private %}
+                        <span class="list-tags">{% trans "private" %}</span>
+                        {% elif mlist.recent_threads_count == 0 %}
+                        <span class="list-tags">{% trans "inactive" %}</span>
+                        {% endif %}
+                        <br />
+
+                        <span class="list-description">{{ mlist.description|default_if_none:"" }}</span>
+                        <div class="chart d-xs-none">
+                            <img alt="{% trans 'Loading...' %}" class="ajaxloader" src="{% static 'hyperkitty/img/ajax-loader.gif' %}" />
+                        </div>
+                            <span class="badge bg-secondary">
+                                <i class="fa fa-user"></i>
+                                {{ mlist.recent_participants_count|default_if_none:"..." }}
+                            </span>
+                            <span class="badge bg-secondary">
+                                <i class="fa fa-comments"></i>
+                                {{ mlist.recent_threads_count|default_if_none:"..." }}
+                            </span>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table> <!-- /table, main-content -->
+        {% else %}
+        <p>{% trans "No archived list yet." %}</p>
+        {% endif %}
+    </div>
+</section> <!-- /row, for lists -->
+
+<section class="row lists d-none d-md-block" aria-label="List of mailinglists">
+    <div class="col-sm-12">
+        {% if all_lists %}
+        <table class="lists table">
+            <!-- headings only shown in screens >= 480px -->
+            <thead class="d-xs-none">
+                <tr>
+                    <th class="">{% trans 'List' %}</th>
+                    <th class="d-none d-md-table-cell">{% trans 'Description' %}</th>
+                    <th class="" colspan=2>{% trans 'Activity in the past 30 days' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for mlist in all_lists %}
+                <tr class="list
+                   {% if mlist.is_private %}
+                   private
+                   {% elif mlist.recent_threads_count == 0 %}
+                   inactive
+                   {% endif %}
+                   "
+                   data-list-name="{{ mlist.name }}">
+                    <!-- tiny/xsmall screens have 1 column, small screens have 2 columns, med/large screen have 3 columns -->
+                    <td>
+                        {% ifchanged mlist.name|first %}<a name="{{ mlist.name|first }}" />{% endifchanged %}
+                        {% if mlist.is_new %}
+                        <span class="new badge bg-secondary">{% trans 'new' %}</span>
+                        {% endif %}
+                         <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}"
+                            class="list-name">
+                             {% if mlist.display_name %}
+                                 {{ mlist.display_name }}
+                             {% else %}
+                                 {{ mlist.name|until:"@" }}
+                             {% endif %}
+                         </a>
+                        {% if mlist.is_private %}
+                        <span class="list-tags">{% trans "private" %}</span>
+                        {% elif mlist.recent_threads_count == 0 %}
+                        <span class="list-tags">{% trans "inactive" %}</span>
+                        {% endif %}
+                        <span class="list-address">
+                            {{ mlist.name }}
+                        </span>
+                    </td>
+                    <td class="list-description d-none d-md-table-cell">
+                        {{ mlist.description|default_if_none:"" }}
+                    </td>
+                    <td class="statistics">
+                        <ul class="list-stats list-unstyled">
+                            <li>
+                                <i class="fa fa-user"></i>
+                                {{ mlist.recent_participants_count|default_if_none:"..." }}
+                                {% trans 'participants' %}
+                            </li>
+                            <li>
+                                <i class="fa fa-comments"></i>
+                                {{ mlist.recent_threads_count|default_if_none:"..." }}
+                                {% trans 'discussions' %}
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="activity">
+                        <div class="chart">
+                            <img alt="{% trans 'Loading...' %}" class="ajaxloader" src="{% static 'hyperkitty/img/ajax-loader.gif' %}" />
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table> <!-- /table, main-content -->
+        {% else %}
+        <p>{% trans "No archived list yet." %}</p>
+        {% endif %}
+
+    </div> <!-- /container for table -->
+
+</section> <!-- /row, for lists -->
+
+{% paginator all_lists %}
+
+</div> <!-- /all-lists, outer-wrapper -->
+
+{% endblock %}
+
+{% block additionaljs %}
+
+<script>
+    $(function() {
+        setup_index("{% url 'hk_list_recent_activity' 'PLACEHOLDER@PLACEHOLDER' %}");
+    });
+</script>
+
+{% endblock %}

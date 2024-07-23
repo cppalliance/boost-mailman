@@ -20,3 +20,19 @@ The mailman servers are installed using https://github.com/cppalliance/ansible-m
 
 - settings.py now includes an "import settings_custom" at the end of the file. One idea is to add customizations in [settings_custom.py](./settings_custom.py). If there are general improvements any mailman installation would use, put those in settings.py itself and submit the changes back to the ansible repository also.   
 
+
+## Templates and Styles
+
+The templates and styles have been modified to more closely match the Boost website and those customizations are housed in the following directories.
+
+### Postorious
+
+The `postorious/templates` directory should override the templates provided in the Postorious project.  
+
+Style customizations reside in `postorious/static` directory and can replace what is provided by the Postorious project.  Bootstrap is updated to latest via the CDN in the base template.  
+
+### Hyperkitty
+
+The `hyperkitty/templates` directory should override the templates provided in the Hyperkitty project.  
+
+Style customizations reside in `hyperkitty/static` directory and can replace what is provided by the Hyperkitty project.  Bootstrap sass update is in progress with dark mode support and will be added to this static directory.

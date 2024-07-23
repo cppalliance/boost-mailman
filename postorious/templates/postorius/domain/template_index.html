@@ -1,0 +1,50 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+
+{% block head_title %}
+{% trans 'Templates' %}
+{% endblock head_title %}
+
+{% block content  %}
+    <div class="page-header">
+      <h1>{% trans 'Templates' %}
+        <small>{{ domain.mail_host }}</small>
+      </h1>
+    </div>
+
+    <p class="text-right"><a href="{% url 'domain_template_new' domain.mail_host %}" class="btn btn-success">{% trans 'New Template' %}</a></p>
+
+
+    {% if object_list %}
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th> {% trans 'Template Name' %} </th>
+            <th> &nbsp; </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for template in object_list %}
+          <tr>
+            <td> <b>[{{ template.name }}]</b> - {{ template.description }}</td>
+            <td>
+              <a class="btn btn-xs btn-primary" href="{% url 'domain_template_update' domain.mail_host template.id %}">{% trans 'Edit' %}</a>
+              <a class="btn btn-xs btn-danger" href="{% url 'domain_template_delete' domain.mail_host template.id %}">{% trans 'Delete' %}</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <p>{% trans 'No Templates.' %}</p>
+
+    {% endif %}
+
+
+{% endblock content %}

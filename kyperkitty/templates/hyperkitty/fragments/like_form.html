@@ -1,0 +1,33 @@
+{% load i18n %}
+
+    <form method="post" class="likeform"
+          action="{% url 'hk_message_vote' mlist_fqdn=mlist.name message_id_hash=message_id_hash %}">
+    {% csrf_token %}
+    {% with votes=object.get_votes %}
+		{% if object.myvote == 1 %}
+			<!-- if you like it, highlight thumbs up, disable thumbs down -->
+			<a href="#cancelvote" class="vote" data-vote="0" aria-label="Cancel vote">
+				<i class="fa fa-thumbs-up selected"></i> {{ votes.likes }}
+				<span class="hidden-tn hidden-xs">{% trans "You like it (cancel)" %}</span>
+			</a>
+			<i class="fa fa-thumbs-down disabled"></i> {{ votes.dislikes }}
+		{% elif object.myvote == -1 %}
+			<!-- if you don't like it, highlight thumbs down, disable thumbs up -->
+			<i class="fa fa-thumbs-up disabled">{{ votes.likes }}</i>
+			<a href="#cancelvote" class="vote" data-vote="0" aria-label="Cancel vote">
+				<i class="fa fa-thumbs-down selected"></i> {{ votes.dislikes }}
+				<span class="hidden-tn hidden-xs">{% trans "You dislike it (cancel)" %}</span>
+			</a>
+		{% else %}
+			<a class="youlike vote {% if not user.is_authenticated %} disabled" title="{% trans 'You must be logged-in to vote.' %}{% endif %}"
+			href="#like" data-vote="1" aria-label="Like thread">
+					<i class="fa fa-thumbs-o-up"></i> {{ votes.likes }}
+			</a>
+			<a class="youdislike vote{% if not user.is_authenticated %} disabled" title="{% trans 'You must be logged-in to vote.' %}{% endif %}"
+			href="#dislike" data-vote="-1" aria-label="Dislike thread">
+				<i class="fa fa-thumbs-o-down"></i> {{ votes.dislikes }}
+			</a>
+		{% endif %}
+    {% endwith %}
+
+    </form>

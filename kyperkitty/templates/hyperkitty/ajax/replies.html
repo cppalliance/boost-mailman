@@ -1,0 +1,9 @@
+{% load i18n %}
+{% load hk_generic %}
+    {% for email in replies %}
+    <div class="{% cycle 'odd' 'even' %} {% if email.level %}reply-level-{{ email.level }}{% endif %}">
+      <!-- Start email -->
+      {% include 'hyperkitty/messages/message.html' %}
+      <!-- End of email -->
+    </div>
+    {% endfor %}

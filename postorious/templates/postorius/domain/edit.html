@@ -1,0 +1,21 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+
+{% block head_title %}
+{% trans 'Edit domain' %} {{ domain }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>{% trans 'Edit domain' %} <small>{{ domain }}</small></h1>
+    </div>
+
+    <form action="{% url 'domain_edit' domain=domain %}" method="post" class="form-horizontal">
+        {% bootstrap_form_horizontal form 2 8 'Update' %}
+        <p hidden>{% trans 'Update' %}</p>
+    </form>
+
+{% endblock content %}
+

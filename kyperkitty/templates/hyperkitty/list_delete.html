@@ -1,0 +1,43 @@
+{% extends "hyperkitty/base.html" %}
+{% load i18n %}
+{% load hk_generic %}
+
+
+{% block title %}
+{% trans "Delete MailingList" %} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-sm-10">
+
+        <div class="message-header">
+            <h1>
+                {% trans "Delete Mailing List From HyperKitty" %}
+            </h1>
+        </div>
+
+        <p>
+
+        {{ mlist.name }} {% trans 'will be deleted from HyperKitty along with all the threads and messages. It will not be deleted from Mailman Core. Do you want to continue?' %}
+
+        </p>
+
+        <form method="post" enctype="multipart/form-data" action="{% url 'hk_list_delete' mlist.name %}">
+            {% csrf_token %}
+            <p class="buttons">
+                <button type="submit" class="submit btn btn-primary">{% trans "Delete" %}</button>
+                {% trans "or" %}
+                <a class="cancel" href="{% url 'hk_list_overview' mlist.name %}">
+                  {% trans "cancel" %}
+                </a>
+            </p>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

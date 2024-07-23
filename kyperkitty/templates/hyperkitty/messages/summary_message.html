@@ -1,0 +1,37 @@
+{% load i18n %}
+{% load hk_generic %}
+
+        <div class="thread">
+            <div class="thread-info">
+                <div class="thread-email row d-flex">
+                    <div class="hidden-tn hidden-xxs hidden-xs col-sm-1 sender gravatar">
+                        {% if email.sender.address %}
+                        {% gravatar email.sender.address 120 %}
+                            <br />
+                        {% else %}
+                                <div class="gravatar-placeholder">&nbsp;</div>
+                        {% endif %}
+                        <!-- {{ email.sender_name|default:email.sender.address|escapeemail }} -->
+                    </div>
+                    <div class="col-10">
+                        <span class="thread-title">
+                            <a name="{{email.message_id_hash}}"
+                               href="{% url 'hk_message_index' mlist_fqdn=email.mailinglist.name message_id_hash=email.message_id_hash %}"
+                               >{{ email.subject|strip_subject:mlist }}</a>
+                        </span>
+                        <div>
+                            {% blocktrans with name=email.sender_name|default:email.sender.address|escapeemail %}
+                                by {{ name }}
+                            {% endblocktrans %}
+                        </div>
+                        <span class="expander collapsed hidden-tn hidden-xxs hidden-xs" style="color: #999">
+                            {{ email.content|urlizetrunc:76|escapeemaillinks }}
+                        </span>
+                    </div>
+                    <div class="col"
+                         title="{{ email.date|date:'l, j F Y H:i:s' }}">
+                        {{ email.date|timesince }}
+                    </div>
+                </div>
+            </div>
+        </div>

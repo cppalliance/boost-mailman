@@ -1,0 +1,88 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Subscription preferences' %} | {{ user.username }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="user-profile">
+    {% user_nav 'settings_list' 'msgid:title:user_settings_list' %}
+
+    {% if formset|length == 0 %}
+      <div>
+          <h2>{% trans 'No preferences available' %}</h2>
+      </div>
+      <p>{% trans 'You are not yet subscribed to any lists, so you have no Mailman preferences.' %}</p>
+    {% else %}
+        <p>{% trans 'Each list subscription can have specific Mailman preferences.' %}</p>
+        <p>{% trans 'Any options showing as not set inherit at runtime from your global or address specific preferences (viewable on other tabs)' %}</p>
+        <form action="{% url 'user_subscription_preferences' %}" method="post" id="subscriptions_formset">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    {% for form in formset %}
+                        {% if forloop.first %}
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Subscription' %}</th>
+                                    {% for field in form.visible_fields %}
+                                    <th>
+                                        <label for="{{ field.id_for_label }}"><a data-bs-toggle="tooltip" title="{{ field.help_text }}">{{ field.label }}</a></label>
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                        {% endif %}
+                        <tr id="{{ form.list_id }}">
+                            <td>
+                                <a href="{% url 'user_list_options' member_id=form.member_id %}">
+                                    {{ form.list_id }}
+                                </a>
+                                {% if form.subscription_mode == 'as_address'%}
+                                    ({{ form.address }})
+                                {% else %}
+                                    ({% trans 'Primary Address' %})
+                                {% endif %}
+                            </td>
+                            {% for field in form %}
+                                {% if field|fieldtype_is:'RadioSelect' %}
+                                    <td class="text-center">
+                                        <fieldset name="{{ field.name }}" role="radiogroup" aria-label="{{ form.list_id }}">
+                                    {% for choice in field %}
+                                        <label class="radio-inline" for="{{ choice.id_for_label }}">
+                                            {{ choice.tag }}
+                                            {{ choice.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                        </fieldset>
+                                    </td>
+                                {% elif field|fieldtype_is:'Select' %}
+                                    <td>{{ field|add_form_select }}</td>
+                                {% else %}
+                                    <td>{{ field|add_form_control }}</td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
+            </div>
+        </form>
+    {% endif %}
+</div>
+
+{% endblock content %}
+{% block additionaljs %}
+<script>
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load nav_helpers %}
+{% load bootstrap_tags %}
+
+{% block content %}
+
+    {% list_nav 'list_mass_ops' 'msgid:title:list_mass_removal' %}
+
+    <form action="{% url 'mass_removal' list.list_id %}" method="post" class="form-horizontal">
+        {% bootstrap_form_horizontal form 2 8 %}
+        <div class="form-group">
+            <div class="offset-md-2 col-md-8">
+                <button class="btn btn-info" type="submit">{% trans 'Remove listed users' %}</button>
+                <hr>
+                <a href="{% url 'unsubscribe_all' list.list_id %}" class="btn btn-danger">
+                    {% trans 'Remove ALL members' %}</a>
+            </div>
+        </div>
+    </form>
+
+{% endblock content %}

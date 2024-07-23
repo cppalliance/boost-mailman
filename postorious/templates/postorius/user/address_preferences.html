@@ -1,0 +1,77 @@
+{% extends "postorius/base.html" %}
+
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load nav_helpers %}
+
+{% block head_title %}
+{% trans 'Subscription preferences' %} | {{ user.username }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="user-profile">
+    {% user_nav 'settings_address' 'msgid:title:user_settings_address' %}
+
+    {% if formset|length == 0 %}
+        <h2>{% trans 'No preferences available' %}</h2>
+        <p>{% trans 'You are not yet subscribed to any lists, so you have no Mailman preferences.' %}</p>
+    {% else %}
+        <p>{% trans 'Each email address can have specific Mailman preferences.' %}</p>
+        <p>{% trans 'Any options showing as not set here inherit at runtime from your global preferences (viewable on other tab)' %}</p>
+
+        <form action="{% url 'user_address_preferences' %}" method="post" id="address_formset">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    {% for form in formset %}
+                        {% if forloop.first %}
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Address' %}</th>
+                                    {% for field in form.visible_fields %}
+                                        <th>
+                                            <label for="{{ field.id_for_label }}"><a data-bs-toggle="tooltip" title="{{ field.help_text }}">{{ field.label }}</a></label>
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                        {% endif %}
+                        <tr>
+                            <td>{{ form.address }}</td>
+                                {% for field in form %}
+                                {% if field|fieldtype_is:'RadioSelect' %}
+                                    <td class="text-center">
+                                        {% for choice in field %}
+                                            <label class="radio-inline" for="{{ choice.id_for_label }}">
+                                                {{ choice.tag }}
+                                                {{ choice.choice_label }}
+                                            </label>
+                                        {% endfor %}
+                                    </td>
+                                {% elif field|fieldtype_is:'Select' %}
+                                    <td>{{ field|add_form_select }}</td>
+                                {% else %}
+                                    <td>{{ field|add_form_control }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">{% trans 'Save' %}</button>
+            </div>
+        </form>
+    {% endif %}
+</div>
+
+{% endblock content %}
+{% block additionaljs %}
+<script>
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %}

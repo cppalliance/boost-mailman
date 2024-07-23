@@ -1,0 +1,117 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load pagination %}
+{% load bootstrap_tags %}
+{% load postorius_helpers %}
+
+{% block head_title %}
+{% trans 'Manage user' %} - {{ auser|user_display }}
+{% endblock %}
+
+{% block content %}
+<h2>{{ auser|user_display }}</h2>
+<form action="{% url 'manage_user' auser.user_id %}" method="post" id="address_formset">
+  {% csrf_token %}
+  {% bootstrap_form_horizontal user_form 2 4 %}
+  <input class="btn btn-primary btn-sm" name="user_form" type="submit" value="{% trans 'Update' %}">
+</form>
+<h4>{% trans 'Addresses' %}</h4>
+<form action="{% url 'manage_user' auser.user_id %}" method="post" id="address_formset">
+  {% csrf_token %}
+  {{ addresses.management_form }}
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      {% for form in addresses %}
+      {% if forloop.first %}
+      <thead>
+        <tr>
+          <th>{% trans 'Email' %}</th>
+          {% for field in form.visible_fields %}
+          <th>
+            <label for="{{ field.id_for_label }}"><a data-bs-toggle="tooltip" title="{{ field.help_text }}">{{ field.label }}</a></label>
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      {% endif %}
+        <tr>
+          <td>{{ form.address.email }}</td>
+          {% for field in form %}
+          <td>{{ field }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+  <input class="btn btn-primary btn-sm" name="address_form" type="submit" value="{% trans 'Update' %}">
+</form>
+
+<h4>{% trans 'Subscriptions' %}</h4>
+{% if subscriptions.forms %}
+<form action="{% url 'manage_user' auser.user_id %}" method="post" id="subscription_formset">
+  {% csrf_token %}
+  {{ subscriptions.management_form }}
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      {% for form in subscriptions %}
+      {% if forloop.first %}
+      <thead>
+        <tr>
+          <th>{% trans 'List' %}</th>
+          <th>{% trans 'Address' %}</th>
+          <th>{% trans 'Role' %}</th>
+          {% for field in form.visible_fields %}
+          <th>
+            <label for="{{ field.id_for_label }}"><a data-bs-toggle="tooltip" title="{{ field.help_text }}">{{ field.label }}</a></label>
+          </th>
+          {% endfor %}
+        </tr >
+      </thead >
+      {% endif %}
+        <tr>
+          <td>{{ form.member.list_id }}</td>
+          <td>{{ form.member.address }}</td>
+          <td>{% trans form.member.role %}</td>
+          {% for field in form %}
+          <td>{{ field|add_form_control }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+  </table>
+  </div>
+  <input class="btn btn-primary btn-sm" type="submit" name="subs_form" value="{% trans 'Update' %}">
+</form>
+{% else %}
+  {% trans 'User has no subscriptions.' %}
+{% endif %}
+
+{% if django_user %}
+<h4>{% trans 'Web Account' %}</h4>
+<table class="table">
+  <tr>
+    <td><strong>{% trans 'Username' %}</strong></td>
+    <td>{{ django_user.username }}</td>
+  </tr>
+  <tr>
+    <td><strong>{% trans 'Superuser' %}</strong></td>
+    <td>{{ django_user.is_superuser|yesno|capfirst }}</td>
+  </tr>
+  <tr>
+    <td><strong>{% trans 'Last login' %}</strong></td>
+    <td>{{ django_user.last_login|date:"DATETIME_FORMAT" }}</td>
+  </tr>
+  <tr>
+    <td><strong>{% trans 'Date joined' %}</strong></td>
+    <td>{{ django_user.date_joined|date:"DATETIME_FORMAT" }}</td>
+  </tr>
+</table>
+
+<h4>{% trans 'Change password' %}</h4>
+<form action="{% url 'manage_user' auser.user_id %}" method="post" id="subscription_formset">
+  {% bootstrap_form_horizontal change_password 2 6 %}
+  <input class="btn btn-primary btn-sm" name="change_password" type="submit" value="{% trans 'Change password' %}">
+</form>
+{% endif %}
+<h4>{% trans 'Delete Account' %}</h4>
+<a class="btn btn-primary btn-sm" href={% url 'delete_user' auser.user_id %}>Delete</a>
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load hk_generic %}
+
+{% export_allowed as export_allowed %}
+{% if mlist %}
+<div class="d-none d-md-inline col-12 col-md-2">
+    <div class="row d-flex justify-content-center flex-column align-items-center">
+        {% if pagename != 'overview' %}
+        <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}"
+           class="btn btn-outline-primary p-2 m-2">
+            <span class="fa fa-backward"></span>
+            {% trans "List overview" %}</a>
+
+        {% endif %}
+        {% if pagename == 'thread' %}
+        <a href="{% url 'hk_archives_latest' mlist_fqdn=mlist.name %}"
+           class="btn btn-outline-primary p-2 m-2">
+            <span class="fa fa-backward"></span>
+       {% trans "All Threads" %}</a>
+    {% endif %}
+    </br>
+    <!-- Download as mbox -->
+    {% if pagename == 'overview' %}
+    {% if export_allowed %}
+    <div class="btn-group">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle p-2 m-2" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-download"></i>
+            {% trans "Download" %} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="{{ export.recent }}">{% trans "Past 30 days" %} <small>(mbox)</small></a></li>
+            <li><a href="{{ export.month }}">{% trans "This month" %} <small>(mbox)</small></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'hk_list_export_mbox' mlist_fqdn=mlist.name filename=mlist.name %}">
+                {% trans "Entire archive" %} <small>(mbox)</small></a></li>
+        </ul>
+    </div>
+    {% endif %}
+    {% elif export and export_allowed %}
+    <a href="{{ export.url }}" title="{{ export.title }}"
+          class="btn btn-outline-primary p-2 m-2">
+        <i class="fa fa-download"></i> {{ export.message }}</a>
+    {% endif %}
+</div>
+</div>
+{% endif %}

@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load hk_generic %}
+
+{% if threads %}
+
+<div class="list-group">
+    {% for thread in threads %}
+        <a class="list-group-item list-group-item-action" href="{% url 'hk_thread' threadid=thread.thread_id mlist_fqdn=mlist.name %}">
+            <h3 class="list-group-item-heading mb-1">
+                {% if thread|is_unread_by:request.user %}
+                    <i class="fa fa-envelope" title="{% trans 'New messages in this thread' %}"></i>
+                {% endif %}
+                {{ thread.subject|strip_subject:mlist }}
+            </h3>
+            <div class="list-group-item-text">
+                {{ thread.date_active|date:"D M j, g:i a" }}
+                <ul class="list-unstyled pull-right list-stats">
+                    <li>
+                        <i class="fa fa-user" aria-label="participants"></i>
+                        {{ thread.participants_count }}
+                    </li>
+                    <li>
+                        <i class="fa fa-comment" aria-label="replies"></i>
+                        {{ thread|num_comments }}
+                    </li>
+                    <li class="hidden-tn">
+                        {% with votes=thread.get_votes %}
+                        <span class="likestatus">
+                            <i class="fa fa-thumbs-o-up"  aria-label="likes"></i> {{ votes.likes }} 
+                            <i class="fa fa-thumbs-o-down" aria-label="dislikes"></i> {{ votes.dislikes }} 
+                        </span>
+                        {% endwith %}
+                    </li>
+                </ul>
+            </div>
+        </a>
+    {% endfor %}
+    <a class="list-group-item text-center" href="{% url 'hk_archives_latest' mlist_fqdn=mlist.name %}">{% trans "All Threads" %}</a>
+</div>
+
+{% elif empty %}
+
+<p>{{ empty }}</p>
+
+{% endif %}

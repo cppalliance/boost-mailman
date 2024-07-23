@@ -1,0 +1,34 @@
+{% extends "postorius/base.html" %}
+{% load i18n %}
+{% load nav_helpers %}
+{% load bootstrap_tags %}
+
+{% block head_title %}
+{% trans 'Member options' %} | {{ mlist.fqdn_listname }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="user-profile">
+    {% user_nav 'settings_list' 'msgid:title:user_settings_list' %}
+
+    <h2 class="margin-bottom">{% trans 'Subscription options for' %} <strong>{{ mlist.fqdn_listname }}</strong></h2>
+    <p>{% trans 'Any options showing as not set inherit at runtime from your global or address specific preferences (viewable on other tabs)' %}</p>
+    <hr />
+
+    <p class="offset-md-2">
+    {% trans 'Use this form to change the email used for this subscription' %}:
+    </p>
+    <form action="{% url 'change_subscription' mlist.list_id %}" method="post" class="form-horizontal">
+        {% bootstrap_form_horizontal change_subscription_form 3 8 'Change email used for subscription' %}
+        <p hidden>{% trans 'Change email used for subscription' %}</p>
+    </form>
+    <hr />
+    <form action="" method="post" class="form-horizontal">
+      {% bootstrap_form_horizontal form 3 8 'Save changes' %}
+      <p hidden>{% trans 'Save changes' %}</p>
+      <input type="hidden" name="formname" value="preferences" />
+    </form>
+
+</div>
+
+{% endblock content %}

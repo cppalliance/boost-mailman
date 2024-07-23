@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load bootstrap_tags %}
+{% load pagination %}
+
+<!-- Add ban -->
+<form action="{{ formurl }}" method="POST" class="form-inline bans-add-form row g-3 align-items-center">
+    {% csrf_token %}
+    <div class="form-group {% if addban_form.email.errors %}has-error{% endif %}">
+        {% if addban_form.email.errors %}
+            <div class="alert alert-danger">{{ addban_form.email.errors }}</div>
+        {% endif %}
+        <span class="fw-bold">{{ addban_form.email.label_tag }}</span>
+        {{ addban_form.email|add_form_control }}
+        <button class="btn btn-primary" type="submit" name="add">{% trans 'Ban email' %}</button>
+        <div id="help-{{ addban_form.email.id_for_label }}" class="help-block text-muted">
+            {{ addban_form.email.help_text }}
+        </div>
+    </div>
+</form>
+
+<!-- Unban -->
+<h4>{% trans 'Currently banned addresses' %}</h4>
+
+{% if banned_addresses|length > 0 %}
+<table class="table bans-current">
+    <tbody>
+        {% for ban in banned_addresses %}
+        <tr>
+            <td>{{ ban.email }}</td>
+            <td>
+                <form action="{{ formurl }}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ ban.email }}" />
+                    <button class="btn btn-danger btn-xs" type="submit" name="del"
+                            title="{% trans 'Un-ban this address' %}">
+                        <span class="fa fa-remove" aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% paginator banned_addresses %}
+{% else %}
+<p>{% trans 'No addresses are currently banned.' %}</p>
+{% endif %}
