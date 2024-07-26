@@ -195,8 +195,12 @@ if env("ADD_REMOTE_ADDR_MIDDLEWARE", None):
     # Add custom middleware to set REMOTE_ADDR when using a unix domain socket
     MIDDLEWARE = MIDDLEWARE + (env("ADD_REMOTE_ADDR_MIDDLEWARE", None),)
 
-try:
-    import settings_custom
-except:
-    pass
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_custom')
+]
+
+TEMPLATES[0]['DIRS'] = [
+    os.path.join(BASE_DIR, 'templates')
+]

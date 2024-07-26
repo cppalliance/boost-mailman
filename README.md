@@ -17,6 +17,3 @@ The mailman servers are installed using https://github.com/cppalliance/ansible-m
 - The settings.py file in ansible has been refactored so that instead of being an ansible template, it is static and leverages environment variables. See [settings.py](./settings.py).
 
 - **Environment Variables**: Copy file `env.template` to `.env` and adjust values to match your local environment.  
-
-- settings.py now includes an "import settings_custom" at the end of the file. One idea is to add customizations in [settings_custom.py](./settings_custom.py). If there are general improvements any mailman installation would use, put those in settings.py itself and submit the changes back to the ansible repository also.   
-
