@@ -1,0 +1,61 @@
+---
+
+# Boost customizations
+#
+
+- name: Create directory for git repo
+  ansible.builtin.file:
+    path: "/opt/github/ansible-managed/"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: Checkout boost-mailman
+  ansible.builtin.git:
+    repo: 'https://github.com/cppalliance/boost-mailman.git'
+    dest: /opt/github/ansible-managed/boost-mailman
+    version: custom-files
+
+- name: Copy boost static files
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+    owner: "{{ __mailman3_web_user_name }}"
+    group: "{{ __mailman3_web_group_name }}"
+  loop:
+    - { src: '/opt/github/ansible-managed/boost-mailman/hyperkitty/static/hyperkitty', dest: '{{ mailman3_web_var_dir }}/static_custom/' }
+    - { src: '/opt/github/ansible-managed/boost-mailman/postorius/static/postorius', dest: '{{ mailman3_web_var_dir }}/static_custom/' }
+  notify:
+    - Restart mailman3-web service
+
+- name: Copy boost templates
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+    owner: "{{ __mailman3_web_user_name }}"
+    group: "{{ __mailman3_web_group_name }}"
+  loop:
+    - { src: '/opt/github/ansible-managed/boost-mailman/hyperkitty/templates/hyperkitty', dest: '{{ mailman3_web_var_dir }}/templates/' }
+    - { src: '/opt/github/ansible-managed/boost-mailman/postorius/templates/postorius', dest: '{{ mailman3_web_var_dir }}/templates/' }
+  notify:
+    - Restart mailman3-web service
+    
+- name: Collect Django static files again in custom tasks
+  community.general.django_manage:
+    command: collectstatic
+    settings: settings
+    pythonpath: "{{ mailman3_django_project_dir }}"
+    project_path: "{{ mailman3_django_project_dir }}"
+    virtualenv: "{{ mailman3_install_dir }}"
+  when: mailman3_install_method == "pip"
+
+- name: Compress CSS again in custom tasks
+  community.general.django_manage:
+    command: compress
+    settings: settings
+    pythonpath: "{{ mailman3_django_project_dir }}"
+    project_path: "{{ mailman3_django_project_dir }}"
+    virtualenv: "{{ mailman3_install_dir }}"
