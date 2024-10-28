@@ -197,10 +197,12 @@ if env("ADD_REMOTE_ADDR_MIDDLEWARE", None):
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static_custom')
-]
+# 2024-09. Temporarily removing customizations. Can be returned later.
 
-TEMPLATES[0]['DIRS'] = [
-    os.path.join(BASE_DIR, 'templates')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static_custom')
+# ]
+# 
+# TEMPLATES[0]['DIRS'] = [
+#     os.path.join(BASE_DIR, 'templates')
+# ]
