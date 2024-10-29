@@ -1,0 +1,154 @@
+/* Sticky footer: http://getbootstrap.com/examples/sticky-footer/ */
+html {
+    position: relative;
+    min-height: 100%;
+    /* This mostly makes sure that the font size doesn't change with
+     bump to Bootstrap 4, which has a default HTML level font-size
+     of 16px rem. */
+    font-size: 14px;
+}
+
+body {
+    margin-bottom: 90px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #e7e7e7;
+    border-radius: 4px;
+    padding-top: 20px;
+}
+/* ---- */
+
+.margin-bottom {
+    margin-bottom: 1em;
+}
+
+form.bans-add-form {
+    margin-bottom: 2.5rem;
+}
+table.bans-current {
+    width: auto;
+}
+
+
+/* Header matches */
+
+table.header-matches th .text-muted {
+    font-weight: normal;
+    font-size: small;
+}
+table.header-matches td .errorlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.header-matches-pending-changes {
+    display: none;
+    margin-left: 1rem;
+}
+
+.page-header{
+	margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 9px;
+    font-size: 175%;
+}
+
+.page-header h1 {
+	margin-top: 0px;
+	padding-top: 0px;
+}
+
+/* Improve contrast per accessibility guidelines */
+header.navbar {
+    background-color: rgb(8, 109, 215);
+    min-height: 59px;
+}
+
+.navbar-default .navbar-brand {
+    color: white;
+}
+.navbar-default a.nav-link {
+    color: white;
+}
+.navbar-default .fa-bars {
+    color: white;
+}
+.navbar-brand img {
+    height: 35px;
+}
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    font-weight: 400;
+    line-height: 1.4;
+}
+.h1 .small, .h1 small, .h2 .small, .h2 small, .h3 .small, .h3 small, .h4 .small, .h4 small, .h5 .small, .h5 small, .h6 .small, .h6 small, h1 .small, h1 small, h2 .small, h2 small, h3 .small, h3 small, h4 .small, h4 small, h5 .small, h5 small, h6 .small, h6 small {
+    color: #666;
+}
+a {
+    color: #2269a6;
+}
+.btn-danger {
+    background-color: #c8423e;
+}
+.btn-success {
+    background-color: #298529;
+}
+.btn-warning {
+    background-color: #A4660E;
+}
+.alert-success {
+    color: #294C29;
+}
+.alert-danger {
+    color: #773231;
+}
+
+/* .navbar-default {
+        margin-bottom: 20px;
+} */
+
+h1, h2, h3, h4, h5, h6, h7 {
+        margin-bottom: 10px;
+        margin-top: 20px;
+}
+
+.current-role {
+    font-size: 120%;
+    font-weight: 110%;
+    text-align: center;
+    /* padding-left: 15px; */
+}
+
+ul.horizontal-list {
+    list-style: none;
+    padding-inline-start: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    height: 100%;
+}
+
+ul.horizontal-list li {
+    display: inline;
+}
+
+.username {
+    font-weight: 400;
+}
+
+button.user-button {
+    background-color: inherit;
+    border: none;
+}
+
+/* Disable the black border on the navbar toggler
+   when it is in focus. */
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    color: white;
+}
