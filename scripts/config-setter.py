@@ -5,11 +5,12 @@
 
 import requests
 from mailman.testing.documentation import dump_json
+import os
 
 hostname="lists.boost.org"
 port_number="8001"
 rest_user="restadmin"
-rest_password=""
+rest_password=os.environ['REST_PASSWORD']
 
 if not rest_password:
     print("please set rest_password. Exiting.")
