@@ -1,53 +1,31 @@
 
-## Common commands  
+## Common commands - managing mailman-web  
 
-Managing mailman-web.  
-
-There are multiple ways to run mailman-web commands. One method is to continue as the `root` user, using sudo each time. For example:  
-
-```
-sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web migrate
-```
-
-Another method is to switch to the proper mailman web user `mailman3-web`, configure enviroment variables, and then directly run a command.  
-
-```
-sudo su - mailman3-web
-. /opt/mailman3/bin/activate
-cd /var/lib/mailman3/web/project
-export PYTHONPATH=$PYTHONPATH:$PWD
-export DJANGO_SETTINGS_MODULE=settings
-```
-
-```
-mailman-web update_index_one_list boost@lists.cppal-dev.boost.cppalliance.org
-```
-
-The command `mailman-web` is mostly equivalent to `python3 manage.py`.  
+There are multiple ways to run the `mailman-web` command. The latest and recommended method is now to call the wrapper convenience script `mailman-web-wrapper` (as root) located in /usr/local/bin/mailman-web-wrapper which will set necessary parameters including user account, executable path, and environment variables. That makes it easy to call the command and not be concerned about those details. If you'd like to more information about previous methods, see [earlier-notes-to-keep.md](earlier-notes-to-keep.md) .
 
 Run migrations:  
 
 ```
-sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web migrate
+# sudo mailman-web-wrapper migrate
 ```
 
 Refresh threads cache:  
 
 ```
-sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjob -v 3 hyperkitty recent_threads_cache
+# sudo mailman-web-wrapper runjob -v 3 hyperkitty recent_threads_cache
 ```
 
 ## Lists of cron jobs
 
 ```
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs minutely --list
+# sudo mailman-web-wrapper runjobs minutely --list
 Job List: 0 jobs
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs quarter_hourly --list
+# sudo mailman-web-wrapper runjobs quarter_hourly --list
 Job List: 0 jobs
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs hourly --list
+# sudo mailman-web-wrapper runjobs hourly --list
 Job List: 3 jobs
  appname    - jobname                - when   - help
 --------------------------------------------------------------------------------
@@ -55,7 +33,7 @@ Job List: 3 jobs
  hyperkitty - thread_starting_email  - hourly - Find the starting email when it is missing
  hyperkitty - update_index           - hourly - Update the full-text index
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs daily --list
+# sudo mailman-web-wrapper runjobs daily --list
 Job List: 5 jobs
  appname           - jobname              - when  - help
 --------------------------------------------------------------------------------
@@ -65,20 +43,33 @@ Job List: 5 jobs
  hyperkitty        - recent_threads_cache - daily - Refresh the recent threads cache
  hyperkitty        - sync_mailman         - daily - Sync user and list properties with Mailman
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs weekly --list
+# sudo mailman-web-wrapper runjobs weekly --list
 Job List: 0 jobs
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs monthly --list
+# sudo mailman-web-wrapper runjobs monthly --list
 Job List: 2 jobs
  appname    - jobname                - when    - help
 --------------------------------------------------------------------------------
  hyperkitty - empty_threads          - monthly - Remove empty threads
  hyperkitty - update_and_clean_index - monthly - Update the full-text index and clean old entries
 
-root@lists:/opt/mailman3/bin# sudo -u mailman3-web MAILMAN_WEB_CONFIG=/var/lib/mailman3/web/project/settings.py /opt/mailman3/bin/mailman-web runjobs yearly --list
+# sudo mailman-web-wrapper runjobs yearly --list
 Job List: 1 jobs
  appname    - jobname            - when   - help
 --------------------------------------------------------------------------------
  hyperkitty - thread_order_depth - yearly - Compute thread order and depth for all threads
 
 ```
+
+## Managing mailman core
+
+The latest and recommended method to call the `mailman` cli command is now to run the wrapper convenience script `mailman-wrapper` (as root) located in /usr/local/bin/mailman-wrapper which will set necessary parameters including user account, executable path, and environment variables. That makes it easy to call the command and not be concerned about those details. If you'd like to more information about previous methods, see [earlier-notes-to-keep.md](earlier-notes-to-keep.md) .
+
+Example:
+
+```
+# sudo mailman-wrapper help
+
+# sudo mailman-wrapper version
+```
+
