@@ -9,6 +9,7 @@ The mailman servers are installed using https://github.com/cppalliance/ansible-m
 /var/lib/mailman3/ Mailman core production files.  
 /var/lib/mailman3/web/ Mailman web   
 /var/lib/mailman3/web/project/ Django settings files. settings.py, manage.py, .env  
+/opt/mailman3/ A python virtual environment used by core and web. (There are no mailman "configuration files" /opt/mailman3. It is a venv with pip packages).
 
 ## Local development environment
 
