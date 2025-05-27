@@ -3,13 +3,13 @@
 
 Modify the steps as necessary.  
 
-gcloud config configurations create cppal
-gcloud config configurations activate cppal
-gcloud config set project boostorg-project1
-gcloud config set account sam@cppalliance.org
+gcloud config configurations create cppal  
+gcloud config configurations activate cppal  
+gcloud config set project boostorg-project1  
+gcloud config set account sam@cppalliance.org  
 
-gcloud auth application-default login
+gcloud auth application-default login  
 
-terraform init
-terraform apply
+terraform init  
+terraform apply  
 

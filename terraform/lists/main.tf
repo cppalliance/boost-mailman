@@ -21,13 +21,13 @@ resource "google_compute_instance" "example" {
   machine_type               = "n2-standard-2"
   name                       = "lists"
   tags                       = ["elasticsearch", "munin", "nrpe", "email", "http-server", "https-server", "lb-health-check", "mailman3-core", "postgres-client", "prometheus"]
-  zone                       = "us-central1-c"
+  zone                       = "us-central1-a"
   boot_disk {
     auto_delete             = true
     device_name             = "lists"
     mode                    = "READ_WRITE"
     initialize_params {
-      image                       = "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2404-noble-amd64-v20241004"
+      image                       = "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2404-noble-amd64-v20250502a"
       size                        = 150
       type                        = "pd-balanced"
     }
