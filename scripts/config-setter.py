@@ -24,6 +24,7 @@ urls["Boost-announce"] = (
 urls["Boost-users"] = (
     f"http://{hostname}:{port_number}/3.1/lists/boost-users@{hostname}/config"
 )
+urls["test"] = f"http://{hostname}:{port_number}/3.1/lists/test@{hostname}/config"
 settings = {}
 settings["boost"] = dict(
     default_nonmember_action="reject",
@@ -49,7 +50,14 @@ settings["Boost-users"] = dict(
     reply_goes_to_list="point_to_list",
     subject_prefix="[Boost-users] ",
 )
-
+settings["test"] = dict(
+    default_nonmember_action="reject",
+    convert_html_to_plaintext="True",
+    filter_content="True",
+    dmarc_mitigate_action="munge_from",
+    reply_goes_to_list="point_to_list",
+    subject_prefix="[test] ",
+)
 for listname, request_url in urls.items():
     print(f"listname is {listname} and request_url is {request_url}")
     print("running dump_json")

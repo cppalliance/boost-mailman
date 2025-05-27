@@ -39,9 +39,10 @@ dump_json(url, username=rest_user, password=rest_password)
 print("Now for lists\n")
 
 lists = [
-    "boost@lists.boost.org",
-    "boost-announce@lists.boost.org",
-    "boost-users@lists.boost.org",
+    f"boost@{domain}",
+    f"boost-announce@{domain}",
+    f"boost-users@{domain}",
+    f"test@{domain}",
 ]
 url = f"http://{hostname}:{port_number}/3.1/lists"
 
