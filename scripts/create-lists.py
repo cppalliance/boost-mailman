@@ -2,6 +2,9 @@
 
 # activate the venv first
 # . /opt/mailman3/bin/activate
+#
+# Check the rest password in /etc/mailman/mailman.cfg
+# export REST_PASSWORD=
 
 import requests
 from mailman.testing.documentation import dump_json
