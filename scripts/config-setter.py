@@ -59,7 +59,7 @@ settings["test"] = dict(
     filter_content="True",
     dmarc_mitigate_action="munge_from",
     reply_goes_to_list="point_to_list",
-    subject_prefix="[test] ",
+    subject_prefix="[Test] ",
 )
 for listname, request_url in urls.items():
     print(f"listname is {listname} and request_url is {request_url}")
