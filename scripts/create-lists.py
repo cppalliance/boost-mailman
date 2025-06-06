@@ -3,7 +3,7 @@
 # activate the venv first
 # . /opt/mailman3/bin/activate
 #
-# Check the rest password in /etc/mailman/mailman.cfg
+# Check the rest password in /etc/mailman3/mailman.cfg
 # export REST_PASSWORD=
 
 import requests
@@ -11,6 +11,8 @@ from mailman.testing.documentation import dump_json
 import os
 
 hostname = "lists.boost.org"
+# check "domain" also.
+
 port_number = "8001"
 rest_user = "restadmin"
 rest_password = os.environ["REST_PASSWORD"]
