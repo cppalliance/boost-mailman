@@ -9,8 +9,11 @@
 import requests
 from mailman.testing.documentation import dump_json
 import os
+import subprocess
 
-hostname = "lists.boost.org"
+hostname = subprocess.check_output("hostname -f", shell=True).decode().strip()
+print(f"hostname is {hostname}")
+
 port_number = "8001"
 rest_user = "restadmin"
 rest_password = os.environ["REST_PASSWORD"]

@@ -9,9 +9,12 @@
 import requests
 from mailman.testing.documentation import dump_json
 import os
+import subprocess
 
-hostname = "lists.boost.org"
-# check "domain" also.
+hostname = subprocess.check_output("hostname -f", shell=True).decode().strip()
+print(f"hostname is {hostname}")
+domain = subprocess.check_output("hostname -f", shell=True).decode().strip()
+print(f"domain is {domain}")
 
 port_number = "8001"
 rest_user = "restadmin"
@@ -23,7 +26,7 @@ if not rest_password:
 
 # DOMAINS
 
-domain = "lists.boost.org"
+# See Above. domain = "lists.boost.org"
 url = f"http://{hostname}:{port_number}/3.1/domains"
 dump_json(
     url,
