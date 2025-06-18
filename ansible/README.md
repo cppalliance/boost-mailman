@@ -8,6 +8,7 @@ Set this in the SSL section to include boost-specific redirects.
     location ~ ^/Archives(.*)$ { return 301 https://listarchives.boost.org/Archives$1; }
     location ~ ^/boost-announce(.*)$ { return 301 https://listarchives.boost.org/boost-announce$1; }
     location ~ ^/boost-users(.*)$ { return 301 https://listarchives.boost.org/boost-users$1; }
+    location ~ ^/mailman/listinfo.cgi/(.*)$ { return 301 https://$host/mailman3/lists/$1.$host; }
 
 Notice ../scripts/templates.sh.  Where should they go, to be more automated?
 
