@@ -203,6 +203,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #     os.path.join(BASE_DIR, 'static_custom')
 # ]
 #
-# TEMPLATES[0]['DIRS'] = [
-#     os.path.join(BASE_DIR, 'templates')
-# ]
+TEMPLATES[0]['DIRS'] = [
+    os.path.join(BASE_DIR, 'templates')
+]
