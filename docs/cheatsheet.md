@@ -73,3 +73,44 @@ Example:
 # sudo mailman-wrapper version
 ```
 
+## Staging Hyperkitty sync
+
+On lists.boost.org modify `/var/lib/mailman3/web/project/settings.py`:  
+
+```
+HYPERKITTY_MBOX_EXPORT = True
+```
+
+Restart the web server:
+
+```
+systemctl stop mailman3-web
+```
+
+In the web-ui https://lists.boost.org visit each archive and "Download" the mbox. Modify the URL manually.
+
+```
+https://lists.boost.org/archives/list/boost@lists.boost.org/export/boost@lists.boost.org-2025-04-07-2026-01-08.mbox.gz?start=2025-04-07&end=2026-01-08
+https://lists.boost.org/archives/list/boost-users@lists.boost.org/export/boost-users@lists.boost.org-2025-04-07-2026-01-08.mbox.gz?start=2025-04-07&end=2026-01-08
+https://lists.boost.org/archives/list/boost-announce@lists.boost.org/export/boost-announce@lists.boost.org-2025-04-07-2026-01-08.mbox.gz?start=2025-04-07&end=2026-01-08
+```
+
+Copy the files to lists.stage.boost.cppalliance.org
+
+```
+mailman-web-wrapper hyperkitty_import -l boost@lists.stage.boost.cppalliance.org /tmp/test/boost@lists.boost.org-2025-04-07-2026-01-08.mbox
+mailman-web-wrapper hyperkitty_import -l boost-users@lists.stage.boost.cppalliance.org /tmp/test/boost-users@lists.boost.org-2025-04-07-2026-01-08.mbox
+mailman-web-wrapper hyperkitty_import -l boost-announce@lists.stage.boost.cppalliance.org /tmp/test/boost-announce@lists.boost.org-2025-04-07-2026-01-08.mbox
+```
+
+On lists.boost.org modify `/var/lib/mailman3/web/project/settings.py`:  
+
+```
+HYPERKITTY_MBOX_EXPORT = False
+```
+
+Restart the web server:  
+
+```
+systemctl stop mailman3-web
+```
