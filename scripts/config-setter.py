@@ -37,6 +37,7 @@ settings["boost"] = dict(
     convert_html_to_plaintext="True",
     filter_content="True",
     dmarc_mitigate_action="munge_from",
+    dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[boost] ",
 )
@@ -45,6 +46,7 @@ settings["Boost-announce"] = dict(
     convert_html_to_plaintext="True",
     filter_content="True",
     dmarc_mitigate_action="munge_from",
+    dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Boost-announce] ",
 )
@@ -53,6 +55,7 @@ settings["Boost-users"] = dict(
     convert_html_to_plaintext="True",
     filter_content="True",
     dmarc_mitigate_action="munge_from",
+    dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Boost-users] ",
 )
@@ -61,6 +64,7 @@ settings["test"] = dict(
     convert_html_to_plaintext="True",
     filter_content="True",
     dmarc_mitigate_action="munge_from",
+    dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Test] ",
 )
