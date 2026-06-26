@@ -26,10 +26,17 @@ DATABASES = {
     }
 }
 
+# CACHES = {
+#     'default': {
+#         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
+
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '127.0.0.1:11211',
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
     }
 }
 
@@ -197,12 +204,14 @@ if env("ADD_REMOTE_ADDR_MIDDLEWARE", None):
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# 2024-09. Temporarily removing customizations. Can be returned later.
+{% if mailman3_static_custom | default(false) | bool %}
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static_custom')
+]
+{% endif %}
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static_custom')
-# ]
-#
 TEMPLATES[0]['DIRS'] = [
     os.path.join(BASE_DIR, 'templates')
 ]
+
+HYPERKITTY_MBOX_EXPORT = env.bool("HYPERKITTY_MBOX_EXPORT", None)
