@@ -40,6 +40,7 @@ settings["boost"] = dict(
     dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[boost] ",
+    max_message_size="100",
 )
 settings["Boost-announce"] = dict(
     default_nonmember_action="reject",
@@ -49,6 +50,7 @@ settings["Boost-announce"] = dict(
     dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Boost-announce] ",
+    max_message_size="100",
 )
 settings["Boost-users"] = dict(
     default_nonmember_action="reject",
@@ -58,6 +60,7 @@ settings["Boost-users"] = dict(
     dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Boost-users] ",
+    max_message_size="100",
 )
 settings["test"] = dict(
     default_nonmember_action="reject",
@@ -67,6 +70,7 @@ settings["test"] = dict(
     dmarc_mitigate_unconditionally="True",
     reply_goes_to_list="point_to_list",
     subject_prefix="[Test] ",
+    max_message_size="100",
 )
 for listname, request_url in urls.items():
     print(f"listname is {listname} and request_url is {request_url}")
