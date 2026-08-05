@@ -15,7 +15,9 @@
   ansible.builtin.git:
     repo: 'https://github.com/cppalliance/boost-mailman.git'
     dest: /opt/github/ansible-managed/boost-mailman
-    version: custom-files
+    # version: custom-files
+    # Branch to check out from https://github.com/cppalliance/boost-mailman
+    version: "{{ mailman3_boost_branch | default('master') }}"
 
 - name: Copy boost static files
   ansible.builtin.copy:
