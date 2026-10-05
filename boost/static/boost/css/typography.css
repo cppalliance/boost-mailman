@@ -1,0 +1,77 @@
+/* typography.css
+ *
+ * Global h1–h4 (and Bootstrap .h1–.h4) using the v3 article scale from
+ * .post-detail__body. Tokens are live, so sizes shrink at 767px with 02.
+ * Margins left to Reboot (see reset.css).
+ *
+ * Stock HyperKitty compiles `h1,.h1{font-size:28px!important}`; the h1
+ * font-size is the boost-important block below.
+ *
+ * Postorius page titles are often a bare `header.page-header` (stock
+ * `font-size: 175%`, body weight) rather than an h1. Style that wrapper
+ * on the h1 scale so "Mailing Lists" / list names match; do not change
+ * the element.
+ */
+
+body :is(h1, .h1, h2, .h2, h3, .h3, h4, .h4, .page-header) {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+body :is(h2, .h2, h3, .h3, h4, .h4) {
+  line-height: var(--line-height-default);
+}
+
+body :is(h2, .h2) {
+  font-size: var(--font-size-large);
+}
+
+body :is(h3, .h3) {
+  font-size: var(--font-size-medium);
+}
+
+body :is(h4, .h4) {
+  font-size: var(--font-size-base);
+}
+
+/* HyperKitty compiles h1 { font-size: 28px !important }. */
+@layer boost-important {
+  body :is(h1, .h1) {
+    font-size: var(--font-size-2xl) !important;
+  }
+}
+
+body :is(h1, .h1) {
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+body :is(.page-header) {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+body .page-header small,
+body .overview #title,
+body .overview #description,
+body .all-lists .header p,
+body [role="main"] > p.lead {
+  display: block;
+  margin-top: var(--space-s);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-loose-alt);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 767px) {
+  body :is(h1, .h1, .page-header) {
+    line-height: 1.1;
+  }
+}

@@ -1,0 +1,56 @@
+/* badges.css
+ *
+ * Bootstrap .badge in the v3 count-badge type (xs sans).
+ * .bg-* sets background-color !important, so fills go through
+ * --bs-*-rgb. Color still applies at this specificity.
+ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--border-radius-s);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  vertical-align: middle;
+}
+
+/* --color-primary-grey-300: mid/strong are too close to white cards. */
+.badge.bg-secondary {
+  --bs-secondary-rgb: 213, 214, 216;
+  color: var(--color-text-primary);
+}
+
+.badge.new,
+.badge.new.bg-secondary {
+  --bs-secondary-rgb: 255, 160, 0;
+  color: var(--color-text-primary);
+}
+
+.badge.bg-warning,
+.nav-pills .badge.bg-warning {
+  --bs-warning-rgb: 255, 160, 0;
+  color: var(--color-text-primary);
+}
+
+.badge.bg-danger {
+  color: var(--color-text-reversed-on-accent);
+}
+
+.badge.bg-success {
+  color: var(--color-text-reversed-on-accent);
+}
+
+.badge.bg-info {
+  color: var(--color-text-primary);
+}
+
+/* v3 .bg-primary is a page-tint blue — unreadable as a filled badge. */
+.badge.bg-primary {
+  color: var(--color-text-on-accent);
+}

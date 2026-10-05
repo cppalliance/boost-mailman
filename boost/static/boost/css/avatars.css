@@ -1,0 +1,84 @@
+/* avatars.css
+ *
+ * One v3 avatar shape site-wide: --border-radius-m on all four
+ * corners, object-fit cover. HyperKitty .circle is only used on
+ * gravatar wrappers (thread rows, participants, reply bylines).
+ */
+
+img.gravatar,
+img.avatar,
+.gravatar.rounded-circle,
+img.gravatar.rounded-circle,
+.circle.rounded-circle,
+.participant-gravatar.circle,
+.gravatar.circle,
+.sender.circle,
+.boost-post-byline__avatar,
+.boost-post-byline__avatar img,
+.boost-post-byline__avatar .gravatar,
+.header .header__user-trigger img.gravatar,
+.header .header__user-trigger .gravatar {
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
+}
+
+/* Bootstrap .rounded-circle is border-radius: 50% !important. */
+@layer boost-important {
+  img.gravatar,
+  img.avatar,
+  .gravatar.rounded-circle,
+  img.gravatar.rounded-circle,
+  .circle.rounded-circle,
+  .participant-gravatar.circle,
+  .gravatar.circle,
+  .sender.circle,
+  .boost-post-byline__avatar,
+  .boost-post-byline__avatar img,
+  .boost-post-byline__avatar .gravatar,
+  .header .header__user-trigger img.gravatar,
+  .header .header__user-trigger .gravatar {
+    border-radius: var(--border-radius-m) !important;
+  }
+}
+
+.gravatar.circle,
+.circle.rounded-circle,
+.participant-gravatar.circle,
+.sender.circle,
+.boost-post-byline__avatar {
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Byline, replies, thread rows, posters,
+   participants — 48px. 375 keeps these sizes. */
+
+.boost-post-byline__avatar,
+.boost-post-byline__avatar img,
+#participants .participant-gravatar,
+#participants .participant-gravatar img,
+#thread-list .sender.gravatar,
+#thread-list .circle,
+#thread-list .circle img,
+#thread-list img.gravatar,
+.overview #most-active-poster .gravatar,
+.overview #most-active-poster .gravatar img,
+.overview #most-active-poster .circle {
+  width: 48px;
+  height: 48px;
+}
+
+:is([data-page-group="post"], [data-page-group="hk-form"]) [role="main"] {
+  .email .gravatar.circle,
+  .email img.gravatar {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.navbar .user-button img.gravatar,
+.navbar .user-button img {
+  width: 32px;
+  height: 32px;
+}

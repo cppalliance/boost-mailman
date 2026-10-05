@@ -1,0 +1,68 @@
+/* dropdowns.css
+ *
+ * Bootstrap menus in the v3 dropdown-panel look. Keep Bootstrap's own
+ * .dropdown positioning; v3's BEM trigger/panel layout breaks Popper.
+ */
+
+.dropdown-menu {
+  background-color: var(--color-surface-weak);
+  border: 1px solid var(--color-stroke-mid);
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 1px 4px rgba(5, 8, 22, 0.04);
+  padding: var(--space-s) 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  color: var(--color-text-primary);
+  z-index: 1020;
+}
+
+.dropdown-item,
+.dropdown-menu .dropdown-item {
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  padding: var(--space-default) var(--space-large);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.dropdown-item:focus,
+.dropdown-item:active,
+.dropdown-menu .dropdown-item:focus {
+  background-color: var(--color-navigation-hover);
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dropdown-item:hover,
+  .dropdown-menu .dropdown-item:hover {
+    background-color: var(--color-navigation-hover);
+    color: var(--color-text-primary);
+  }
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--color-navigation-selected);
+  color: var(--color-text-primary);
+}
+
+.dropdown-divider {
+  border-top-color: var(--color-stroke-weak);
+  margin: var(--space-s) 0;
+}
+
+.dropdown-item .fa {
+  margin-inline-end: var(--space-default);
+  color: inherit;
+}
+
+.dropdown-header,
+.dropdown-item.username,
+.dropdown-menu .username {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}

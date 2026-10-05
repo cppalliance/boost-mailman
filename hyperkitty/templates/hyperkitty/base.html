@@ -1,0 +1,118 @@
+{# Copied from HyperKitty 1.3.12. Changes vs stock: class=v3 on html and body, plus page-<url_name> and data-page-group (boost/page-group.html) on body; stock stylesheets in @layer stock (plain files @import-ed after the layer order statement, the compress block wrapped by two style hunks); include boost/stylesheets.html after endcompress; color-mode script was not in this package; Plausible tag in head; headers.html include removed; Boost chrome header/footer via boost/chrome-*.html. #}
+{% load i18n %}
+{% load compress %}
+{% load static %}
+{% load hk_generic %}
+{% export_allowed as export_allowed %}
+<!DOCTYPE HTML>
+<html class="v3">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="ROBOTS" content="INDEX, FOLLOW" />
+        <title>{% block head_title %}{{ site_name }}{% endblock %}</title>
+        <meta name="author" content="" />
+        <meta name="dc.language" content="en" />
+        <link rel="shortcut icon" href="{% static 'hyperkitty/img/favicon.ico' %}" />
+        <style>
+            @layer boost-important, reset, stock, vendor;
+            @import url("{% static 'hyperkitty/libs/jquery/smoothness/jquery-ui-1.13.1.min.css' %}") layer(stock);
+            @import url("{% static 'hyperkitty/libs/fonts/font-awesome/css/font-awesome.min.css' %}") layer(stock);
+        </style>
+        {# The compressor joins same-media hunks, in order, into one file, so the two style hunks open and close the layer around the stock files. Every hunk needs media="all" or the output splits and the layer is left open. #}
+        {% compress css %}
+        <style media="all">@layer stock {</style>
+        <link rel="stylesheet" href="{% static 'hyperkitty/libs/fonts/icomoon/icomoon.css' %}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{% static 'hyperkitty/libs/fonts/droid/droid.css' %}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{% static 'django-mailman3/css/main.css' %}" media="all" />
+        <link rel="stylesheet" type="text/x-scss" media="all" href="{% static 'hyperkitty/sass/hyperkitty.scss' %}" />
+        <style media="all">}</style>
+        {% endcompress %}
+        {% include 'boost/stylesheets.html' %}
+        {% block additional_stylesheets %} {% endblock %}
+        {% block head_feed %}{% endblock %}
+        <script defer data-domain="lists.boost.org" src="https://plausible.io/js/script.js"></script>
+    </head>
+
+    <body class="v3 page-{{ request.resolver_match.url_name }}" data-page-group="{% filter slugify %}{% include 'boost/page-group.html' %}{% endfilter %}">
+
+    {% include 'hyperkitty/top.html' %}
+
+    {% include "boost/chrome-header.html" with chrome_app="hyperkitty" chrome_logout_next="hk_root" %}
+
+    {% if messages %}
+    <div class="flashmsgs">
+    {% for msg in messages %}
+        <div class="flashmsg-wrapper">
+            <!--<div class="alert alert-{{ msg.level_tag }}">-->
+            <div role="alert" class="alert alert-{{ msg.tags }} {{msg.tags}}
+                {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                ">
+                {% else %}
+                alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {% endif %}
+                {{ msg }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+    {% endif %}
+
+     <div class="modal fade" tabindex="-1" role="dialog" id="keyboard-shortcuts">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+             <h4 class="modal-title">{% trans "Keyboard Shortcuts" %}</h4>
+           </div>
+           <div class="modal-body">
+             <h3>{% trans "Thread View" %}</h3>
+             <ul>
+               <li><code>j</code>: {% trans "Next unread message" %} </li>
+               <li><code>k</code>: {% trans "Previous unread message" %} </li>
+               <li><code>j a</code>: {% trans "Jump to all threads" %}
+               <li><code>j l</code>: {% trans "Jump to MailingList overview" %}
+             </ul>
+           </div>
+         </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+     </div><!-- /.modal -->
+
+     <div class="container-xxl" role="main">
+        {% block content %} {% endblock %}
+    </div> <!-- /container for content -->
+
+    {% include "boost/chrome-footer.html" %}
+
+    <script src="{% static 'hyperkitty/libs/jquery/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'hyperkitty/libs/jquery/jquery-ui-1.13.1.min.js' %}"></script>
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'hyperkitty/libs/bootstrap/javascripts/bootstrap.bundle.min.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/libs/mousetrap/mousetrap.min.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/libs/jquery.expander.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/libs/d3.v2.min.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/libs/jquery.hotkeys.js' %}" />
+    <script type="text/javascript" src="{% static 'django-mailman3/js/main.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/js/hyperkitty-common.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/js/hyperkitty-index.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/js/hyperkitty-overview.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/js/hyperkitty-thread.js' %}" />
+    <script type="text/javascript" src="{% static 'hyperkitty/js/hyperkitty-userprofile.js' %}" />
+    {% endcompress %}
+    <script>
+      // Add the .js-enabled class to the body so we can style the elements
+      // depending on whether Javascript is enabled.
+      $(document).ready(function(){
+          $("body").addClass("js-enabled");
+          $(".gravatar").addClass("rounded-circle");
+      });
+    </script>
+    {% block additionaljs %} {% endblock %}
+
+    {% include 'hyperkitty/bottom.html' %}
+
+    </body>
+</html>

@@ -1,0 +1,77 @@
+{% comment %}
+The Page group of the current route (see Page group in CONTEXT.md).
+One line per route; a route appears on at most one line, and ungrouped
+routes render nothing. Both base templates wrap this include in
+{% filter slugify %}, which strips the line breaks below from the
+data-page-group value.
+A route check fails when a name here no longer exists in the installed apps.
+{% endcomment %}
+{% with r=request.resolver_match.url_name %}
+{# Post #}
+{% if r == "hk_message_index" %}post{% endif %}
+{% if r == "hk_thread" %}post{% endif %}
+
+{# HyperKitty forms #}
+{% if r == "hk_list_delete" %}hk-form{% endif %}
+{% if r == "hk_message_delete" %}hk-form{% endif %}
+{% if r == "hk_message_new" %}hk-form{% endif %}
+{% if r == "hk_thread_delete" %}hk-form{% endif %}
+
+{# Account #}
+{% if r == "account_confirm_email" %}account{% endif %}
+{% if r == "account_login" %}account{% endif %}
+{% if r == "account_logout" %}account{% endif %}
+{% if r == "account_reset_password" %}account{% endif %}
+{% if r == "account_reset_password_from_key" %}account{% endif %}
+{% if r == "account_signup" %}account{% endif %}
+
+{# Index #}
+{% if r == "domain_index" %}index{% endif %}
+{% if r == "list_index" %}index{% endif %}
+{% if r == "list_users" %}index{% endif %}
+
+{# List home #}
+{% if r == "hk_list_overview" %}list-home{% endif %}
+{% if r == "list_summary" %}list-home{% endif %}
+
+{# Settings: Postorius list admin #}
+{% if r == "list_bans" %}settings{% endif %}
+{% if r == "list_delete" %}settings{% endif %}
+{% if r == "list_header_matches" %}settings{% endif %}
+{% if r == "list_held_messages" %}settings{% endif %}
+{% if r == "list_member_options" %}settings{% endif %}
+{% if r == "list_members" %}settings{% endif %}
+{% if r == "list_pending_confirmation" %}settings{% endif %}
+{% if r == "list_settings" %}settings{% endif %}
+{% if r == "list_subscription_requests" %}settings{% endif %}
+{% if r == "list_template_delete" %}settings{% endif %}
+{% if r == "list_template_list" %}settings{% endif %}
+{% if r == "list_template_new" %}settings{% endif %}
+{% if r == "list_template_update" %}settings{% endif %}
+{% if r == "list_unsubscription_requests" %}settings{% endif %}
+{% if r == "mass_removal" %}settings{% endif %}
+{% if r == "mass_subscribe" %}settings{% endif %}
+{% if r == "unsubscribe_all" %}settings{% endif %}
+
+{# Settings: Postorius and django-mailman3 user #}
+{% if r == "mm_user_account_delete" %}settings{% endif %}
+{% if r == "mm_user_profile" %}settings{% endif %}
+{% if r == "ps_user_profile" %}settings{% endif %}
+{% if r == "user_address_preferences" %}settings{% endif %}
+{% if r == "user_list_options" %}settings{% endif %}
+{% if r == "user_mailmansettings" %}settings{% endif %}
+{% if r == "user_subscription_preferences" %}settings{% endif %}
+
+{# Settings: allauth account #}
+{% if r == "account_change_password" %}settings{% endif %}
+{% if r == "account_email" %}settings{% endif %}
+{% if r == "account_set_password" %}settings{% endif %}
+{% if r == "socialaccount_connections" %}settings{% endif %}
+
+{# Settings: HyperKitty user #}
+{% if r == "hk_user_favorites" %}settings{% endif %}
+{% if r == "hk_user_last_views" %}settings{% endif %}
+{% if r == "hk_user_profile" %}settings{% endif %}
+{% if r == "hk_user_subscriptions" %}settings{% endif %}
+{% if r == "hk_user_votes" %}settings{% endif %}
+{% endwith %}

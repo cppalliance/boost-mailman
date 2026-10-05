@@ -1,0 +1,427 @@
+/* tables.css — Bootstrap tables then library-list look.
+ *
+ * Bootstrap .table restyled to the v3 editor-table look (14-tables.css
+ * .wysiwyg-editor__prose th/td). Driven through --bs-table-* so we do not
+ * fight `.table > :not(caption) > * > *`.
+ */
+
+.table {
+  --bs-table-color: var(--color-text-primary);
+  --bs-table-bg: var(--color-surface-weak);
+  --bs-table-border-color: var(--color-stroke-weak);
+  --bs-table-striped-color: var(--color-text-primary);
+  --bs-table-hover-color: var(--color-text-primary);
+  --bs-table-active-color: var(--color-text-primary);
+  --bs-table-active-bg: var(--color-surface-strong);
+  color: var(--bs-table-color);
+  border-color: var(--color-stroke-weak);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+}
+
+.table {
+  --bs-table-striped-bg: transparent;
+  --bs-table-hover-bg: transparent;
+  --bs-table-accent-bg: transparent;
+}
+
+.table > :not(caption) > * > * {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--color-stroke-weak);
+  text-align: left;
+}
+
+.table > :not(caption) > * > * {
+  padding: var(--space-medium) var(--space-large);
+}
+
+/* Bootstrap 5.1.3 paints a 2px currentColor rule on tbody
+   (`.table > :not(:first-child)`). Drop it back to the 1px stroke. */
+.table > :not(:first-child) {
+  border-top-color: var(--color-stroke-weak);
+}
+
+.table > :not(:first-child) {
+  border-top-width: 0;
+}
+
+.table-responsive,
+.all-lists table.lists,
+.all-lists .table {
+  border: 1px solid var(--color-stroke-weak);
+  border-radius: var(--border-radius-xl);
+  background-color: var(--color-surface-weak);
+  overflow: hidden;
+}
+
+/* HyperKitty profile activity tables sit in .user-profile-content
+   with no .table-responsive wrapper. Postorius header filters, list
+   and global bans, system information, the manage-user web-account
+   table, and HyperKitty table.user-data are the same missing wrapper. */
+.user-profile-content > .table,
+.page-list_header_matches form.header-matches > .table,
+:is(.page-list_bans, .page-global_bans) table.bans-current,
+.page-system_information [role="main"] > .table,
+.page-manage_user [role="main"] > .table,
+table.user-data {
+  border: 1px solid var(--color-stroke-weak);
+  border-radius: var(--border-radius-xl);
+  background-color: var(--color-surface-weak);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.all-lists table.lists {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Corner cells carry the card radius. overflow:hidden does not clip
+   display:table, and overflow-x:auto on those tables computes overflow
+   to visible, so thead/th backgrounds would square the corners. */
+:is(
+  .table-responsive .table,
+  .all-lists table.lists,
+  .user-profile-content > .table,
+  .page-list_header_matches form.header-matches > .table,
+  :is(.page-list_bans, .page-global_bans) table.bans-current,
+  .page-system_information [role="main"] > .table,
+  .page-manage_user [role="main"] > .table,
+  table.user-data
+) {
+  > :first-child > tr:first-child > :first-child {
+    border-top-left-radius: calc(var(--border-radius-xl) - 1px);
+  }
+
+  > :first-child > tr:first-child > :last-child {
+    border-top-right-radius: calc(var(--border-radius-xl) - 1px);
+  }
+
+  > :last-child > tr:last-child > :first-child {
+    border-bottom-left-radius: calc(var(--border-radius-xl) - 1px);
+  }
+
+  > :last-child > tr:last-child > :last-child {
+    border-bottom-right-radius: calc(var(--border-radius-xl) - 1px);
+  }
+}
+
+.table-responsive .table {
+  margin-bottom: 0;
+}
+
+.table-bordered > :not(caption) > *,
+.table-bordered > :not(caption) > * > *,
+.all-lists table.lists th,
+.all-lists table.lists td,
+.page-list_header_matches form.header-matches > .table > :not(caption) > * > *,
+:is(.page-list_bans, .page-global_bans) table.bans-current > :not(caption) > * > *,
+.page-manage_user [role="main"] > .table > :not(caption) > * > * {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--color-stroke-weak);
+}
+
+.table > thead > * > *,
+.all-lists table.lists th,
+.all-lists .table th {
+  background-color: var(--color-surface-weak);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  text-transform: none;
+  letter-spacing: var(--letter-spacing-tight);
+  border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.all-lists table.lists tr.list,
+.all-lists table.lists tr.inactive,
+.all-lists table.lists tr.private {
+  background-color: var(--color-surface-weak);
+  --bs-table-accent-bg: transparent;
+}
+
+.all-lists table.lists tr.list > td {
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.all-lists a.list-name {
+  font-size: var(--font-size-base);
+}
+
+:is([data-page-group="index"], [data-page-group="list-home"], [data-page-group="settings"], .page-system_information, .page-global_bans) [role="main"] {
+  .table td a:not(.btn) {
+    font-family: var(--font-display);
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Table links stay --color-text-primary in every state. */
+.table td a:not(.btn),
+.all-lists table.lists td a:not(.btn) {
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .table td a:not(.btn):hover,
+  .table tr:hover td a:not(.btn),
+  .all-lists table.lists td a:not(.btn):hover,
+  .all-lists table.lists tr:hover td a:not(.btn) {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+}
+
+.all-lists .list-description,
+.all-lists .list-address,
+.user-profile-content tr.list-address td {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+:is([data-page-group="index"], .page-system_information, .page-global_bans) [role="main"],
+.page-list_summary [role="main"]:where(:not(:has(> .boost-list-summary--signed-in))) {
+  .table td:nth-child(2),
+  .table td:nth-child(3) {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-regular);
+  }
+}
+
+.all-lists .list-address {
+  display: block;
+  font-size: var(--font-size-xs);
+}
+
+:is([data-page-group="settings"], .page-global_bans, .page-hk_list_overview) [role="main"],
+.page-list_summary [role="main"]:where(:has(> .boost-list-summary--signed-in)) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .user-profile-content > .table,
+  .header-matches > .table,
+  table.bans-current {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-page-group="index"] [role="main"] {
+    .table-responsive {
+      overflow: hidden;
+      border-collapse: separate;
+    }
+  }
+
+  .all-lists section.lists {
+    overflow: visible;
+  }
+
+  [data-page-group="index"] [role="main"] {
+    .table,
+    .table tbody,
+    .table tr {
+      display: block;
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+  }
+
+  .all-lists table.lists,
+  .all-lists table.lists tbody,
+  .all-lists table.lists tr {
+    display: block;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  [data-page-group="index"] [role="main"] {
+    .table thead {
+      display: none;
+    }
+  }
+
+  .all-lists table.lists thead {
+    display: none;
+  }
+
+  [data-page-group="index"] [role="main"] {
+    .table td {
+      display: block;
+      width: 100%;
+      border: 0;
+      padding: var(--space-s) var(--space-large);
+    }
+  }
+
+  .all-lists table.lists td {
+    display: block;
+    width: 100%;
+    border: 0;
+    padding: var(--space-s) var(--space-large);
+  }
+
+  [data-page-group="index"] [role="main"] {
+    .table tr {
+      padding: 0;
+      margin: 0;
+      background-color: var(--color-surface-weak);
+      border-bottom: 1px solid var(--color-stroke-weak);
+    }
+  }
+
+  .all-lists table.lists tr.list {
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-surface-weak);
+    border-bottom: 1px solid var(--color-stroke-weak);
+  }
+
+  [data-page-group="index"] [role="main"] {
+    .table tr:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .all-lists table.lists tr.list:last-child {
+    border-bottom: 0;
+  }
+
+  .user-profile-content > .table.d-md-none,
+  .user-profile-content > .table.d-md-none tbody,
+  .user-profile-content > .table.d-md-none tr {
+    display: block;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  /* Dividers sit on td: a display:block tr's border is in the
+     box model but Chromium does not paint it (last_views is long
+     enough that the missing stroke is obvious). */
+  .user-profile-content > .table.d-md-none td {
+    display: block;
+    width: 100%;
+    border-width: 0;
+    border-bottom: 1px solid var(--color-stroke-weak);
+    padding: var(--space-s) var(--space-large);
+  }
+
+  .user-profile-content > .table.d-md-none tr {
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-surface-weak);
+    border-bottom: 0;
+  }
+
+  .user-profile-content > .table.d-md-none tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* Stacked cells are full-width: only the first and last painted
+     cell should carry both top/bottom radii. */
+  [data-page-group="index"] [role="main"] .table > :first-child > tr:first-child > :first-child,
+  .all-lists table.lists > :first-child > tr:first-child > :first-child,
+  .user-profile-content > .table.d-md-none > :first-child > tr:first-child > :first-child {
+    border-top-right-radius: calc(var(--border-radius-xl) - 1px);
+  }
+
+  [data-page-group="index"] [role="main"] .table > :last-child > tr:last-child > :last-child,
+  .all-lists table.lists > :last-child > tr:last-child > :last-child,
+  .user-profile-content > .table.d-md-none > :last-child > tr:last-child > :last-child {
+    border-bottom-left-radius: calc(var(--border-radius-xl) - 1px);
+  }
+
+  [data-page-group="index"] [role="main"] .table > :first-child > tr:first-child > :last-child:not(:first-child),
+  .all-lists table.lists > :first-child > tr:first-child > :last-child:not(:first-child),
+  .user-profile-content > .table.d-md-none > :first-child > tr:first-child > :last-child:not(:first-child) {
+    border-top-right-radius: 0;
+  }
+
+  [data-page-group="index"] [role="main"] .table > :last-child > tr:last-child > :first-child:not(:last-child),
+  .all-lists table.lists > :last-child > tr:last-child > :first-child:not(:last-child),
+  .user-profile-content > .table.d-md-none > :last-child > tr:last-child > :first-child:not(:last-child) {
+    border-bottom-left-radius: 0;
+  }
+}
+
+/* HyperKitty `table.user-data` (profile page), which .table and
+   .table-bordered above would override now that stock is layered. */
+table.user-data {
+  font-size: 95%;
+}
+
+table.user-data tr:first-child > td,
+table.user-data tr:first-child > th {
+  border-top: 0;
+}
+
+/* One-target rows: stretch the first non-control link. Empty ::after
+   does not paint, so corner-radius cells and the card clip stay.
+   Chromium contains position:absolute in a position:relative <tr>.
+   tr.list-address is a group label with no destination. */
+:is(.page-hk_user_favorites, .page-hk_user_last_views, .page-hk_user_votes)
+  .user-profile-content
+  > .table
+  tbody
+  tr:not(.list-address) {
+  position: relative;
+  z-index: 0;
+}
+
+:is(.page-hk_user_favorites, .page-hk_user_last_views, .page-hk_user_votes)
+  .user-profile-content
+  > .table
+  tbody
+  tr:not(.list-address)
+  a:not(.btn):not(.cancel)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+:is(.page-hk_user_favorites, .page-hk_user_last_views, .page-hk_user_votes)
+  .user-profile-content
+  > .table
+  tbody
+  tr:not(.list-address)
+  :is(a.cancel, a.btn, button, input, .likeform) {
+  position: relative;
+  z-index: 1;
+}
+
+.page-ps_user_profile table tbody tr {
+  position: relative;
+  z-index: 0;
+}
+
+.page-ps_user_profile table tbody tr td:first-child a:not(.btn)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.page-ps_user_profile table tbody tr td:not(:first-child) a:not(.btn) {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.page-hk_user_favorites, .page-hk_user_last_views, .page-hk_user_votes)
+    .user-profile-content
+    > .table
+    tbody
+    tr:not(.list-address),
+  .page-ps_user_profile table tbody tr {
+    cursor: pointer;
+  }
+}

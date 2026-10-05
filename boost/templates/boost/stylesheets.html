@@ -1,0 +1,55 @@
+{% comment %}
+Groups, in load order:
+  vendored v3 tokens, foundations and components (01- to footer.css);
+  base components (reset.css to forms.css);
+  index pages (list-index.css, archives-index.css);
+  colour.css, shell.css;
+  thread-rows.css, search-results.css, cards.css, chrome.css;
+  page files (post.css to admin.css).
+Every rule lives in one file; later files specialise, never undo.
+Custom files are unlayered, so among them specificity then load order
+still decide. Do not reorder.
+Both base templates declare `@layer boost-important, reset, stock, vendor;`
+and load stock CSS into `stock`. The vendored files are imported into
+`vendor`, which beats stock; everything linked here without a layer beats
+both. reset.css is imported into `reset`, below stock, so Reboot still wins
+over its :where() preflight. For !important the order inverts: a declaration
+that must beat a stock !important sits in an `@layer boost-important`
+block in its owner file.
+{% endcomment %}{% load static %}
+<style>
+@import url("{% static 'boost/vendor/v3/css/01-tokens-primitives.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/02-tokens-typography.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/03-tokens-spacing.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/04-tokens-border-radius.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/05-tokens-semantics.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/06-foundations.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/11-buttons.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/16-headers.css' %}") layer(vendor);
+@import url("{% static 'boost/vendor/v3/css/footer.css' %}") layer(vendor);
+</style>
+<style>@import url("{% static 'boost/css/reset.css' %}") layer(reset);</style>
+<link rel="stylesheet" href="{% static 'boost/css/typography.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/tables.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/buttons.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/alerts.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/dropdowns.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/pagination.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/badges.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/avatars.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/tabs.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/forms.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/list-index.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/archives-index.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/colour.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/shell.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/thread-rows.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/search-results.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/cards.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/chrome.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/post.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/post-sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/list-pages.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/list-overview.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/account.css' %}">
+<link rel="stylesheet" href="{% static 'boost/css/admin.css' %}">

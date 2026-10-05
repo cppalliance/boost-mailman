@@ -1,0 +1,330 @@
+/* Vendored 16-headers.css / footer.css paint the v3 chrome; this file adapts
+ * them to Mailman pages (header in flow, search pill, CSS-only mobile search
+ * panel, stock Postorius sticky-footer rules reset).
+ */
+
+/* 16-headers.css sets body.v3 .header { position: absolute }. The
+   lists are not hero pages; the header stays in document flow like
+   Postorius already was. position:relative keeps the drawer anchored.
+   space-xlarge (24px, 16px at ≤767) is the gap from the header box to
+   the page title; plus the header's own 8px pad this reads as ~32/24
+   from the pills, matching libraries/news. */
+body header.header {
+  position: relative;
+  z-index: 10;
+  left: auto;
+  right: auto;
+  margin-bottom: var(--space-xlarge);
+}
+
+/* HyperKitty reuses class="header" on page title rows (.row.header), which
+   16-headers.css would position absolutely over the filters and h1. */
+body .header.row,
+body .all-lists .header {
+  position: static;
+  z-index: auto;
+  left: auto;
+  right: auto;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: inherit;
+}
+
+/* 06-foundations.css already makes body.v3 a min-height flex column,
+   but its grow rule targets website-v2's .min-vh-110 wrapper. Here the
+   body's own [role=main] takes the slack, so the footer sits on the
+   viewport bottom only when the page is short. dvh keeps mobile
+   browser bars out of the sum; vh is the fallback. Direct children
+   only, so nested .container-xxl never grows. Postorius style.css
+   still ships the old Bootstrap sticky footer (body margin-bottom
+   90px, .footer height 60px); both are reset here. */
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-bottom: 0;
+}
+
+body > header.header,
+body > footer.chrome-footer {
+  flex-shrink: 0;
+}
+
+body > footer.chrome-footer {
+  height: auto;
+}
+
+body > [role="main"] {
+  flex: 1 0 auto;
+}
+
+/* Stock and Bootstrap pad [role=main]. Zero that so the header gap
+   is the only top offset. */
+[role="main"] {
+  padding-top: 0 !important;
+}
+
+/* Header/footer links stay regular weight, no underline; the active
+   app link uses a 1px / 2px underline. */
+header.header a.header__nav-link,
+header.header a.header__nav-btn {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-tight);
+  text-decoration: none;
+}
+
+footer.footer.chrome-footer a.footer__link,
+footer.footer.chrome-footer .footer__social a {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.12px;
+  text-decoration: none;
+}
+
+header.header a.header__nav-link--active,
+header.header a.header__nav-link--active:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+header.header a.header__nav-link:not(.header__nav-link--active):hover,
+header.header a.header__nav-btn:hover {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header__nav-link:hover,
+  .header__nav-link[data-hover] {
+    color: var(--color-text-primary);
+    background: var(--color-navigation-hover);
+  }
+
+  .header__search-bar:hover {
+    background: var(--color-surface-mid);
+    color: var(--color-text-link-accent);
+  }
+
+  .header__nav-btn:hover,
+  .header__menu-btn:hover,
+  .header__user-trigger:hover {
+    background: var(--color-surface-mid);
+    border-color: var(--color-stroke-strong);
+  }
+
+  .footer__link:hover,
+  .footer__social a:hover {
+    color: var(--color-text-link-accent);
+    background: var(--color-navigation-hover);
+  }
+}
+
+/* 16-headers.css hovers are ungated; that file is not edited. */
+@media (hover: none), (pointer: coarse) {
+  .header__nav-link:hover,
+  .header__nav-link[data-hover] {
+    color: var(--color-text-primary);
+    background: transparent;
+  }
+
+  .header__search-bar:hover,
+  .header__search-bar:hover .header__search-icon {
+    background: var(--header-bg, var(--color-surface-weak));
+    color: inherit;
+  }
+
+  .header__nav-btn:hover,
+  .header__menu-btn:hover,
+  .header__user-trigger:hover {
+    background: var(--header-bg, var(--color-surface-weak));
+    border-color: var(--color-stroke-weak);
+    color: var(--color-text-primary);
+  }
+}
+
+footer.footer.chrome-footer a.footer__link:hover,
+footer.footer.chrome-footer .footer__social a:hover {
+  color: var(--color-text-link-accent);
+  text-decoration: none;
+}
+
+.chrome-nav-divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 24px;
+  background: var(--color-stroke-weak);
+}
+
+.chrome-search {
+  display: contents;
+}
+
+.chrome-search-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.chrome-search-toggle:focus-visible ~ .chrome-search-tile {
+  outline: 2px solid var(--color-stroke-link-accent);
+}
+
+.chrome-search-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+}
+
+.chrome-search-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.header .header__nav-btn {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+}
+
+.header .header__user-trigger.btn,
+.header .header__user-trigger.btn-primary {
+  width: var(--header-height);
+  height: var(--header-height);
+  min-width: var(--header-height);
+  padding: 2px;
+  line-height: 0;
+  background: var(--header-bg);
+  border: var(--header-border);
+  color: var(--color-text-primary);
+  box-shadow: none;
+}
+
+.header .header__user-trigger.dropdown-toggle::after {
+  display: none;
+}
+
+.header .header__user-trigger img,
+.header .header__user-trigger .gravatar {
+  width: 32px;
+  height: 32px;
+  display: block;
+  margin: auto;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.header .chrome-logout {
+  margin: 0;
+}
+
+.header .chrome-logout .header__nav-link,
+.header .chrome-logout .dropdown-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.header .chrome-user .dropdown-menu {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  border: 1px solid var(--color-stroke-mid);
+  border-radius: var(--header-radius);
+  background: var(--color-surface-weak);
+  z-index: 1002;
+}
+
+/* Postorius style.css still ships the old footer: absolute, grey fill, top
+   border. footer.css pulls the box out by the shell gutter. */
+footer.footer.chrome-footer {
+  position: relative;
+  margin: var(--space-large) 0 0;
+  border-top: 0;
+  background: transparent;
+}
+
+footer.footer.chrome-footer a,
+footer.footer.chrome-footer p,
+footer.footer.chrome-footer .footer__text {
+  color: var(--color-text-primary);
+  text-align: left;
+}
+
+footer.footer.chrome-footer .footer__link:hover,
+footer.footer.chrome-footer .footer__social a:hover {
+  background: var(--color-navigation-hover);
+}
+
+footer.footer.chrome-footer .footer__social svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* footer.css colours every .footer descendant; the icons follow their link. */
+footer.footer.chrome-footer .footer__social a * {
+  color: inherit;
+}
+
+.chrome-footer-credit {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+@media (min-width: 991px) {
+  .chrome-search-tile {
+    display: none;
+  }
+}
+
+@media (max-width: 990px) {
+  .chrome-nav-divider {
+    display: none;
+  }
+
+  .chrome-search-tile {
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  .chrome-search-form {
+    display: none;
+  }
+
+  .chrome-search-toggle:checked ~ .chrome-search-form {
+    display: flex;
+    position: absolute;
+    top: calc(100% + var(--space-s));
+    left: var(--space-medium);
+    right: var(--space-medium);
+    z-index: 1001;
+  }
+
+  .header .header__drawer-nav .header__nav-link {
+    width: 100%;
+  }
+}
