@@ -1,0 +1,123 @@
+/* tabs.css
+ *
+ * Postorius .nav-pills (list admin) and HyperKitty .nav-tabs (Recent /
+ * Active / Popular) in the v3 tab__trigger look: underline, no pill fill.
+ */
+
+.nav-link {
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.nav-pills,
+.nav-tabs {
+  gap: var(--space-medium);
+  border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.nav-pills .nav-link,
+.nav-tabs .nav-link {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  margin-bottom: -1px;
+  padding: var(--space-default) var(--space-medium);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-default);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.nav-pills .nav-link:hover:not(.active),
+.nav-tabs .nav-link:hover:not(.active),
+.nav-pills .nav-link:focus:not(.active),
+.nav-tabs .nav-link:focus:not(.active) {
+  background: none;
+  border-color: transparent;
+}
+
+.nav-pills .nav-link:focus-visible,
+.nav-tabs .nav-link:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.nav-pills .nav-link:focus:not(:focus-visible),
+.nav-tabs .nav-link:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.nav-pills .nav-link.active,
+.nav-tabs .nav-link.active,
+.nav-pills .show > .nav-link,
+.nav-tabs .nav-item.show .nav-link {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.nav-tabs .nav-link {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+/* HyperKitty index sort-mode is links + span.active, not .nav-tabs. */
+.sort-mode a,
+.sort-mode span {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  border-bottom: 1px solid transparent;
+  padding: var(--space-default) var(--space-medium);
+}
+
+.sort-mode span {
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+}
+
+.sort-mode a:has(.active):focus-visible {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-pills .nav-link:hover,
+  .nav-tabs .nav-link:hover {
+    color: var(--color-text-primary);
+  }
+
+  .nav-pills .nav-link.active:hover,
+  .nav-tabs .nav-link.active:hover,
+  .nav-pills .show > .nav-link:hover,
+  .nav-tabs .nav-item.show .nav-link:hover {
+    border-bottom: 1px solid var(--color-text-secondary);
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
+
+  .sort-mode a:hover,
+  .sort-mode span:hover {
+    color: var(--color-text-primary);
+  }
+
+  .sort-mode a:has(.active):hover,
+  .sort-mode a.active:hover {
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
+}
+
+.sort-mode .active,
+.sort-mode span.active,
+.sort-mode a.active {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-text-secondary);
+  background: none;
+}

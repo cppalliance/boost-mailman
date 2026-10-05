@@ -1,0 +1,428 @@
+/* forms.css
+ *
+ * Bootstrap .form-control / .form-select / .form-check outrank the :where()
+ * reset, so give those classes the v3 field look explicitly. Focus is a 2px
+ * link-accent ring, not Bootstrap blue glow.
+ */
+
+/* Stock wraps the control in .checkbox / .radio / .radio-inline / .form-check,
+   sometimes with the text on a nested label (login Remember Me). */
+.checkbox,
+.radio,
+.checkbox label,
+.radio label,
+label.radio-inline,
+.form-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-medium);
+  cursor: pointer;
+}
+
+/* Postorius Yes/No radios are adjacent .radio-inline labels, not one flex row. */
+label.radio-inline {
+  margin-inline-end: var(--space-large);
+}
+
+.form-check {
+  padding-left: 0;
+  min-height: 24px;
+}
+
+.form-check .form-check-input {
+  float: none;
+  margin: 0;
+}
+
+.checkbox,
+.radio,
+label.radio-inline,
+.form-check,
+.form-check-label {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
+}
+
+.checkbox a,
+.radio a,
+label.radio-inline a,
+.form-check-label a {
+  text-decoration: underline;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-link-accent);
+}
+
+.form-control,
+.form-select {
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  min-height: 40px;
+  padding: 0 var(--space-large);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--color-stroke-weak);
+  background-color: var(--color-surface-weak);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.form-control::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+.form-select,
+.paginator select {
+  padding-right: 40px;
+}
+
+textarea.form-control {
+  min-height: 6rem;
+  padding: var(--space-default) 16px;
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: var(--color-stroke-mid);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-surface-mid);
+  border-color: var(--color-stroke-strong);
+  box-shadow: none;
+  color: var(--color-text-primary);
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0;
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  background-color: var(--color-surface-mid);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.form-select {
+  background-position: right var(--space-medium) center;
+}
+
+.form-label,
+.col-form-label,
+.control-label {
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+.form-text,
+.form-text.text-muted,
+.help-block,
+.form-control + .helptext,
+.helptext,
+p[id^="help-"],
+[id^="help-"].text-muted {
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+/* Bootstrap 5.1 .text-muted is color: #6c757d !important. */
+@layer boost-important {
+  .form-text,
+  .form-text.text-muted,
+  .help-block,
+  .form-control + .helptext,
+  .helptext,
+  p[id^="help-"],
+  [id^="help-"].text-muted {
+    color: var(--color-text-secondary) !important;
+  }
+}
+
+/* Stock allauth/Postorius/HyperKitty have no .checkbox__box span; paint the
+   24px control on the input. CSS-only header toggles stay 1px clipped. */
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ) {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+  background-color: var(--color-surface-weak);
+  background-image: none;
+  background-origin: border-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid var(--color-stroke-strong);
+  border-radius: var(--border-radius-xs);
+  transition:
+    background-color 0.1s ease,
+    border-color 0.1s ease,
+    background-image 0.1s ease;
+}
+
+/* Shared box is 0,2,1 (:is + :not class list). This must beat that xs radius. */
+:is(input[type="radio"], .form-check-input[type="radio"]):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ) {
+  border-radius: 50%;
+}
+
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):is(:checked, :indeterminate) {
+  background-color: var(--color-surface-strong);
+  border-color: var(--color-text-primary);
+}
+
+:is(input[type="checkbox"], .form-check-input[type="checkbox"]):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):is(:checked, :indeterminate) {
+  background-size: 16px 16px;
+}
+
+:is(input[type="checkbox"], .form-check-input[type="checkbox"]):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23050816'%3e%3cpath d='M18 6H20V8H18V6ZM16 10V8H18V10H16ZM14 12V10H16V12H14ZM12 14H14V12H12V14ZM10 16H12V14H10V16ZM8 16V18H10V16H8ZM6 14H8V16H6V14ZM6 14H4V12H6V14Z'/%3e%3c/svg%3e");
+  background-size: 16px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* 24-grid pixel-art at 16px antialiases to grey; keep the primary fill solid. */
+  image-rendering: pixelated;
+}
+
+:is(input[type="checkbox"], .form-check-input[type="checkbox"]):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):indeterminate {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23050816'%3e%3crect x='3' y='7' width='10' height='2'/%3e%3c/svg%3e");
+}
+
+:is(input[type="radio"], .form-check-input[type="radio"]):checked {
+  /* Derived: design system has no radio; 10px primary dot in the 24px circle. */
+  background-image: radial-gradient(
+    circle,
+    var(--color-text-primary) 5px,
+    transparent 5.5px
+  );
+}
+
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):focus {
+  box-shadow: none;
+}
+
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):focus:not(:focus-visible) {
+  outline: none;
+}
+
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):focus-visible {
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 2px;
+}
+
+:is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+    .header__menu-toggle,
+    .header__user-toggle,
+    .chrome-search-toggle
+  ):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:is(.checkbox, .radio, .radio-inline, .form-check):has(:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:is(.checkbox, .radio, .radio-inline):has(:disabled) input,
+.form-check:has(:disabled) .form-check-input {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(input[type="checkbox"], input[type="radio"], .form-check-input):not(
+      .header__menu-toggle,
+      .header__user-toggle,
+      .chrome-search-toggle
+    ) {
+    transition: none;
+  }
+}
+
+/* CSS-only header toggles are clip-hidden but keep the 1rem field box
+   geometry; the drawer and search layouts are measured against it. */
+input.header__menu-toggle,
+input.header__user-toggle,
+input.chrome-search-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  accent-color: var(--color-icon-brand-accent);
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0 var(--space-s) 0 0;
+  padding: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+  color: #2563eb;
+  background-color: var(--color-surface-weak);
+  background-image: none;
+  border: 1px solid var(--color-stroke-mid);
+  border-radius: var(--border-radius-s);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.input-group {
+  border: 1px solid var(--color-stroke-weak);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-surface-weak);
+  overflow: hidden;
+}
+
+.input-group .form-control,
+.input-group .form-select {
+  border: 0;
+  border-radius: 0;
+}
+
+.input-group > .input-group-btn,
+.input-group > .input-group-append,
+.input-group > .input-group-prepend {
+  display: flex;
+  align-self: stretch;
+}
+
+.input-group .btn,
+.input-group > .input-group-btn > .btn {
+  border: 0;
+  border-radius: 0;
+  align-self: stretch;
+}
+
+/* .input-group clips overflow; an outset ring would lose the sides that touch its edge. */
+.input-group .btn:not(.btn-close):focus-visible {
+  outline-offset: -2px;
+}
+
+.input-group:has(.form-control:focus, .form-select:focus) {
+  background-color: var(--color-surface-mid);
+  border-color: var(--color-stroke-strong);
+  box-shadow: none;
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0;
+}
+
+.input-group .form-control:focus,
+.input-group .form-select:focus {
+  outline: none;
+}
+
+.input-group-text {
+  background: var(--color-surface-mid);
+  border-color: var(--color-stroke-weak);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.is-invalid.form-control {
+  background-color: var(--color-surface-error-weak);
+  border-color: var(--color-stroke-error);
+}
+
+.invalid-feedback,
+.errorlist li {
+  color: var(--color-text-error);
+  font-size: 12px;
+}
+
+/* Login/signup page padding (kept with the field block). */
+:is(.page-account_login, .page-account_signup) [role="main"] {
+  & {
+    padding-bottom: var(--space-xl);
+  }
+
+}
+
+.page-account_login [role="main"] {
+  form.login {
+    border-radius: var(--border-radius-xl);
+    background: var(--color-surface-weak);
+    padding: var(--space-xlarge);
+  }
+
+  form.login .control-label {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+  }
+
+  /* Stock help sits in a right-hand column; stack it under the field. */
+  form.login #help-id_password,
+  form.login a[href*="password"] {
+    float: none;
+    display: inline-block;
+    margin-top: var(--space-s);
+    font-size: var(--font-size-small);
+  }
+
+  .form-check,
+  #id_remember {
+    vertical-align: middle;
+  }
+}
+
+.page-account_signup [role="main"] {
+  form.signup {
+    border-radius: var(--border-radius-xl);
+    background: var(--color-surface-weak);
+    padding: var(--space-xlarge);
+  }
+
+  form.signup .control-label {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+  }
+}

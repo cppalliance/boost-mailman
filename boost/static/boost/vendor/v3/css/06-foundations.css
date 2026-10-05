@@ -1,0 +1,386 @@
+/* ============================================================================
+ * 06-foundations.css
+ *
+ * The v3 baseline layer: @font-face declarations, the body.v3 base, and
+ * the token-driven utility classes.
+ *
+ * Extracted VERBATIM from the sources listed below. Declarations are copied
+ * byte-for-byte: nothing renamed, deduped, reordered, reformatted or
+ * revalued. The only removals are `html.dark` / `.dark` rules and rules that
+ * exist purely for dark theming; each removal is noted inline where it
+ * occurred. Token names and class names are UNPREFIXED, exactly as shipped --
+ * namespacing is documented in README.md as a migration step, not applied.
+ *
+ * SOURCES:
+ *   static/css/v3/fonts.css
+ *   static/css/v3/foundations.css
+ *   static/css/v3/v3-style-overrides.css (focus-visible rules only)
+ * ==========================================================================*/
+
+/* =========================================================================
+   fonts.css -- verbatim, EXCEPT that all 8 `url('/static/...')` absolute
+   paths are rewritten to `url('../../static/...')` so the gallery resolves
+   the real font files over a relative path from design-system/css/.
+   Nothing else in these @font-face blocks is changed.
+   ======================================================================== */
+
+/**
+ * V3 typography fonts.
+ * Reuses v2 fonts from /static/font/ where same (Monaspace); v3-only (Mona Sans) in /static/font/v3/
+ */
+
+/* Mona Sans – v3 only */
+@font-face {
+  font-family: 'Mona Sans VF';
+  font-style: normal;
+  font-weight: 400 500;
+  font-stretch: 95%;
+  font-display: swap;
+  src: url('../../static/font/v3/mona-sans/mona-sans-vf.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mona Sans VF';
+  font-style: italic;
+  font-weight: 400 500;
+  font-stretch: 95%;
+  font-display: swap;
+  src: url('../../static/font/v3/mona-sans/mona-sans-vf-italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mona Sans Display SemiCondensed';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/v3/mona-sans-display/MonaSans_SemiCondensed-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mona Sans Display SemiCondensed';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/v3/mona-sans-display/MonaSans_SemiCondensed-Medium.ttf') format('truetype');
+}
+
+/* Monaspace Neon – reuse v2 assets in /static/font/ */
+@font-face {
+  font-family: 'Monaspace Neon';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/MonaspaceNeon-Var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Monaspace Neon';
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/v3/monaspace-neon/monaspace-neon-latin-400-italic.ttf') format('truetype');
+}
+
+/* Monaspace Xenon – reuse v2 assets in /static/font/ */
+@font-face {
+  font-family: 'Monaspace Xenon';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/MonaspaceXenon-Var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Monaspace Xenon';
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('../../static/font/MonaspaceXenon-Italic.woff2') format('woff2');
+}
+
+/* =========================================================================
+   foundations.css -- verbatim, EXCEPT that line 1 (`@import './index.css';`)
+   is dropped. index.css pulls in the token files plus themes.css (dark-only)
+   and cpp-highlight.css; index.html loads the token files itself, in cascade
+   order, as 01..05. No declaration is affected.
+   ======================================================================== */
+
+html.v3 body,
+body.v3 {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-default);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+body.v3 {
+  background: var(--color-surface-page);
+
+  /* Gutter the page shell puts around its children — 0 for the full-bleed shells.
+     Overlays that line up with .header cancel it. */
+  --v3-shell-gutter: 0px;
+
+  /* .header's height, and the space it occupies with its padding. Read these
+     rather than var(--header-height), the legacy 41px outside .header. */
+  --v3-header-height: 48px;
+  --v3-header-footprint: calc(var(--v3-header-height) + 2 * var(--space-default));
+}
+
+/* .header swaps to all-round --space-medium padding at this width (header.css). */
+@media (max-width: 990px) {
+  body.v3 {
+    --v3-header-footprint: calc(var(--v3-header-height) + 2 * var(--space-medium));
+  }
+}
+
+html.v3,
+body.v3,
+html.v3 *,
+body.v3 * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-stroke-mid) var(--color-surface-strong);
+}
+
+/* Scroll regions inside the page keep their scrollbar hidden until hovered or
+   focused. Only the colours change — `scrollbar-width: thin` above still
+   reserves the gutter, so revealing a scrollbar never reflows content.
+   Scoped to `body.v3 *` so the document's own scrollbar stays visible, and to
+   hover-capable pointers, since touch has no hover to reveal it with. */
+@media (hover: hover) {
+  body.v3 * {
+    scrollbar-color: transparent transparent;
+  }
+
+  body.v3 *:is(:hover, :focus, :focus-within) {
+    scrollbar-color: var(--color-stroke-mid) var(--color-surface-strong);
+  }
+}
+
+/* Reserve the scrollbar gutter so dialog scroll-lock doesn't reflow the page. */
+html.v3 {
+  scrollbar-gutter: stable;
+}
+
+/* Neutralise third-party scroll-lock libs (e.g. Boost Gecko search) that
+   add inline body padding-right — our gutter above already reserves it. */
+body.v3 {
+  padding-right: 0 !important;
+}
+
+html.v3 code {
+  font-family: var(--font-code);
+}
+
+/* Typography utility classes */
+.font-sans { font-family: var(--font-sans); }
+.font-display { font-family: var(--font-display); }
+.font-code { font-family: var(--font-code); }
+.font-comments { font-family: var(--font-comments); }
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-small { font-size: var(--font-size-small); }
+.text-base { font-size: var(--font-size-base); }
+.text-medium { font-size: var(--font-size-medium); }
+.text-large { font-size: var(--font-size-large); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-default { line-height: var(--line-height-default); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+.leading-code { line-height: var(--line-height-code); }
+
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+
+/* Border Radius utility classes */
+.rounded-xs { border-radius: var(--border-radius-xs); }
+.rounded-s { border-radius: var(--border-radius-s); }
+.rounded-m { border-radius: var(--border-radius-m); }
+.rounded-l { border-radius: var(--border-radius-l); }
+.rounded-xl { border-radius: var(--border-radius-xl); }
+.rounded-xxl { border-radius: var(--border-radius-xxl); }
+
+/* Spacing utility classes - Padding */
+.p-xs { padding: var(--space-xs); }
+.p-s { padding: var(--space-s); }
+.p-default { padding: var(--space-default); }
+.p-medium { padding: var(--space-medium); }
+.p-large { padding: var(--space-large); }
+.p-xl { padding: var(--space-xl); }
+.p-xxl { padding: var(--space-xxl); }
+.p-avatar { padding: var(--space-avatar); }
+
+/* Spacing utility classes - Margin */
+.m-xs { margin: var(--space-xs); }
+.m-s { margin: var(--space-s); }
+.m-default { margin: var(--space-default); }
+.m-medium { margin: var(--space-medium); }
+.m-large { margin: var(--space-large); }
+.m-xl { margin: var(--space-xl); }
+.m-xxl { margin: var(--space-xxl); }
+.m-avatar { margin: var(--space-avatar); }
+
+/* Spacing utility classes - Gap */
+.gap-xs { gap: var(--space-xs); }
+.gap-s { gap: var(--space-s); }
+.gap-default { gap: var(--space-default); }
+.gap-medium { gap: var(--space-medium); }
+.gap-large { gap: var(--space-large); }
+.gap-xl { gap: var(--space-xl); }
+.gap-xxl { gap: var(--space-xxl); }
+.gap-avatar { gap: var(--space-avatar); }
+
+/* Spacing utility classes - Margin Bottom */
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-s { margin-bottom: var(--space-s); }
+.mb-default { margin-bottom: var(--space-default); }
+.mb-medium { margin-bottom: var(--space-medium); }
+.mb-large { margin-bottom: var(--space-large); }
+.mb-xl { margin-bottom: var(--space-xl); }
+.mb-xxl { margin-bottom: var(--space-xxl); }
+
+/* Spacing utility classes - Padding X and Y */
+.px-medium { padding-left: var(--space-medium); padding-right: var(--space-medium); }
+.py-medium { padding-top: var(--space-medium); padding-bottom: var(--space-medium); }
+.px-large { padding-left: var(--space-large); padding-right: var(--space-large); }
+.py-large { padding-top: var(--space-large); padding-bottom: var(--space-large); }
+
+/* Color utility classes - Background */
+.bg-primary { background-color: var(--color-bg-primary); }
+.bg-secondary { background-color: var(--color-bg-secondary); }
+.bg-surface-mid { background-color: var(--color-surface-mid); }
+.bg-surface-strong { background-color: var(--color-surface-strong); }
+.bg-surface-weak { background-color: var(--color-surface-weak); }
+.bg-surface-brand-accent { background-color: var(--color-surface-brand-accent-default); }
+.bg-button-accent { background-color: var(--color-button-accent); }
+.bg-button-primary { background-color: var(--color-button-primary); }
+.bg-button-secondary { background-color: var(--color-button-secondary); }
+
+/* Color utility classes - Icon (Icon/Brand Accent etc.) */
+.icon-brand-accent { color: var(--color-icon-brand-accent); }
+
+/* Color utility classes - Text */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-error { color: var(--color-text-error); }
+.text-link-accent { color: var(--color-text-link-accent); }
+.text-on-accent { color: var(--color-text-on-accent); }
+.text-reversed { color: var(--color-text-reversed); }
+
+/* Color utility classes - Border/Stroke */
+.border-brand-accent { border-color: var(--color-stroke-brand-accent); }
+.border-strong { border-color: var(--color-stroke-strong); }
+.border-mid { border-color: var(--color-stroke-mid); }
+.border-weak { border-color: var(--color-stroke-weak); }
+.border-default { border-color: var(--color-border); }
+.border-error { border-color: var(--color-stroke-error); }
+.border-link-accent { border-color: var(--color-stroke-link-accent); }
+
+/* ==========================================================================
+   Underline links (#2297)
+   Left at `auto`, Firefox derives underline thickness and position from the
+   font's own metrics. For Mona Sans that seats the line inside the descenders,
+   and `skip-ink` then carves a gap around every g/p/y, so the underline renders
+   as disconnected fragments and heavier than in Chromium.
+
+   These three properties are inert unless a decoration is actually drawn, so
+   setting them on every v3 anchor is safe and covers links added later. Keep the
+   specificity low so a component can still override deliberately, and do not
+   reintroduce `auto`, a percentage, or `text-underline-position: from-font` in a
+   component rule: any of those puts the bug back for that component only.
+   ========================================================================== */
+body.v3 a,
+/* Non-anchor elements that carry their own underline. .learn-card__link is a
+   span inside the anchor, so the selector above does not reach it. */
+body.v3 .learn-card__link,
+body.v3 .btn-underline,
+body.v3 .dropdown__item--selected,
+body.v3 .mailing-list-modal__select-all {
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* Container for v3 content */
+.v3-container {
+  --v3-shell-gutter: var(--space-large);
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--v3-shell-gutter);
+  padding-right: var(--v3-shell-gutter);
+}
+
+@media (max-width: 767px) {
+  .v3-container {
+    --v3-shell-gutter: var(--space-medium);
+  }
+}
+
+/* ==========================================================================
+   Full-height page: the footer sits at the bottom of the viewport on pages
+   whose content is too short to fill it, instead of riding up under the last
+   card.
+
+   Driven from the body because that is the only element every v3 page shares:
+   base.html renders [optional flag banner] + [page wrapper], and the wrapper
+   itself is a template block that homepage, community, release detail, auth
+   and library subpages each swap out for their own. Growing the body's own
+   children also means the banner's height is accounted for automatically,
+   rather than each page guessing at `min-height: 100vh`.
+   ========================================================================== */
+
+body.v3 {
+  display: flex;
+  flex-direction: column;
+  /* Overrides .h-screen, which would otherwise cap the page at exactly one
+     viewport and let longer content spill out of the flex column. */
+  height: auto;
+  min-height: 100vh;
+}
+
+/* The page wrapper, whatever class the template gave it: it is the body child
+   holding the header, the content and the footer. */
+body.v3 > div:has(> .min-vh-110) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+/* The content wrapper between the header and the footer takes up the slack. */
+body.v3 > div > .min-vh-110 {
+  flex: 1 0 auto;
+}
+
+
+/* =========================================================================
+   v3-style-overrides.css -- ONLY the two focus-visible rules. This file is
+   loaded LAST in templates/base.html under the v3 flag, so it sits here at
+   the end of the foundations layer for the same reason.
+   OMITTED from this file: `.dark textarea { background-color: ... }`
+   (dark-only).
+   ======================================================================== */
+
+a:focus-visible {
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0px;
+}

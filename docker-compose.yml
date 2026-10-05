@@ -1,0 +1,98 @@
+name: boost-mailman
+
+x-mailman-shared-env: &mailman-shared-env
+  DATABASE_URL: postgresql://mailman:mailmanpass@database/mailmandb
+  HYPERKITTY_API_KEY: ${HYPERKITTY_API_KEY:-devhyperkittyapikey}
+
+services:
+  mailman-core:
+    image: maxking/mailman-core:0.5.2
+    container_name: boost-mailman-core
+    hostname: mailman-core
+    restart: unless-stopped
+    volumes:
+      - core_data:/opt/mailman/
+    stop_grace_period: 30s
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      <<: *mailman-shared-env
+      DATABASE_TYPE: postgres
+      DATABASE_CLASS: mailman.database.postgresql.PostgreSQLDatabase
+    ports:
+      - "127.0.0.1:8201:8001" # Mailman core REST API
+      - "127.0.0.1:8224:8024" # LMTP - incoming mail
+    networks:
+      mailman:
+
+  mailman-web:
+    image: maxking/mailman-web:0.5.2
+    container_name: boost-mailman-web
+    hostname: mailman-web
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+      mailman-core:
+        condition: service_started
+    volumes:
+      - web_data:/opt/mailman-web-data
+      # Serve /static/ without nginx (production uses nginx for this).
+      - ./local/uwsgi.ini:/opt/mailman-web/uwsgi.ini:ro
+      # Production URL paths: /mailman3/ (Postorius), /archives/ (HyperKitty).
+      - ./local/urls.py:/opt/mailman-web/urls.py:ro
+      # Prod-faithful overrides: register static_custom + templates DIRS.
+      - ./local/settings_local.py:/opt/mailman-web/settings_local.py:ro
+      # Seed helper.
+      - ./scripts:/opt/boost-scripts:ro
+      # --- boost redesign overrides (static_custom + templates) ---
+      # Mounted OUTSIDE /opt/mailman-web-data so the entrypoint's `chown -R`
+      # over the data dir does not choke on these read-only mounts. The boost/
+      # static namespace is served live by uwsgi via a dedicated static-map
+      # (see local/uwsgi.ini); templates are picked up via TEMPLATES DIRS.
+      # Per-app static overrides (postorius/hyperkitty) are added here only
+      # when such a file actually exists.
+      - ./boost/static/boost:/opt/boost-custom/static_custom/boost:ro
+      - ./boost/templates/boost:/opt/boost-custom/templates/boost:ro
+      - ./postorius/templates/postorius:/opt/boost-custom/templates/postorius:ro
+      - ./hyperkitty/templates/hyperkitty:/opt/boost-custom/templates/hyperkitty:ro
+    environment:
+      <<: *mailman-shared-env
+      DATABASE_TYPE: postgres
+      SECRET_KEY: ${SECRET_KEY:-dev-only-insecure-secret-change-me}
+      SERVE_FROM_DOMAIN: ${SERVE_FROM_DOMAIN:-lists.example.com}
+      MAILMAN_ADMIN_USER: ${MAILMAN_ADMIN_USER:-admin}
+      MAILMAN_ADMIN_EMAIL: ${MAILMAN_ADMIN_EMAIL:-admin@example.com}
+    ports:
+      - "127.0.0.1:8400:8000" # HTTP (open this in the browser)
+      - "127.0.0.1:8480:8080" # uwsgi
+    networks:
+      mailman:
+
+  database:
+    image: postgres:12-alpine
+    container_name: boost-mailman-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mailmandb
+      POSTGRES_USER: mailman
+      POSTGRES_PASSWORD: mailmanpass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --dbname mailmandb --username mailman"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      mailman:
+
+networks:
+  mailman:
+    driver: bridge
+
+volumes:
+  core_data:
+  web_data:
+  db_data:

@@ -1,0 +1,42 @@
+/* shell.css — 1440px containers. */
+
+.container-xxl,
+.container-xl,
+.container-lg,
+.container-md,
+.container-sm,
+.container,
+.container-fluid {
+  --v3-shell-gutter: var(--space-large);
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--v3-shell-gutter);
+  padding-right: var(--v3-shell-gutter);
+}
+
+/* Bootstrap .row resets --bs-gutter-x to 1.5rem; keep negative row
+   margins inside the shell padding. Vendored 06-foundations.css sets
+   --v3-shell-gutter to 0 on body.v3, so the token lives on the container. */
+
+.row {
+  --bs-gutter-x: calc(var(--v3-shell-gutter, var(--space-large)) * 2);
+}
+
+/* Bootstrap .collapsing uses a height transition; disable it. */
+.collapsing {
+  transition: none;
+}
+
+@media (max-width: 767px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container,
+  .container-fluid {
+    --v3-shell-gutter: var(--space-medium);
+  }
+}

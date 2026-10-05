@@ -1,0 +1,156 @@
+/* alerts.css
+ *
+ * One v3 banner per message. Soft surfaces (not saturated fills). HyperKitty
+ * wraps allauth errors as .alert > ul.errorlist (stock pink pill) — flatten
+ * the inner list so it does not paint a second box. Flashmsgs stay in flow.
+ */
+
+.alert,
+ul.errorlist {
+  display: block;
+  width: auto;
+  margin: 0 0 var(--space-medium);
+  padding: var(--space-default) var(--space-medium);
+  border: 1px solid var(--color-stroke-weak);
+  border-radius: var(--border-radius-l);
+  background: var(--color-surface-mid);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
+  text-shadow: none;
+  list-style: none;
+}
+
+.alert a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.alert-success {
+  background: var(--color-surface-weak-accent-green);
+  border-color: var(--color-stroke-weak);
+  color: var(--color-text-primary);
+}
+
+.alert-danger,
+.alert-error,
+ul.errorlist {
+  background: var(--color-surface-error-weak);
+  border-color: var(--color-stroke-error);
+  color: var(--color-text-error);
+}
+
+.alert-warning {
+  background: var(--color-surface-weak-accent-yellow);
+  border-color: var(--color-stroke-weak);
+  color: var(--color-text-primary);
+}
+
+.alert-info {
+  background: var(--color-surface-weak-accent-teal);
+  border-color: var(--color-stroke-weak);
+  color: var(--color-text-primary);
+}
+
+.alert .errorlist,
+.alert ul.errorlist {
+  display: block;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  text-shadow: none;
+  list-style: none;
+}
+
+.flashmsgs {
+  --v3-shell-gutter: var(--space-large);
+  position: static;
+  left: auto;
+  width: 100%;
+  max-width: 1440px;
+  margin: var(--space-medium) auto 0;
+  padding: 0 var(--v3-shell-gutter);
+  text-align: left;
+  z-index: auto;
+}
+
+@media (max-width: 767px) {
+  .flashmsgs {
+    --v3-shell-gutter: var(--space-medium);
+  }
+}
+
+.flashmsgs .alert {
+  display: block;
+}
+
+.alert-dismissible {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+  padding-right: var(--space-medium);
+}
+
+.alert .btn-close,
+.alert .close {
+  position: static;
+  margin-left: auto;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  padding: var(--space-xs);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  opacity: 0.85;
+  filter: none;
+  font-size: var(--font-size-small);
+  line-height: 1;
+  color: inherit;
+  text-shadow: none;
+}
+
+.alert .close span {
+  color: inherit;
+}
+
+.alert .btn-close:hover,
+.alert .close:hover {
+  opacity: 0.7;
+}
+
+.flashmsgs .alert-success,
+.flashmsgs .alert-info,
+[role="main"] > .alert-success,
+[role="main"] > .alert-info {
+  --fade-delay: 6s;
+  animation: boost-banner-fade-out 1s var(--fade-delay) ease forwards;
+}
+
+@keyframes boost-banner-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flashmsgs .alert-success,
+  .flashmsgs .alert-info,
+  [role="main"] > .alert-success,
+  [role="main"] > .alert-info {
+    animation: boost-banner-fade-out 0s 6s forwards;
+  }
+}

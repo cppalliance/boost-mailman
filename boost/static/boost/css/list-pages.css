@@ -1,0 +1,258 @@
+/* list-pages.css — Postorius list summary (About + subscribe cards)
+ * plus shared spacing with the HyperKitty overview and manage_user
+ * (that admin form used to match the old display-name page guard;
+ * dropping it is a visual change).
+ * mailing-list-card.css is not vendored: we do not emit its classes.
+ */
+
+:is([data-page-group="list-home"], .page-manage_user) [role="main"] {
+  & {
+    padding-bottom: var(--space-xl);
+  }
+
+  & > .page-header {
+    margin-bottom: var(--space-medium);
+  }
+
+  .page-header small {
+    display: block;
+    margin-top: var(--space-s);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+  }
+
+  h2 {
+    margin-top: var(--space-xlarge);
+    margin-bottom: var(--space-medium);
+  }
+
+  h3 {
+    margin-top: var(--space-large);
+    margin-bottom: var(--space-default);
+  }
+
+  p {
+    max-width: 40rem;
+    margin-bottom: var(--space-medium);
+    color: var(--color-text-primary);
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--color-stroke-weak);
+    margin: var(--space-xlarge) 0;
+  }
+
+  form.form-horizontal {
+    border-radius: var(--border-radius-xl);
+    background: var(--color-surface-weak);
+    padding: var(--space-xlarge);
+  }
+}
+
+[role="main"] .boost-list-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-large);
+  align-items: start;
+  margin-top: var(--space-large);
+}
+
+[role="main"] .boost-subscribe-card {
+  order: -1;
+}
+
+@media (min-width: 768px) {
+  [role="main"] .boost-list-summary {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  [role="main"] .boost-about-card {
+    order: 0;
+  }
+
+  [role="main"] .boost-subscribe-card {
+    order: 0;
+  }
+}
+
+[role="main"] .boost-about-card,
+[role="main"] .boost-subscribe-card {
+  padding: var(--space-card);
+}
+
+[role="main"] .boost-subscribe-card {
+  background: var(--color-surface-weak-accent-teal);
+}
+
+.page-list_summary [role="main"] .boost-about-card > h2,
+.page-list_summary [role="main"] .boost-subscribe-card > h2,
+.page-list_summary [role="main"] .boost-subscribe-card > div > h2 {
+  margin: 0 0 var(--space-medium);
+  padding: 0 0 var(--space-medium);
+  border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+[role="main"] .boost-about-card > h3,
+[role="main"] .boost-subscribe-card h4 {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: var(--space-large) 0 var(--space-default);
+}
+
+[role="main"] .boost-about-card dl.row {
+  --bs-gutter-x: 0;
+  margin: 0;
+}
+
+[role="main"] .boost-about-card dt,
+[role="main"] .boost-about-card dd {
+  flex: 0 0 100%;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+[role="main"] .boost-about-card dt {
+  margin-top: var(--space-default);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+[role="main"] .boost-about-card dd {
+  margin-bottom: 0;
+}
+
+[role="main"] .boost-about-card .btn {
+  color: var(--color-text-primary);
+  background: var(--color-surface-weak);
+  border: 1px solid var(--color-stroke-strong, var(--color-stroke-mid));
+}
+
+:is([data-page-group="list-home"], .page-manage_user) [role="main"] {
+  .boost-subscribe-card form.form-horizontal {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+}
+
+[role="main"] .boost-subscribe-card form.form-horizontal .col-md-2,
+[role="main"] .boost-subscribe-card form.form-horizontal :is(.col-md-8, .offset-md-2):where(div) {
+  max-width: 100%;
+}
+
+[role="main"] .boost-subscribe-card form.form-horizontal .col-md-2,
+[role="main"] .boost-subscribe-card form.form-horizontal .col-md-8,
+[role="main"] .boost-subscribe-card form.form-horizontal .offset-md-2 {
+  flex: 0 0 100%;
+  width: 100%;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+[role="main"] .boost-subscribe-card form.form-horizontal .control-label {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  text-align: left;
+  margin-bottom: var(--space-s);
+}
+
+[role="main"] .boost-subscribe-card form.form-horizontal .mb-3.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+[role="main"] .boost-subscribe-card #id_email {
+  padding-right: 48px;
+}
+
+[role="main"] .boost-subscribe-card .boost-subscribe-arrow {
+  display: none;
+}
+
+/* Arrow is a form sibling of the field row (not inside it). Share the
+   email row's grid cell so it can sit in the 40px input. */
+
+[role="main"] .boost-subscribe-card form:has(#id_email).form-horizontal {
+  display: grid;
+}
+
+[role="main"] .boost-subscribe-card form:has(#id_email) .mb-3.row:has(#id_email) {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+/* Bootstrap .mb-3 is 1rem !important; that margin grows this shared
+   grid cell and sits the arrow below the 40px input. */
+@layer boost-important {
+  [role="main"] .boost-subscribe-card form:has(#id_email) .mb-3.row:has(#id_email) {
+    margin-bottom: 0 !important;
+  }
+}
+
+[role="main"] .boost-subscribe-card form:has(#id_email) .mb-3.row:has(#id_email) + * {
+  margin-top: 1rem;
+}
+
+[role="main"] .boost-subscribe-card form:has(#id_email) .boost-subscribe-arrow {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: end;
+  justify-self: end;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  margin: 0 var(--space-large) 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  bottom: 8px;
+}
+
+[role="main"] .boost-subscribe-card button.btn-primary[type="submit"]:not(.boost-subscribe-arrow) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: var(--space-default);
+  padding: 0 var(--space-xl);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  background-color: var(--color-surface-brand-accent-default);
+  border-color: var(--color-surface-brand-accent-default);
+  color: var(--color-text-on-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [role="main"] .boost-subscribe-card button.btn-primary[type="submit"]:not(.boost-subscribe-arrow):hover {
+    background-color: var(--color-surface-brand-accent-hovered);
+    border-color: var(--color-surface-brand-accent-hovered);
+    color: var(--color-text-on-accent);
+  }
+
+  [role="main"] .boost-subscribe-card form:has(#id_email) .boost-subscribe-arrow:hover {
+    color: var(--color-text-link-accent);
+  }
+
+  [role="main"] .boost-about-card .btn:hover {
+    background: var(--color-surface-weak);
+    border-color: var(--color-stroke-link-accent);
+    color: var(--color-text-link-accent);
+  }
+}

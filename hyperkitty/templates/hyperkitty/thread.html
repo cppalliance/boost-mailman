@@ -1,0 +1,155 @@
+{% extends "hyperkitty/base.html" %}
+
+{% load i18n %}
+{% load hk_generic %}
+{% load static %}
+
+
+{% block head_title %}
+{{ subject }} - {{ mlist.display_name|default:mlist.name }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row view-thread d-flex">
+
+        <!-- thread header: navigation (older/newer), thread title -->
+        <div class="thread-header">
+          <div class="d-flex">
+            {% with prev_thread=thread.prev_thread next_thread=thread.next_thread %}
+            <div>
+                {% if next_thread %}
+                <a id="next-thread" class="btn btn-secondary btn-sm {% if not next_thread %}disabled{% endif %}"
+                        {% if next_thread %}title="{{ next_thread.subject|strip_subject:mlist|escape }}"{% endif %}
+                        href="{% url 'hk_thread' threadid=next_thread.thread_id mlist_fqdn=mlist.name %}">
+                    <span class="fa fa-chevron-left"></span>
+                    <span class="d-none d-md-inline">{% trans "newer" %}</span>
+                </a>
+                <br />
+                <a href="{% url 'hk_thread' threadid=next_thread.thread_id mlist_fqdn=mlist.name %}"
+                title="{{ next_thread.subject|strip_subject:mlist|escape }}" class="thread-titles d-none d-md-block">
+                    {{ next_thread.subject|strip_subject:mlist|truncatesmart:"35" }}
+                </a>
+               {% endif %}
+            </div>
+            <div class="flex-grow-1">
+                <header class="post-header">
+                    <h1 class="post-header__title">{{ subject }}</h1>
+                    <div class="post-header__meta">
+                        <time class="post-header__date" datetime="{{ starting_email.date|date:'c' }}">{{ starting_email.date|date:"F jS, Y" }}</time>
+                        <span>{% blocktrans %}{{ num_comments }} replies{% endblocktrans %}</span>
+                        <span>{% blocktrans with participants_count=thread.participants_count %}{{ participants_count }} participants{% endblocktrans %}</span>
+                        {% if user.is_authenticated %}
+                        <span>{% blocktrans %}{{ unread_count }} unread{% endblocktrans %}</span>
+                        {% endif %}
+                        <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}">{{ mlist.display_name|default:mlist.name }}</a>
+                    </div>
+                    <div class="boost-post-byline">
+                        <div class="boost-post-byline__avatar">
+                            {% gravatar starting_email.sender.address 48 %}
+                        </div>
+                        <div class="boost-post-byline__text">
+                            <span class="boost-post-byline__name">
+                                {% if starting_email.sender.mailman_id %}
+                                <a href="{% url 'hk_public_user_profile' user_id=starting_email.sender.mailman_id %}">{{ starting_email.sender_name|default:starting_email.sender.address|escapeemail }}</a>
+                                {% else %}
+                                {{ starting_email.sender_name|default:starting_email.sender.address|escapeemail }}
+                                {% endif %}
+                            </span>
+                            <span class="boost-post-byline__role">{% trans "Original poster" %}</span>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="right">
+                <a id="prev-thread" class="btn btn-secondary btn-sm {% if not prev_thread %}disabled{% endif %}"
+                    {% if prev_thread %}
+                    title="{{ prev_thread.subject|strip_subject:mlist|escape }}"
+                    href="{% url 'hk_thread' threadid=prev_thread.thread_id mlist_fqdn=mlist.name %}"
+                    {% endif %}>
+                    <span class="fa fa-chevron-right"></span>
+                    <span class="d-none d-md-inline">{% trans "older" %}</span>
+                </a><br />
+                {% if prev_thread %}
+                <a href="{% url 'hk_thread' threadid=prev_thread.thread_id mlist_fqdn=mlist.name %}"
+                    title="{{ prev_thread.subject|strip_subject:mlist|escape }}" class="thread-titles d-none d-md-block">
+                    {{ prev_thread.subject|strip_subject:mlist|truncatesmart:"35" }}
+                </a>
+                {% endif %}
+            </div>
+          </div>
+         {% endwith %}
+         </div>
+        </div> <!-- /thread-header -->
+
+        <div class="row">
+            <div class="col-sm-12 col-md-9">
+                <!-- main section, the email thread -->
+                <div id="thread-content">
+
+                    <!-- Start first email -->
+                    {% include 'hyperkitty/messages/message.html' with email=starting_email unfolded='True' mlist=mlist %}
+                    <!-- End first email -->
+
+                    <p class="sort-mode">
+                        {% if sort_mode == "date" %}
+                        <a href="{% url 'hk_thread' threadid=thread.thread_id mlist_fqdn=mlist.name %}?sort=thread"
+                            >{% trans "Show replies by thread" %}</a>
+                        {% else %}
+                        <a href="{% url 'hk_thread' threadid=thread.thread_id mlist_fqdn=mlist.name %}?sort=date"
+                            >{% trans "Show replies by date" %}</a>
+                        {% endif %}
+                    </p>
+
+                    <div class="anchor-link">
+                        <a id="replies"></a>
+                    </div>
+                    <div class="replies">
+                        {% if is_bot or is_noscript %}
+                            {% include 'hyperkitty/ajax/replies.html' %}
+                        {% else %}
+                            <img alt="{% trans 'Loading...' %}" class="ajaxloader" src="{% static 'hyperkitty/img/ajax-loader.gif' %}" />
+                            <noscript>
+                              <a href="{% url 'hk_thread' threadid=thread.thread_id mlist_fqdn=mlist.name %}?noscript">{% trans 'Visit here for a non-javascript version of this page.' %}</a>
+                            </noscript>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <div class="anchor-link">
+                    <a id="stats"></a>
+                </div>
+                {% include 'hyperkitty/threads/right_col.html' %}
+            </div>
+
+        </div>
+
+</div>
+
+<!-- end of content -->
+{% endblock %}
+
+{% block additionaljs %}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        //enable tooltips for thread buttons
+        $("btn#next-thread").tooltip();
+        $("btn#prev-thread").tooltip();
+
+        setup_category();
+        setup_tags();
+        setup_favorites();
+        // Hide quotes by default in the thread view
+        fold_quotes("div.container-xxl");
+        // Load the replies
+        update_thread_replies("{% url 'hk_thread_replies' threadid=thread.thread_id mlist_fqdn=mlist.name %}?sort={{sort_mode}}&last_view={{last_view|date:'U'}}");
+        setup_unreadnavbar("#unreadnavbar");
+        setup_thread_keyboard_shortcuts();
+    });
+</script>
+
+{% endblock %}

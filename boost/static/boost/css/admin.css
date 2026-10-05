@@ -1,0 +1,115 @@
+/* admin.css — list-index pills, members stack, admin tables. */
+
+
+/* ---------- List index: role filter pills ---------- */
+
+/* Unselected pills stay at rest even with Bootstrap .active.
+   Selected role uses the outline .active look. Nested :has()
+   is dropped by the engine, so the single-active case is enumerated. */
+
+[role="main"] .horizontal-list a.btn.btn-outline-secondary,
+[role="main"] .horizontal-list a.btn.btn-outline-secondary.active,
+[role="main"] .horizontal-list a.btn.btn-outline-secondary:active,
+[role="main"] .horizontal-list a.btn.btn-outline-secondary:focus,
+[role="main"] .horizontal-list a.btn.btn-outline-secondary:focus-visible {
+  background-color: var(--color-surface-weak);
+  border: 1px solid var(--color-stroke-strong, var(--color-stroke-mid));
+  color: var(--color-text-primary);
+  box-shadow: none;
+}
+
+[role="main"] .horizontal-list:has(> li:nth-child(1) > a.active):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(1) > a.active,
+[role="main"] .horizontal-list:has(> li:nth-child(2) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(2) > a.active,
+[role="main"] .horizontal-list:has(> li:nth-child(3) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(3) > a.active,
+[role="main"] .horizontal-list:has(> li:nth-child(4) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(4) > a.active,
+[role="main"] .horizontal-list:has(> li:nth-child(5) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)) > li:nth-child(5) > a.active {
+  background-color: var(--color-surface-mid);
+  border-color: var(--color-stroke-link-accent);
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [role="main"] .horizontal-list a.btn.btn-outline-secondary:hover {
+    background-color: var(--color-surface-weak);
+    border-color: var(--color-stroke-link-accent);
+    color: var(--color-text-link-accent);
+  }
+
+  [role="main"] .horizontal-list:has(> li:nth-child(1) > a.active):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(1) > a.active:hover,
+  [role="main"] .horizontal-list:has(> li:nth-child(2) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(2) > a.active:hover,
+  [role="main"] .horizontal-list:has(> li:nth-child(3) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(4) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(3) > a.active:hover,
+  [role="main"] .horizontal-list:has(> li:nth-child(4) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(5) > a.active)) > li:nth-child(4) > a.active:hover,
+  [role="main"] .horizontal-list:has(> li:nth-child(5) > a.active):not(:has(> li:nth-child(1) > a.active)):not(:has(> li:nth-child(2) > a.active)):not(:has(> li:nth-child(3) > a.active)):not(:has(> li:nth-child(4) > a.active)) > li:nth-child(5) > a.active:hover {
+    background-color: var(--color-surface-mid);
+    border-color: var(--color-stroke-link-accent);
+    color: var(--color-text-primary);
+  }
+}
+
+/* ---------- Members: stack search + empty at 375 ---------- */
+
+@media (max-width: 767px) {
+  :is([data-page-group="settings"], .page-hk_list_overview) [role="main"],
+  .page-list_summary [role="main"]:where(:has(> .boost-list-summary--signed-in)) {
+    .pull-left {
+      float: none;
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: var(--space-medium);
+    }
+
+    .pull-left .form-inline,
+    .pull-left .input-group {
+      display: flex;
+      width: 100%;
+    }
+
+    .pull-left + p,
+    .pull-left + form {
+      clear: both;
+      display: block;
+      width: 100%;
+    }
+  }
+}
+
+/* Admin nav pills: one scrolling row at 375, like v3 tabs. The row clips
+   anything positioned against it, so the dropdown li is static and the
+   menus position against an ancestor outside the row. */
+
+@media (max-width: 767px) {
+  [role="main"] > header.page-header ~ .nav-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  [role="main"] > header.page-header ~ .nav-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  [role="main"] > header.page-header ~ .nav-pills .nav-link {
+    white-space: nowrap;
+  }
+
+  [role="main"] > header.page-header ~ .nav-pills .dropdown {
+    position: static;
+  }
+}
+
+[role="main"] > header.page-header ~ table.table + h2 {
+  margin-top: var(--space-xlarge);
+}
+
+/* Django emits <p id="help-…"><ul>…</ul></p>; the parser closes the <p>,
+   so the list lands as its next sibling. */
+
+p[id^="help-"] + ul {
+  margin: var(--space-s) 0 0;
+  padding-left: var(--space-large);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: var(--line-height-default);
+}

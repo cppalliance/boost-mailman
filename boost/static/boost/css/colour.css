@@ -1,0 +1,87 @@
+/* colour.css
+ *
+ * Page colour grammar and the shared 2px focus ring (offset 0).
+ * Rings with another offset stay on the component.
+ */
+
+body {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-page);
+}
+
+.card-header,
+.panel-heading,
+.modal-header,
+.list-header,
+.well-sm {
+  background-color: var(--color-surface-mid);
+  border-color: var(--color-stroke-weak);
+  box-shadow: none;
+}
+
+.shadow,
+.shadow-sm,
+.shadow-lg,
+.dropdown-menu,
+.btn:not(.btn-close),
+.form-control,
+.form-select,
+.navbar,
+nav#navbar-main {
+  box-shadow: none;
+}
+
+.email-body blockquote,
+.email-body pre,
+.email-body .quoted-switch,
+.email .quoted-text,
+pre,
+blockquote {
+  background-color: var(--color-surface-mid);
+  border-color: var(--color-stroke-weak);
+  box-shadow: none;
+}
+
+/* Zero weight in every state: a Component that colours its links owns
+   their hover and focus too. */
+:where(a:not(.btn, .nav-link, .page-link, .dropdown-item, .navbar-brand, .badge, .close, .btn-close)) {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:where(a:not(.btn, .nav-link, .page-link, .dropdown-item, .navbar-brand, .badge, .close, .btn-close):is(:hover, :focus-visible)) {
+  color: var(--color-text-link-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:not(.btn):focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+a:not(.btn):focus-visible,
+.btn:not(.btn-close):focus-visible,
+.page-link:focus-visible,
+.navbar-toggler:focus-visible {
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0;
+}
+
+.footer a {
+  color: var(--color-text-primary);
+}
+
+.footer a:hover,
+.footer a:focus-visible {
+  color: var(--color-text-link-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}

@@ -1,0 +1,399 @@
+/* post.css
+ *
+ * HyperKitty thread and single-message pages: stock main + sidebar
+ * (row / col-md-9 / col-md-3). 28px indent per reply level at 1280
+ * (lists.boost.org); 12px capped at level 3 on ≤767px so depth still
+ * reads without overflow.
+ */
+
+:is([data-page-group="post"], [data-page-group="hk-form"]) [role="main"] {
+  & {
+    padding-bottom: var(--space-xl);
+  }
+
+  .email {
+    border: 1px solid var(--color-stroke-weak);
+    border-radius: var(--border-radius-xl);
+    background: var(--color-surface-weak);
+    padding: var(--space-large);
+    margin-bottom: var(--space-large);
+  }
+
+  .email-date,
+  .email-date .date,
+  .email-date .time {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+  }
+
+  .email .gravatar img,
+  .email img.gravatar {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.page-hk_thread [role="main"] {
+  .thread-header {
+    margin-bottom: var(--space-xlarge);
+  }
+
+  .thread-header h3 {
+    margin: 0 var(--space-medium);
+  }
+
+  .email-header {
+    gap: var(--space-medium);
+  }
+
+  h2.name {
+    text-transform: none;
+  }
+
+  /* Source strings are lowercase ("tags", "participants (5)"); Display
+     titles are sentence case. */
+  #participants h3::first-letter,
+  #tag-title::first-letter,
+  #participants h3#participants_title::first-letter,
+  #participants_title::first-letter {
+    text-transform: uppercase;
+  }
+
+  .email-info {
+    margin-top: var(--space-medium);
+    padding-top: var(--space-medium);
+    border-top: 1px solid var(--color-stroke-weak);
+  }
+
+  /* #stats is an empty <a> hash target, so the card goes on the section. */
+  #thread-overview-info {
+    border-radius: var(--border-radius-xl);
+    background: var(--color-surface-weak);
+    padding: var(--space-large);
+  }
+
+  #participants,
+  #tags {
+    padding-top: var(--space-large);
+  }
+}
+
+:is(.page-hk_message_index, [data-page-group="hk-form"]) [role="main"] {
+  .message-header {
+    margin-bottom: var(--space-xlarge);
+    align-items: center;
+  }
+
+  .message-header h1 {
+    margin: 0;
+  }
+}
+
+[role="main"] .view-thread .thread-header > .d-flex {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-medium) 0;
+}
+
+[role="main"] .view-thread .thread-header > .d-flex > .flex-grow-1 {
+  flex-basis: 100%;
+  width: 100%;
+  min-width: 100%;
+  order: -1;
+}
+
+[role="main"] .view-thread .thread-header > .d-flex > .right {
+  margin-left: auto;
+}
+
+[role="main"] .view-thread .post-header,
+[role="main"] .message-header.post-header {
+  min-width: 0;
+}
+
+[role="main"] .message-header.post-header {
+  align-items: flex-start;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  [role="main"] .row > .col-md-10:has(> .message-header) {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+[role="main"] .view-thread .post-header__title,
+[role="main"] .message-header .post-header__title {
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  [role="main"] .view-thread .post-header__title,
+  [role="main"] .message-header .post-header__title {
+    line-height: 1.1;
+  }
+}
+
+[role="main"] .boost-post-byline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+}
+
+[role="main"] .boost-post-byline__avatar img,
+[role="main"] .boost-post-byline__avatar .gravatar {
+  width: 48px;
+  height: 48px;
+}
+
+[role="main"] .boost-post-byline__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+[role="main"] .boost-post-byline__name,
+[role="main"] .boost-post-byline__name a {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+[role="main"] .boost-post-byline__role {
+  color: var(--color-text-secondary);
+}
+
+:is([data-page-group="post"], [data-page-group="hk-form"]) [role="main"] {
+  /* Bootstrap .d-flex is display:flex !important, so display:none
+     cannot hide this wrapper. Clip it out of flow; .email-author .name
+     stays in the DOM for quote-attribution JS (.text()). */
+  .email-first .email-header {
+    position: relative;
+  }
+
+  /* Stacked byline. Grid on .email-header;
+     display:contents on .gravatar-wrapper AND .email-date; named areas;
+     48px avatar; date+time adjacent max-content columns so they do not
+     overlap. Empty date column collapses when ifchanged drops the date. */
+  .email-header {
+    display: grid;
+    grid-template-columns: 48px var(--space-medium) max-content max-content auto minmax(0, 1fr);
+    grid-template-areas:
+      "avatar gutter name name name name"
+      "avatar gutter date time unread ."
+      ". gutter subject subject subject subject";
+    column-gap: 0;
+    row-gap: 0;
+    align-items: center;
+    justify-content: start;
+    float: none;
+    padding: 0;
+    margin: 0 0 var(--space-large);
+    min-width: 0;
+  }
+
+  .email-header .right,
+  .email-header .pull-right {
+    float: none;
+  }
+
+  .email:not(.email-first) .gravatar.circle,
+  .email:not(.email-first) img.gravatar {
+    grid-area: avatar;
+    align-self: start;
+    width: 48px;
+    height: 48px;
+  }
+
+  .email:not(.email-first) .email-author {
+    grid-area: name;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .email-header h2.name,
+  .email-header h2.name a {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.25;
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .email:not(.email-first) .email-date .date {
+    grid-area: date;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: var(--font-weight-regular);
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+    margin: 0;
+    padding: 0;
+    float: none;
+  }
+
+  .email:not(.email-first) .email-date .time {
+    grid-area: time;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: var(--font-weight-regular);
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+    margin: 0;
+    padding: 0;
+    float: none;
+  }
+
+  /* Same 3px secondary dot as .post-header__meta > :not(:first-child)::before. */
+  .email-date .time::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-text-secondary);
+    margin-right: 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .email-date:not(:has(span.date.d-sm-inline)):not(:has(span.date.d-sm-none)) .time::before {
+    display: none;
+  }
+
+  .email-date > .fa-envelope {
+    grid-area: unread;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 0 0 6px;
+    padding: 0;
+    font-size: 0;
+    line-height: 0;
+    color: transparent;
+    overflow: hidden;
+    align-self: center;
+  }
+
+  .email-date > .fa-envelope::before {
+    content: none;
+  }
+
+  .email-date > .fa-envelope::after {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-icon-brand-accent);
+  }
+
+  /* First email: the duplicate avatar/name is clip-hidden, so this
+     header is flex, not display:contents. */
+  .email-first .email-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-s);
+    grid-template-columns: none;
+    grid-template-areas: none;
+  }
+
+  .email-first .email-date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    grid-area: auto;
+  }
+
+  .email-body {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .email-body p {
+    margin-bottom: var(--space-large);
+  }
+
+  .email-body pre,
+  .email-body .quoted-text,
+  .email-body.fixed {
+    font-family: var(--font-mono, "Monaspace Neon", ui-monospace, monospace);
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  /* HyperKitty paints these bars rgb(55, 113, 200). */
+  .quoted-switch a,
+  .quoted-text {
+    border-left-color: var(--color-stroke-mid);
+  }
+
+  a.reply,
+  a.reply-mailto {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    background: none;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+    text-decoration: none;
+  }
+
+  a.reply:hover,
+  a.reply:focus-visible,
+  a.reply-mailto:hover,
+  a.reply-mailto:focus-visible {
+    color: var(--color-text-link-accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+}
+
+/* Bootstrap .d-flex is display:flex !important. */
+@layer boost-important {
+  :is([data-page-group="post"], [data-page-group="hk-form"]) [role="main"] {
+    .email:not(.email-first) .gravatar-wrapper,
+    .email:not(.email-first) .email-date {
+      display: contents !important;
+    }
+  }
+}
+
+.email-header h2.name a,
+.boost-post-byline__name a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .email-header h2.name a:hover,
+  .email-header h2.name a:focus-visible,
+  .boost-post-byline__name a:hover,
+  .boost-post-byline__name a:focus-visible {
+    color: var(--color-text-link-accent);
+    text-decoration: none;
+  }
+}
+

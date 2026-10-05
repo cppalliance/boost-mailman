@@ -1,0 +1,271 @@
+/* account.css — allauth login/signup/reset as one centred card. */
+
+/* ---------- Account: one centred card ---------- */
+
+[data-page-group="account"] [role="main"]:has(> form) {
+  /* chrome.css sets [role=main] { padding-top: 0 !important }
+     so the card's top pad has to match that weight. */
+  & {
+    max-width: 520px;
+    margin-inline: auto;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-xlarge);
+    padding-top: var(--space-xlarge) !important;
+  }
+
+  & > h1 {
+    margin: 0 0 var(--space-medium);
+  }
+  & > p {
+    max-width: none;
+    margin-bottom: var(--space-medium);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+  }
+
+  & > form {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  & > form .btn-primary[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space-default);
+  }
+}
+
+body[data-page-group="account"] > [role="main"]:has(> form) {
+  /* The card is [role=main] itself, so it must not take the sticky-footer
+     slack from chrome.css (the card would stretch to the footer).
+     The footer's top margin takes it instead; the card's bottom margin
+     keeps the gap on tall pages. */
+  & {
+    flex-grow: 0;
+  }
+  & + footer.chrome-footer {
+    margin-top: auto;
+  }
+}
+
+.page-account_login [role="main"] {
+  /* Stock login wraps a second card; flatten it so the page is one surface. */
+  form.login {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  form.login .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  form.login .col-md-2,
+  form.login .col-md-4,
+  form.login .offset-md-2 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+  }
+
+  form.login .control-label {
+    margin-bottom: var(--space-s);
+    color: var(--color-text-primary);
+  }
+
+  form.login .btn-primary[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space-default);
+  }
+
+  /* Two "forgot password" links (field help + action row). Hide the
+     help paragraph; account.css sets it to display: inline-block. */
+  form.login #help-id_password {
+    display: none;
+  }
+  form.login a[href*="password"] {
+    font-size: var(--font-size-small);
+    text-underline-offset: 2px;
+  }
+}
+
+.page-account_signup [role="main"] {
+  form.signup {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  form.signup .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  form.signup .col-md-2,
+  form.signup .col-md-4,
+  form.signup .offset-md-2 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+  }
+
+  form.signup .control-label {
+    margin-bottom: var(--space-s);
+    color: var(--color-text-primary);
+  }
+
+  form.signup ul {
+    padding-left: 1.25em;
+    margin: var(--space-s) 0 var(--space-medium);
+  }
+
+  form.signup .btn-primary[type="submit"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space-default);
+  }
+}
+
+.page-account_reset_password [role="main"] {
+  form.password_reset {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  form.password_reset .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  form.password_reset .col-md-2,
+  form.password_reset .col-md-4,
+  form.password_reset .offset-md-2 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+  }
+
+  .control-label {
+    margin-bottom: var(--space-s);
+    color: var(--color-text-primary);
+  }
+
+}
+
+:is(.page-account_login, .page-account_signup) [role="main"] {
+  .socialaccount_ballot {
+    margin: var(--space-large) 0;
+  }
+  .socialaccount_providers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-default);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .socialaccount_providers .btn {
+    min-width: 0;
+    background: var(--color-surface-weak);
+    border: 1px solid var(--color-stroke-strong, var(--color-stroke-mid));
+    color: var(--color-text-primary);
+  }
+  .login-or {
+    display: flex;
+    align-items: center;
+    gap: var(--space-medium);
+    margin: var(--space-xlarge) 0;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    text-transform: lowercase;
+  }
+  .login-or::before,
+  .login-or::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--color-stroke-weak);
+  }
+
+  & > p a {
+    font-size: var(--font-size-small);
+    text-underline-offset: 2px;
+  }
+}
+
+/* Only the signup page's "sign in" link is underlined. */
+.page-account_signup [role="main"] > p a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.page-account_login, .page-account_signup) [role="main"] {
+    .socialaccount_providers .btn:hover {
+      background-color: var(--color-surface-weak);
+      border-color: var(--color-stroke-link-accent);
+      color: var(--color-text-link-accent);
+    }
+  }
+
+  .page-account_login [role="main"] {
+    form.login a[href*="password"]:hover {
+      color: var(--color-text-link-accent);
+    }
+  }
+
+  :is(.page-account_login, .page-account_signup) [role="main"] {
+    & > p a:hover {
+      color: var(--color-text-link-accent);
+    }
+  }
+
+  .page-account_signup [role="main"] > p a:hover {
+    color: var(--color-text-link-accent);
+  }
+}

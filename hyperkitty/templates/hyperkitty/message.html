@@ -1,0 +1,54 @@
+{% extends "hyperkitty/base.html" %}
+{% load i18n %}
+{% load hk_generic %}
+
+
+{% block head_title %}
+{{ message.subject }} - {{ mlist.display_name|default:mlist.name }} - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-12 col-md-10">
+
+        <header class="post-header message-header">
+            <h1 class="post-header__title">{{ message.subject|strip_subject:mlist }}</h1>
+            <div class="post-header__meta">
+                <time class="post-header__date" datetime="{{ message.date|date:'c' }}">{{ message.date|date:"F jS, Y" }}</time>
+                <a href="{% url 'hk_list_overview' mlist_fqdn=mlist.name %}">{{ mlist.display_name|default:mlist.name }}</a>
+            </div>
+            <div class="boost-post-byline">
+                <div class="boost-post-byline__avatar">
+                    {% gravatar message.sender.address 48 %}
+                </div>
+                <div class="boost-post-byline__text">
+                    <span class="boost-post-byline__name">
+                        {% if message.sender.mailman_id %}
+                        <a href="{% url 'hk_public_user_profile' user_id=message.sender.mailman_id %}">{{ message.sender_name|default:message.sender.address|escapeemail }}</a>
+                        {% else %}
+                        {{ message.sender_name|default:message.sender.address|escapeemail }}
+                        {% endif %}
+                    </span>
+                    <span class="boost-post-byline__role">{% if message.pk == message.thread.starting_email.pk %}{% trans "Original poster" %}{% else %}{% trans "Author" %}{% endif %}</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="row">
+            <div class="col-lg-9">
+                <section id="thread-content">
+                    {% include 'hyperkitty/messages/message.html' with email=message unfolded='True' %}
+                </section>
+            </div>
+            <div class="col-lg-3">
+                {% include 'hyperkitty/messages/right_col.html' %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

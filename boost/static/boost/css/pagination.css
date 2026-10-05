@@ -1,0 +1,105 @@
+/* Bootstrap's ul.pagination markup in the v3 pagination look. */
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-default);
+  padding: var(--space-large) 0;
+  list-style: none;
+  margin: 0;
+}
+
+.pagination .page-item {
+  display: flex;
+}
+
+.pagination .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 var(--space-large);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-xl);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-default);
+  text-decoration: none;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pagination .page-link:hover {
+    background-color: var(--color-surface-mid);
+    border-color: var(--color-stroke-weak);
+    color: var(--color-text-primary);
+  }
+}
+
+.pagination .page-link:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.pagination .page-link:focus {
+  box-shadow: none;
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 0;
+  z-index: 1;
+}
+
+.pagination .page-link:focus-visible {
+  color: var(--color-text-primary);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--color-surface-weak);
+  border-color: var(--color-stroke-weak);
+  color: var(--color-text-primary);
+}
+
+.pagination .page-item.disabled .page-link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text-tertiary);
+  pointer-events: none;
+}
+
+.pagination,
+.paginator,
+.paginator .row {
+  min-width: 0;
+}
+
+.pagination {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* At 375 only the first, last, active and its neighbours stay. */
+@media (max-width: 767px) {
+  .pagination .page-item {
+    display: none;
+  }
+
+  .pagination .page-item:first-child,
+  .pagination .page-item:last-child,
+  .pagination .page-item.active,
+  .pagination .page-item.active + .page-item,
+  .pagination .page-item:has(+ .page-item.active) {
+    display: flex;
+  }
+
+  .pagination .page-link {
+    padding: 0 var(--space-medium);
+    min-height: 36px;
+  }
+}

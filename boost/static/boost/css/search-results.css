@@ -1,0 +1,75 @@
+/* search-results.css
+ *
+ * HyperKitty /archives/search rows and sort control.
+ */
+
+.search-results {
+  min-width: 0;
+}
+
+/* Search rows use <span class="thread-title"><a>, not a.thread-title,
+   so thread-rows.css's overlay and :not(.thread-title) z-index miss
+   them. Keep the title static so ::after uses .thread (already
+   position:relative). */
+.page-hk_search #thread-list.search-results .thread-title a {
+  position: static;
+  z-index: auto;
+}
+
+.page-hk_search #thread-list.search-results .thread-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.page-hk_search #thread-list.search-results .expander a {
+  position: relative;
+  z-index: 2;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page-hk_search #thread-list.search-results > .thread {
+    cursor: pointer;
+  }
+
+  .page-hk_search #thread-list.search-results > .thread:hover .thread-title a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    color: var(--color-text-primary);
+  }
+}
+
+#thread-list.search-results .thread-email {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+#thread-list.search-results .thread-email > .col {
+  display: flex;
+  align-items: center;
+}
+
+#thread-list.search-results .thread-list-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#thread-list.search-results .thread-list-header form {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+  margin-left: auto;
+}
+
+#sort-search {
+  width: auto;
+  max-width: 100%;
+  min-height: 32px;
+  height: 32px;
+  padding: 4px 40px 4px 12px;
+  font-size: 12px;
+}

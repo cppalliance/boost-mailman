@@ -1,0 +1,86 @@
+/* archives-index.css
+ * Scope: .all-lists
+ * HyperKitty /archives/ only.
+ */
+
+.all-lists {
+  padding-bottom: var(--space-xl);
+}
+
+/* The header is a Bootstrap .row; its col padding would inset the h1
+   past the shell gutter the filters and table sit on. */
+.all-lists .header {
+  --bs-gutter-x: 0;
+  margin-bottom: var(--space-large);
+  align-items: center;
+}
+
+.all-lists .header h1 {
+  margin-bottom: 0;
+}
+
+.all-lists .filter-lists {
+  margin-bottom: var(--space-large);
+  gap: var(--space-medium);
+}
+
+.all-lists .hide-switches {
+  margin: 0;
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+.all-lists table.lists a,
+.all-lists .table a {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.all-lists .paginator {
+  margin-top: var(--space-large);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+/* Stock hyperkitty-index.js follows a click anywhere in the row to
+   a.list-name. */
+@media (hover: hover) and (pointer: fine) {
+  .all-lists table.lists tr.list {
+    cursor: pointer;
+  }
+}
+
+/* HyperKitty paints the row blue and the text/chart white (0,4,3).
+   Hover cursor stays for the sticky-375 archives-index target. */
+.all-lists table.lists tr.list:hover {
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.all-lists table.lists tr.list:hover a {
+  color: var(--color-text-primary);
+}
+
+/* Keep HyperKitty's .inactive rest grey (#999) through the hover. */
+.all-lists table.lists tr.inactive:hover .list-name {
+  color: #999;
+}
+
+/* HyperKitty sets fill:white on hover; rest is steelBlue. */
+.all-lists table.lists tr.list:hover .chart-data .bars rect {
+  fill: steelBlue;
+}
+
+/* HyperKitty `.all-lists table.lists tr span.new { font-size: 78% }`,
+   which .badge would override now that stock is layered. */
+.all-lists table.lists tr span.new {
+  font-size: 78%;
+}
+
+/* HyperKitty `.all-lists nav.sort-mode .active`, which tabs.css
+   .sort-mode span would override now that stock is layered. */
+.all-lists nav.sort-mode .active {
+  border-bottom-width: 4px;
+  padding-bottom: 12px;
+}

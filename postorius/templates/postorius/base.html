@@ -1,0 +1,57 @@
+{# Copied from postorius 1.3.13. Changes vs stock: class=v3 on html and body, plus page-<url_name> and data-page-group (boost/page-group.html) on body; stock stylesheets @import-ed into @layer stock after the layer order statement; include boost/stylesheets.html inside additionalcss (no child overrides that block); deferred boost/js/row-links.js after that block; Boost chrome header/footer via boost/chrome-*.html; Plausible tag in head. #}
+{% load i18n %}
+{% load static %}
+{% load p_gravatar %}
+<!DOCTYPE html>
+<html lang="en" class="v3">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block head_title %}{{ site_name }}{% endblock %}</title>
+        <link rel="shortcut icon" href="{% static 'postorius/img/favicon.ico' %}">
+        <style>
+            @layer boost-important, reset, stock, vendor;
+            @import url("{% static 'postorius/libs/bootstrap/css/bootstrap.min.css' %}") layer(stock);
+            @import url("{% static 'django-mailman3/css/main.css' %}") layer(stock);
+            @import url("{% static 'postorius/css/style.css' %}") layer(stock);
+            @import url("{% static 'postorius/libs/fonts/font-awesome/css/font-awesome.min.css' %}") layer(stock);
+        </style>
+        {% block additionalcss %}
+        {% include 'boost/stylesheets.html' %}
+        {% endblock %}
+        <script defer src="{% static 'boost/js/row-links.js' %}"></script>
+        <script defer data-domain="lists.boost.org" src="https://plausible.io/js/script.js"></script>
+        <noscript><style> .jsonly { display: none } </style></noscript>
+    </head>
+    <body class="v3 page-{{ request.resolver_match.url_name }}" data-page-group="{% filter slugify %}{% include 'boost/page-group.html' %}{% endfilter %}">
+        {% include "boost/chrome-header.html" with chrome_app="postorius" chrome_logout_next="list_index" %}
+
+
+        <div class="container-xxl" role="main">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} fade show alert-dismissible" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            {% block content %}{% endblock content %}
+        </div>
+
+        {% include "boost/chrome-footer.html" %}
+
+        <script src="{% static 'postorius/libs/jquery/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'postorius/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'django-mailman3/js/main.js' %}"></script>
+        <script src="{% static 'postorius/js/script.js' %}" defer></script>
+        <script>
+            // Add the .js-enabled class to the body so we can style the elements
+            // depending on whether Javascript is enabled.
+            $(document).ready(function(){
+                $("body").addClass("js-enabled");
+                $(".gravatar").addClass("rounded-circle");
+            });
+        </script>
+        {% block additionaljs %}{% endblock %}
+    </body>
+</html>

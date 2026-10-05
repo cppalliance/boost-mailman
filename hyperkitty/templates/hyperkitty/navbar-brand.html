@@ -1,0 +1,4 @@
+{% load static %}
+<a class="header__logo" href="{% if chrome_app == 'hyperkitty' %}{% url 'hk_root' %}{% else %}{% url 'list_index' %}{% endif %}" aria-label="Boost Home">
+    <img src="{% static 'boost/vendor/v3/img/Boost_Symbol_Transparent.svg' %}" alt="Boost" width="31" height="31">
+</a>

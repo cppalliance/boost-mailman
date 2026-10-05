@@ -1,0 +1,333 @@
+/* list-overview.css
+ *
+ * HyperKitty list overview (hk_list_overview): title, tabs, activity
+ * and the right column with the teal join card.
+ */
+
+.overview {
+  padding-bottom: var(--space-xl);
+}
+
+.overview #title h1 {
+  margin-bottom: var(--space-s);
+}
+
+.overview .discussions {
+  margin-top: var(--space-medium);
+}
+
+.overview .list-group,
+.overview .thread-list {
+  gap: var(--space-default);
+}
+
+.overview .list-group-item + .list-group-item {
+  border-top-width: 1px;
+}
+
+/* #stats is an empty <a> hash target (HyperKitty .anchor-link), so the
+   card goes on .stats; #most-active-poster sits inside it. */
+.overview .stats {
+  border-radius: var(--border-radius-xl);
+  background: var(--color-surface-weak);
+  padding: var(--space-large);
+}
+
+.overview #most-active-poster {
+  padding-top: var(--space-large);
+}
+
+.overview .list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-default);
+}
+
+/* Tabs on their own row under the title (stock col-auto squeezes them). */
+
+.overview > .row > .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.overview #title.col-auto,
+.overview > .row > .row > .discussions.col-auto {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+.overview > .row > .row > .discussions {
+  margin-top: var(--space-medium);
+}
+
+@media (min-width: 768px) {
+  .overview .col-md-3 {
+    padding-top: var(--space-xlarge);
+  }
+}
+
+.overview .boost-join-card {
+  background: var(--color-surface-weak-accent-teal);
+  border: 1px solid var(--color-stroke-weak);
+  border-radius: var(--border-radius-xl);
+  box-shadow: none;
+  padding: var(--space-card);
+  margin-bottom: var(--space-large);
+}
+
+.page-hk_list_overview [role="main"],
+.page-list_summary [role="main"]:where(:has(> .boost-list-summary--signed-in)) {
+    .overview .boost-join-card > h2 {
+    margin: 0 0 var(--space-medium);
+    padding: 0 0 var(--space-medium);
+    border-bottom: 1px solid var(--color-stroke-weak);
+  }
+
+  .overview .stats > h2,
+  .overview .stats > .chart,
+  .overview .stats > .duration-text,
+  .overview .stats > .list-stats {
+    margin: 0;
+  }
+
+  .overview .stats > h2 {
+    border-top: 1px solid var(--color-stroke-weak);
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+    padding-top: var(--space-card);
+    padding-bottom: var(--space-medium);
+    margin: 0;
+    border-bottom: 0;
+    position: relative;
+  }
+
+  /* Sibling card pieces carry padding on the h2, so a real border-bottom
+     full-bleeds to the frame. ::after sits on the padding box bottom,
+     inset to --space-card like Join this list / Most active posters. */
+  .overview .stats > h2::after {
+    content: "";
+    position: absolute;
+    left: var(--space-card);
+    right: var(--space-card);
+    bottom: 0;
+    border-bottom: 1px solid var(--color-stroke-weak);
+  }
+}
+
+.overview .boost-join-card .boost-join-name {
+  margin-top: 0;
+  margin-inline: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.overview .boost-join-card .boost-join-desc,
+.overview .boost-join-card .boost-join-address {
+  margin: 0 0 var(--space-medium);
+  font-size: var(--font-size-small);
+}
+
+.overview .boost-join-card .boost-join-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overview .boost-join-card .boost-join-address {
+  margin-top: var(--space-medium);
+  font-size: var(--font-size-xs);
+}
+
+body .overview h2,
+body .overview .h2 {
+  margin: var(--space-xlarge) 0 var(--space-medium);
+  line-height: var(--line-height-default);
+}
+
+/* Source strings are lowercase ("tags", "participants (5)"); Display
+   titles are sentence case. */
+body .overview h2::first-letter,
+body .overview .h2::first-letter {
+  text-transform: uppercase;
+}
+
+/* Action buttons: one card CTA row. Download's menu is a sibling <ul>. */
+
+.overview .col-md-3 > div:not(.stats) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-default);
+  padding: var(--space-card);
+  margin-bottom: var(--space-large);
+  position: relative;
+}
+
+.overview .col-md-3 > div:not(.stats) > .btn,
+.overview .col-md-3 > div:not(.stats) > a.btn,
+.overview .col-md-3 > div:not(.stats) > .dropdown-center {
+  flex: 1 1 100%;
+  min-width: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.overview .col-md-3 > div:not(.stats) > .dropdown-center {
+  display: flex;
+}
+
+.overview .col-md-3 > div:not(.stats) > .dropdown-center > .btn {
+  flex: 1 0 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.overview .col-md-3 > div:not(.stats) > ul.dropdown-menu {
+  flex: 0 0 auto;
+}
+
+.overview .col-md-3 > div:not(.stats) > .list-actions {
+  flex: 1 1 100%;
+  margin-top: var(--space-s);
+}
+
+.overview .col-md-3 > div:not(.stats) > .list-actions .btn {
+  width: 100%;
+}
+
+/* Activity siblings share one frame (no flex gap). Posters stay a
+   separate card in the nested .row. */
+
+.overview .stats {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.overview .stats > .anchor-link {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.overview .stats > h2,
+.overview .stats > .chart,
+.overview .stats > .duration-text,
+.overview .stats > .list-stats {
+  background: var(--color-surface-weak);
+  border-left: 1px solid var(--color-stroke-weak);
+  border-right: 1px solid var(--color-stroke-weak);
+  box-shadow: none;
+  padding: var(--space-default) var(--space-card);
+}
+
+.overview .stats > .list-stats {
+  border-bottom: 1px solid var(--color-stroke-weak);
+  border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+  padding-bottom: var(--space-card);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.overview .stats > .duration-text,
+.overview .stats > .list-stats {
+  font-size: var(--font-size-small);
+}
+
+.overview .stats > .list-stats {
+  color: var(--color-text-secondary);
+}
+
+.overview .chart,
+.overview .chart img,
+.overview .chart svg,
+.overview .chart canvas {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.overview .stats > .row {
+  --bs-gutter-x: 0;
+  margin: var(--space-large) 0 0;
+  padding: 0;
+}
+
+.overview #most-active-poster,
+.overview #discussion-maker {
+  padding: var(--space-card);
+  margin-top: 0;
+  border-top: 1px solid var(--color-stroke-weak);
+}
+
+body .overview #most-active-poster h2,
+body .overview #discussion-maker h2 {
+  margin: 0 0 var(--space-medium);
+  padding: 0 0 var(--space-medium);
+  border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.overview #most-active-poster .maker {
+  align-items: center;
+  gap: var(--space-medium);
+  padding: var(--space-medium) 0;
+  border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.overview #most-active-poster .maker:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.overview #most-active-poster .gravatar img,
+.overview #most-active-poster .gravatar .gravatar {
+  width: 48px;
+  height: 48px;
+}
+
+.overview #most-active-poster .maker-name,
+.overview #most-active-poster .maker-name a {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.overview #most-active-poster .score,
+.overview #most-active-poster .gravatar-details li:last-child {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Bootstrap .list-group-item-action:active is #e9ecef in stock. */
+.overview a.list-group-item-action:active {
+  background-color: var(--color-surface-weak);
+  color: var(--color-text-primary);
+}
+
+.overview a.list-group-item-action:active .list-group-item-heading {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  color: var(--color-text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .overview a.list-group-item-action:hover .list-group-item-heading {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    color: var(--color-text-primary);
+  }
+}

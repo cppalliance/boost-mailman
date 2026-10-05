@@ -1,0 +1,56 @@
+/* list-index.css
+ * Postorius list, domain and user index tables.
+ */
+
+[data-page-group="index"] [role="main"] {
+  & {
+    padding-top: var(--space-large);
+    padding-bottom: var(--space-xl);
+  }
+
+  & > .page-header {
+    margin-bottom: var(--space-large);
+    padding-bottom: var(--space-medium);
+  }
+
+  & > .row.mb-3 {
+    align-items: center;
+  }
+
+  .horizontal-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .current-role {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+  }
+
+  .paginator {
+    margin-top: var(--space-large);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+  }
+}
+
+/* boost/js/row-links.js follows a click anywhere in the row to its link;
+   its ROWS list names the same tables. */
+@media (hover: hover) and (pointer: fine) {
+  .page-list_index table tbody tr {
+    cursor: pointer;
+  }
+}
+
+/* Bootstrap .mb-3 is margin-bottom: 1rem !important. */
+@layer boost-important {
+  [data-page-group="index"] [role="main"] > .row.mb-3 {
+    margin-bottom: var(--space-large) !important;
+  }
+}

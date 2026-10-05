@@ -1,0 +1,120 @@
+/* reset.css
+ *
+ * Look-affecting preflight / @tailwindcss/forms rules copied from
+ * vendor/v3/css/00-borrowed-base.css so v3 components render on Bootstrap
+ * Reboot. :where() keeps specificity at 0 so Bootstrap classes and later
+ * custom files still apply. Originals are unscoped; these match that.
+ *
+ * Copied: box-sizing; default border-color #e5e7eb; font/color inherit on
+ * form elements; button background/cursor; placeholder color; the forms
+ * plugin field look (text/select) and checkbox/radio appearance:none
+ * (geometry, colour and icons live in forms.css).
+ *
+ * Not copied: margin: 0 on h1–h6 / p / ul / ol / blockquote (Mailman has no
+ * v3 components to restore spacing); display: block on img/svg (breaks
+ * inline avatars and icons). Also skipped the preflight `a { color:
+ * inherit }` link reset (06-foundations.css does not restore link color)
+ * and `list-style: none` on lists (Mailman content lists stay lists).
+ *
+ * Visible difference vs website-v2: headings keep Reboot's 0.5rem bottom
+ * margin; p/ul/ol keep 1rem. Tune per page in <page>.css where it matters.
+ */
+
+:where(html.v3, html.v3 *, html.v3 ::before, html.v3 ::after) {
+  box-sizing: border-box;
+  border-color: #e5e7eb;
+}
+
+:where(
+  html.v3 button,
+  html.v3 input,
+  html.v3 optgroup,
+  html.v3 select,
+  html.v3 textarea
+) {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+:where(html.v3 button, html.v3 select) {
+  text-transform: none;
+}
+
+:where(
+  html.v3 button,
+  html.v3 [type="button"],
+  html.v3 [type="reset"],
+  html.v3 [type="submit"]
+) {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+:where(html.v3 button, html.v3 [role="button"]) {
+  cursor: pointer;
+}
+
+:where(html.v3 :disabled) {
+  cursor: default;
+}
+
+:where(html.v3 input)::placeholder,
+:where(html.v3 textarea)::placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+/* @tailwindcss/forms@0.5.3 base layer (text-like fields) */
+:where(
+  html.v3 [type="text"],
+  html.v3 [type="email"],
+  html.v3 [type="url"],
+  html.v3 [type="password"],
+  html.v3 [type="number"],
+  html.v3 [type="date"],
+  html.v3 [type="datetime-local"],
+  html.v3 [type="month"],
+  html.v3 [type="search"],
+  html.v3 [type="tel"],
+  html.v3 [type="time"],
+  html.v3 [type="week"],
+  html.v3 [multiple],
+  html.v3 textarea,
+  html.v3 select
+) {
+  appearance: none;
+  background-color: #fff;
+  border-color: #6b7280;
+  border-width: 1px;
+  border-radius: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+:where(html.v3 select) {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+:where(html.v3 [multiple]) {
+  background-image: none;
+  padding-right: 0.75rem;
+}
+
+:where(html.v3 [type="checkbox"], html.v3 [type="radio"]) {
+  appearance: none;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+  background-origin: border-box;
+  user-select: none;
+  flex-shrink: 0;
+}

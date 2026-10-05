@@ -1,0 +1,388 @@
+/* buttons.css
+ *
+ * Layout follows website-v2 buttons.css (vendored 11-buttons.css): every
+ * .btn is inline-flex, align/justify center, gap: var(--space-default).
+ * min-width stays 0 (not v3's 128px). Icons are spaced by that gap, not
+ * by icon margins. Bootstrap me-1/me-2/ms-1/ms-2 on inner icons are
+ * zeroed so they do not stack with gap.
+ *
+ * Flex itemizes each element and text run and drops whitespace-only
+ * nodes. Icon+label uses that gap. Label fragments that Bootstrap
+ * splits across .d-*-inline spans are unwrapped with display:contents
+ * so adjacent text (and the real template space) become one flex item.
+ * white-space: pre-wrap is not used: Mailman indents inside the button.
+ *
+ * Variants set --boost-btn-* only. One rule set on .btn reads them.
+ */
+
+html {
+  --boost-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn:not(.btn-close) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-default);
+  min-width: 0;
+  width: auto;
+  padding: var(--space-default) var(--space-medium);
+  background-color: var(--boost-btn-bg);
+  border-color: var(--boost-btn-border);
+  color: var(--boost-btn-fg);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 160ms var(--boost-ease-out);
+}
+
+/* Bootstrap .d-block means a block-level box; keep flex (not inline-flex).
+   Bootstrap .d-block / .d-md-block are !important. */
+@layer boost-important {
+  @media (min-width: 768px) {
+    .btn.d-md-block:not(.btn-close) {
+      display: flex !important;
+    }
+  }
+
+  .btn.d-block:not(.d-none):not(.btn-close) {
+    display: flex !important;
+  }
+}
+
+/* Gap already separates the Bootstrap 5 caret from the label. */
+.btn.dropdown-toggle::after {
+  margin-left: 0;
+}
+
+/* Empty BS3 caret placeholders are 0x0 flex items that still consume gap. */
+.btn > .caret,
+.btn > b.caret {
+  display: none;
+}
+
+/* Unwrap Bootstrap inline-utility label spans so their text joins the
+   neighbouring run as one anonymous flex item. .d-none (<768) and
+   .d-md-none (≥768) stay display:none. Bootstrap .d-*-inline is
+   display:inline !important. */
+@layer boost-important {
+  @media (min-width: 768px) {
+    .btn > span.d-md-inline {
+      display: contents !important;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .btn > span.d-inline:not(.d-none),
+    .btn > span.d-md-none:not(.d-none) {
+      display: contents !important;
+    }
+  }
+}
+
+/* Bootstrap icon utilities would add 4px/8px on top of gap. */
+.btn > .me-1,
+.btn > .me-2,
+.btn > .ms-1,
+.btn > .ms-2,
+.btn > .fa.me-1,
+.btn > .fa.me-2,
+.btn > .fa.ms-1,
+.btn > .fa.ms-2,
+.btn > i.me-1,
+.btn > i.me-2,
+.btn > i.ms-1,
+.btn > i.ms-2 {
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+.btn-close {
+  min-width: 0;
+  width: 1em;
+  gap: 0;
+  padding: 0.25em 0.25em;
+  border: 0;
+  background-color: transparent;
+  background-image: none;
+}
+
+/* ---------- Variant mapping (custom properties) ---------- */
+
+.btn-primary,
+.btn-success {
+  --boost-btn-bg: var(--color-button-primary);
+  --boost-btn-border: transparent;
+  --boost-btn-fg: var(--color-text-primary);
+  --boost-btn-bg-hover: var(--color-secondary-dark-blue);
+  --boost-btn-border-hover: transparent;
+  --boost-btn-fg-hover: var(--color-text-reversed);
+  --boost-btn-bg-active: var(--color-button-primary);
+  --boost-btn-border-active: transparent;
+  --boost-btn-fg-active: var(--color-text-primary);
+}
+
+a.btn[href*="message/new"],
+a.btn-success[href*="message/new"],
+a.btn[href$="/lists/new/"],
+a.btn-success[href$="/lists/new/"] {
+  --boost-btn-bg: var(--color-surface-brand-accent-default);
+  --boost-btn-border: var(--color-surface-brand-accent-default);
+  --boost-btn-fg: var(--color-text-on-accent);
+  --boost-btn-bg-hover: var(--color-surface-brand-accent-hovered);
+  --boost-btn-border-hover: var(--color-surface-brand-accent-hovered);
+  --boost-btn-fg-hover: var(--color-text-on-accent);
+  --boost-btn-bg-active: var(--color-surface-brand-accent-default);
+  --boost-btn-border-active: var(--color-surface-brand-accent-default);
+  --boost-btn-fg-active: var(--color-text-on-accent);
+  min-width: 0;
+  padding: var(--space-default) var(--space-medium);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-relaxed);
+}
+
+.btn-teal {
+  --boost-btn-bg: var(--color-surface-strong-accent-teal-default);
+  --boost-btn-border: transparent;
+  --boost-btn-fg: var(--color-text-primary);
+  --boost-btn-bg-hover: var(--color-surface-strong-accent-teal-hover);
+  --boost-btn-border-hover: transparent;
+  --boost-btn-fg-hover: var(--color-text-primary);
+  --boost-btn-bg-active: var(--color-surface-strong-accent-teal-default);
+  --boost-btn-border-active: transparent;
+  --boost-btn-fg-active: var(--color-text-primary);
+}
+
+.btn.btn-success[name="accept"],
+input.btn-success[name="accept"] {
+  --boost-btn-bg: var(--color-syntax-green);
+  --boost-btn-border: var(--color-syntax-green);
+  --boost-btn-fg: var(--color-text-reversed);
+  --boost-btn-bg-hover: #217a26;
+  --boost-btn-border-hover: #217a26;
+  --boost-btn-fg-hover: var(--color-text-reversed);
+  --boost-btn-bg-active: #217a26;
+  --boost-btn-border-active: #217a26;
+  --boost-btn-fg-active: var(--color-text-reversed);
+}
+
+.btn-secondary,
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-info,
+.btn-warning,
+.btn.toggle-font {
+  --boost-btn-bg: var(--color-surface-weak);
+  --boost-btn-border: var(--color-stroke-strong);
+  --boost-btn-fg: var(--color-text-primary);
+  --boost-btn-bg-hover: var(--color-surface-weak);
+  --boost-btn-border-hover: var(--color-stroke-link-accent);
+  --boost-btn-fg-hover: var(--color-text-link-accent);
+  --boost-btn-bg-active: var(--color-surface-mid);
+  --boost-btn-border-active: var(--color-stroke-link-accent);
+  --boost-btn-fg-active: var(--color-text-primary);
+}
+
+form[action*="/delete"] a.btn.btn-success {
+  --boost-btn-bg: var(--color-surface-weak);
+  --boost-btn-border: var(--color-stroke-strong);
+  --boost-btn-fg: var(--color-text-primary);
+  --boost-btn-bg-hover: var(--color-surface-weak);
+  --boost-btn-border-hover: var(--color-stroke-link-accent);
+  --boost-btn-fg-hover: var(--color-text-link-accent);
+  --boost-btn-bg-active: var(--color-surface-weak);
+  --boost-btn-border-active: var(--color-stroke-link-accent);
+  --boost-btn-fg-active: var(--color-text-link-accent);
+}
+
+.btn-danger,
+.btn-outline-danger,
+form[action*="/delete"] button.submit.btn-primary,
+a.btn-primary[href^="/mailman3/users/"][href$="/delete"],
+.btn-info#unsubscribe-selected-btn {
+  --boost-btn-bg: var(--color-surface-error-weak);
+  --boost-btn-border: var(--color-stroke-error);
+  --boost-btn-fg: var(--color-text-error);
+  --boost-btn-bg-hover: var(--color-surface-error-weak);
+  --boost-btn-border-hover: var(--color-error-strong);
+  --boost-btn-fg-hover: var(--color-text-error);
+  --boost-btn-bg-focus: var(--color-surface-error-weak);
+  --boost-btn-border-focus: var(--color-error-strong);
+  --boost-btn-fg-focus: var(--color-text-error);
+  --boost-btn-bg-active: var(--color-surface-error-weak);
+  --boost-btn-border-active: var(--color-error-strong);
+  --boost-btn-fg-active: var(--color-text-error);
+}
+
+.btn-link {
+  --boost-btn-bg: transparent;
+  --boost-btn-border: transparent;
+  --boost-btn-fg: var(--color-text-link-accent);
+  --boost-btn-bg-hover: transparent;
+  --boost-btn-border-hover: transparent;
+  --boost-btn-fg-hover: var(--color-text-link-accent);
+  --boost-btn-bg-active: transparent;
+  --boost-btn-border-active: transparent;
+  --boost-btn-fg-active: var(--color-text-link-accent);
+  min-width: 0;
+  padding: 0;
+  background: none;
+  text-decoration: underline;
+}
+
+.btn-sm,
+.btn-xs {
+  font-size: var(--font-size-xs);
+  min-width: 0;
+}
+
+.btn.btn-sm:not(.btn-close) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: var(--space-s) var(--space-medium);
+  font-size: var(--font-size-xs);
+  line-height: 22px;
+}
+
+.btn.btn-sm:not(.btn-close) > .fa,
+.btn.btn-sm:not(.btn-close) > i,
+.btn.btn-sm:not(.btn-close) > span.fa {
+  line-height: inherit;
+}
+
+.btn.btn-xs:not(.btn-close) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: var(--space-xs) var(--space-default);
+  font-size: var(--font-size-xs);
+  line-height: 18px;
+}
+
+.btn.btn-xs:not(.btn-close) > .fa,
+.btn.btn-xs:not(.btn-close) > i,
+.btn.btn-xs:not(.btn-close) > span.fa {
+  line-height: inherit;
+}
+
+@media (max-width: 767px) {
+  .btn.btn-sm:not(.btn-close) {
+    line-height: 16px;
+  }
+
+  .btn.btn-xs:not(.btn-close) {
+    line-height: 14px;
+  }
+}
+
+/* v3 has no .btn-lg; .btn-hero is a marketing size. One step up the scale. */
+.btn-lg:not(.btn-close) {
+  padding: var(--space-medium) var(--space-large);
+  font-size: var(--font-size-base);
+  min-width: 0;
+}
+
+/* ---------- States (one rule set; reads --boost-btn-*) ---------- */
+
+.btn:not(.btn-close):is(:focus, :focus-visible) {
+  background-color: var(--boost-btn-bg-focus, var(--boost-btn-bg));
+  border-color: var(--boost-btn-border-focus, var(--boost-btn-border));
+  color: var(--boost-btn-fg-focus, var(--boost-btn-fg));
+}
+
+.btn:not(.btn-close):is(:focus, :focus-visible, :active, .show),
+.btn-check:checked + .btn {
+  box-shadow: none;
+  outline: 2px solid var(--color-stroke-link-accent);
+  outline-offset: 2px;
+}
+
+.btn:not(.btn-close):active,
+.btn:not(.btn-close).show,
+.btn:not(.btn-close).active,
+.btn-check:checked + .btn {
+  background-color: var(--boost-btn-bg-active);
+  border-color: var(--boost-btn-border-active);
+  color: var(--boost-btn-fg-active);
+}
+
+.btn:not(.btn-close):focus:not(:focus-visible),
+.btn:not(.btn-close):active:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn:not(.btn-close):active:not(:disabled):not(.disabled) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:not(.btn-close):active:not(:disabled):not(.disabled) {
+    transform: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:not(.btn-close):hover {
+    background-color: var(--boost-btn-bg-hover);
+    border-color: var(--boost-btn-border-hover);
+    color: var(--boost-btn-fg-hover);
+  }
+
+  .btn-secondary:hover,
+  .btn-outline-primary:hover,
+  .btn-outline-secondary:hover,
+  .btn-info:not(#unsubscribe-selected-btn):hover,
+  .btn-warning:hover,
+  .btn.toggle-font:hover,
+  form[action*="/delete"] a.btn.btn-success:hover {
+    text-decoration: none;
+  }
+
+  /* HyperKitty forces .fa white on thread/message overview links. */
+  #thread-overview-info a.btn:hover .fa,
+  #message-overview-info a.btn:hover .fa {
+    color: inherit;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .btn:not(.btn-close):hover {
+    background-color: var(--boost-btn-bg);
+    border-color: var(--boost-btn-border);
+    color: var(--boost-btn-fg);
+  }
+
+  .btn-secondary:hover,
+  .btn-outline-primary:hover,
+  .btn-outline-secondary:hover,
+  .btn-info:not(#unsubscribe-selected-btn):hover,
+  .btn-warning:hover,
+  .btn.toggle-font:hover,
+  form[action*="/delete"] a.btn.btn-success:hover {
+    text-decoration: none;
+  }
+}
+
+.btn:not(.btn-close):is(:disabled, .disabled) {
+  background-color: var(--boost-btn-bg);
+  border-color: var(--boost-btn-border);
+  color: var(--boost-btn-fg);
+  opacity: 0.5;
+}
+
+.btn-link:is(:hover, :focus, :focus-visible, :active, .show, :disabled, .disabled) {
+  background: none;
+}
+
+/* HyperKitty `.reattach-thread form.search button`, which .btn and
+   vendored 11-buttons.css would override now that stock is layered. */
+.reattach-thread form.search button {
+  font-size: 12px;
+  padding: 2px 8px;
+}
